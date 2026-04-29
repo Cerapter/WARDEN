@@ -1,0 +1,17 @@
+{
+	"id": "warden",
+	"title": "WARDEN",
+	"description": "lorem ipsum dolor sit amet",
+	"version": "0.0.1",
+	"compatibility": {
+		"minimum": "14",
+		"verified": "14.360"
+	},
+	"languages": [
+		{
+			"lang": "en",
+			"name": "English",
+			"path": "lang/en.json"
+		}
+	]
+}
