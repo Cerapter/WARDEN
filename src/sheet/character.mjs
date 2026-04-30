@@ -5,6 +5,7 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 	static PARTS = {
 		main: {
 			template: "systems/warden/static/sheets/character-sheet.hbs",
+			scrollable: [""],
 		},
 	};
 

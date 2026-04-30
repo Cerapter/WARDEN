@@ -1,4 +1,4 @@
-<section>
+<section class="scrollable">
 	<img
 		class="profile-img"
 		src="{{actor.img}}"
@@ -15,17 +15,112 @@
 	</label>
 	<input type="text" name="name" value="{{actor.name}}" />
 
+	{{formGroup fields.pronouns value=system.pronouns}}
+	{{formGroup
+		fields.description
+		value=system.description
+		elementType="textarea"
+	}}
+
+	{{formGroup fields.size value=system.size localize=true}}
+
+	{{formGroup fields.level value=system.level max=10 type="number"}}
+
 	{{formGroup
 		fields.hit_points.fields.value
 		value=system.hit_points.value
 		max=10
 		type="number"
 	}}
-
+	{{formGroup
+		fields.temporary_hit_points
+		value=system.temporary_hit_points
+		type="number"
+	}}
 	{{formGroup
 		fields.strain.fields.value
 		value=system.strain.value
 		max=10
 		type="number"
 	}}
+
+	{{formGroup fields.fate_points value=system.fate_points}}
+
+	{{formGroup fields.vocation.fields.title value=system.vocation.title}}
+	{{formGroup
+		fields.vocation.fields.value
+		value=system.vocation.value
+		type="number"
+	}}
+
+	{{formGroup fields.wealth value=system.wealth}}
+	{{formGroup fields.has_savings value=system.has_savings}}
+
+	{{formGroup
+		fields.path.fields.combat.fields.rank
+		value=system.path.combat.rank
+	}}
+	{{formGroup
+		fields.path.fields.skill.fields.rank
+		value=system.path.skill.rank
+	}}
+	{{formGroup
+		fields.path.fields.special.fields.rank
+		value=system.path.special.rank
+	}}
+	{{formGroup
+		fields.defense.fields.toughness.fields.rank
+		value=system.defense.toughness.rank
+	}}
+	{{formGroup
+		fields.defense.fields.perception.fields.rank
+		value=system.defense.perception.rank
+	}}
+	{{formGroup
+		fields.defense.fields.resolve.fields.rank
+		value=system.defense.resolve.rank
+	}}
+
+	{{formGroup
+		fields.skill_proficiency.fields.crafting
+		value=system.skill_proficiency.crafting
+	}}
+	{{formGroup
+		fields.skill_proficiency.fields.deception
+		value=system.skill_proficiency.deception
+	}}
+	{{formGroup
+		fields.skill_proficiency.fields.diplomacy
+		value=system.skill_proficiency.diplomacy
+	}}
+	{{formGroup
+		fields.skill_proficiency.fields.force
+		value=system.skill_proficiency.force
+	}}
+	{{formGroup
+		fields.skill_proficiency.fields.intimidation
+		value=system.skill_proficiency.intimidation
+	}}
+	{{formGroup
+		fields.skill_proficiency.fields.medicine
+		value=system.skill_proficiency.medicine
+	}}
+	{{formGroup
+		fields.skill_proficiency.fields.mobility
+		value=system.skill_proficiency.mobility
+	}}
+	{{formGroup
+		fields.skill_proficiency.fields.skullduggery
+		value=system.skill_proficiency.skullduggery
+	}}
+	{{formGroup
+		fields.skill_proficiency.fields.stealth
+		value=system.skill_proficiency.stealth
+	}}
+	{{formGroup
+		fields.skill_proficiency.fields.survival
+		value=system.skill_proficiency.survival
+	}}
+
+	<!-- TODO: Knowledge skill input -->
 </section>

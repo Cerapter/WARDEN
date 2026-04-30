@@ -14,16 +14,102 @@
 			"hit_points": "Hit Points",
 			"strain": "Strain",
 
+			"size": {
+				"tiny": "Tiny",
+				"small": "Small",
+				"medium": "Medium",
+				"large": "Large",
+				"huge": "Huge",
+				"massive": "Massive"
+			},
+
 			"FIELDS": {
+				"pronouns": {
+					"label": "Pronouns"
+				},
+				"description": {
+					"label": "Description"
+				},
+
+				"size": {
+					"label": "Size"
+				},
+
+				"level": {
+					"label": "Level"
+				},
+
 				"hit_points": {
 					"value": {
 						"label": "Current Hit Points"
 					}
 				},
+				"temporary_hit_points": {
+					"label": "Temporary Hit Points"
+				},
 				"strain": {
 					"value": {
 						"label": "Current Strain"
 					}
+				},
+
+				"fate_points": {
+					"label": "Fate Points"
+				},
+
+				"vocation": {
+					"title": {
+						"label": "Vocation"
+					},
+					"value": {
+						"label": "Vocation Value"
+					}
+				},
+				"wealth": {
+					"label": "Wealth"
+				},
+				"has_savings": {
+					"label": "Savings"
+				},
+
+				"path": {
+					"combat": {
+						"rank": { "label": "Combat" }
+					},
+					"skill": {
+						"rank": { "label": "Skill" }
+					},
+					"special": {
+						"rank": { "label": "Special" }
+					}
+				},
+				"defense": {
+					"toughness": {
+						"rank": { "label": "Toughness" }
+					},
+					"perception": {
+						"rank": { "label": "Perception" }
+					},
+					"resolve": {
+						"rank": { "label": "Resolve" }
+					}
+				},
+
+				"skill_proficiency": {
+					"crafting": { "label": "Crafting" },
+					"deception": { "label": "Deception" },
+					"diplomacy": { "label": "Diplomacy" },
+					"force": { "label": "Force" },
+					"intimidation": { "label": "Intimidation" },
+					"medicine": { "label": "Medicine" },
+					"mobility": { "label": "Mobility" },
+					"skullduggery": { "label": "Skullduggery" },
+					"stealth": { "label": "Stealth" },
+					"survival": { "label": "Survival" }
+				},
+
+				"knowledge_skills": {
+					"label": "Knowledge Skills"
 				}
 			}
 		}
