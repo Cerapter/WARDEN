@@ -12,7 +12,20 @@
 
 			"name": "Character name",
 			"hit_points": "Hit Points",
-			"strain": "Strain"
+			"strain": "Strain",
+
+			"FIELDS": {
+				"hit_points": {
+					"value": {
+						"label": "Current Hit Points"
+					}
+				},
+				"strain": {
+					"value": {
+						"label": "Current Strain"
+					}
+				}
+			}
 		}
 	}
 }

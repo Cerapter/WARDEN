@@ -17,3 +17,7 @@ Hooks.once("init", () => {
 		label: "warden.character.sheet.label",
 	});
 });
+
+Hooks.once("i18nInit", () => {
+	foundry.helpers.Localization.localizeDataModel(CharacterData);
+});

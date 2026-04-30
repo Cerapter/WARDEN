@@ -15,29 +15,17 @@
 	</label>
 	<input type="text" name="name" value="{{actor.name}}" />
 
-	<label>
-		{{localize "warden.character.hit_points"}}:
-	</label>
-	<input
+	{{formGroup
+		fields.hit_points.fields.value
+		value=system.hit_points.value
+		max=10
 		type="number"
-		name="system.hit_points.value"
-		value="{{system.hit_points.value}}"
-		min="0"
-		max="{{system.hit_points.max}}"
-	/>
-	/
-	{{system.hit_points.max}}
+	}}
 
-	<label>
-		{{localize "warden.character.strain"}}:
-	</label>
-	<input
+	{{formGroup
+		fields.strain.fields.value
+		value=system.strain.value
+		max=10
 		type="number"
-		name="system.strain.value"
-		value="{{system.strain.value}}"
-		min="0"
-		max="{{system.strain.max}}"
-	/>
-	/
-	{{system.strain.max}}
+	}}
 </section>

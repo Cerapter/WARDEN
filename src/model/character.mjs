@@ -2,6 +2,8 @@ const { SchemaField, NumberField } = foundry.data.fields;
 const { TypeDataModel } = foundry.abstract;
 
 export class CharacterData extends TypeDataModel {
+	static LOCALIZATION_PREFIXES = ["warden.character"];
+
 	static defineSchema() {
 		return {
 			hit_points: new SchemaField({

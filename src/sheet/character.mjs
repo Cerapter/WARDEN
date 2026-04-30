@@ -16,8 +16,15 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 
 	async _prepareContext(options) {
 		const context = await super._prepareContext(options);
-		context.actor = this.actor;
-		context.system = this.actor.system;
+
+		const actor = this.actor;
+		const system = actor.system;
+
+		context.actor = actor;
+		context.system = system;
+
+		context.fields = system.schema.fields;
+
 		return context;
 	}
 }
