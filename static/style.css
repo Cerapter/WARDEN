@@ -1,3 +1,32 @@
 .scrollable {
 	overflow-y: scroll;
 }
+
+.character-sheet {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+
+	gap: 10px;
+
+	img {
+		grid-column: span 4;
+	}
+
+	.form-group {
+		align-items: center;
+
+		grid-column: span 2;
+
+		display: grid;
+		grid-template-columns: subgrid;
+		grid-template-rows: subgrid;
+
+		&.wide {
+			grid-column: span 4;
+
+			label, .form-fields {
+				grid-column: span 2;
+			}
+		}
+	}
+}

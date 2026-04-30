@@ -1,4 +1,4 @@
-<section class="scrollable">
+<section class="scrollable character-sheet">
 	<img
 		class="profile-img"
 		src="{{actor.img}}"
@@ -10,16 +10,21 @@
 		data-action="editImage"
 	/>
 
-	<label>
-		{{localize "warden.character.name"}}:
-	</label>
-	<input type="text" name="name" value="{{actor.name}}" />
+	<div class="form-group">
+		<label>
+			{{localize "warden.character.name"}}:
+		</label>
+		<div class="form-field">
+			<input type="text" name="name" value="{{actor.name}}" />
+		</div>
+	</div>
 
 	{{formGroup fields.pronouns value=system.pronouns}}
 	{{formGroup
 		fields.description
 		value=system.description
 		elementType="textarea"
+		classes="wide"
 	}}
 
 	{{formGroup fields.size value=system.size localize=true}}
