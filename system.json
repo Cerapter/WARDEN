@@ -7,6 +7,12 @@
 		"minimum": "14",
 		"verified": "14.360"
 	},
+	"esmodules": ["src/warden.mjs"],
+	"documentTypes": {
+		"Actor": {
+			"character": {}
+		}
+	},
 	"languages": [
 		{
 			"lang": "en",

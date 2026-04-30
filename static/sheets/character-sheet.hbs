@@ -1,0 +1,43 @@
+<section>
+	<img
+		class="profile-img"
+		src="{{actor.img}}"
+		title="{{actor.name}}"
+		height="100"
+		width="100"
+		alt=""
+		data-edit="img"
+		data-action="editImage"
+	/>
+
+	<label>
+		{{localize "warden.character.name"}}:
+	</label>
+	<input type="text" name="name" value="{{actor.name}}" />
+
+	<label>
+		{{localize "warden.character.hit_points"}}:
+	</label>
+	<input
+		type="number"
+		name="system.hit_points.value"
+		value="{{system.hit_points.value}}"
+		min="0"
+		max="{{system.hit_points.max}}"
+	/>
+	/
+	{{system.hit_points.max}}
+
+	<label>
+		{{localize "warden.character.strain"}}:
+	</label>
+	<input
+		type="number"
+		name="system.strain.value"
+		value="{{system.strain.value}}"
+		min="0"
+		max="{{system.strain.max}}"
+	/>
+	/
+	{{system.strain.max}}
+</section>
