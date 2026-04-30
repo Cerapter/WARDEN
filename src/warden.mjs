@@ -1,8 +1,8 @@
-import { CharacterData } from "./model/character.mjs";
+import { BaseCharacterData } from "./model/base_character.mjs";
 import { CharacterSheet } from "./sheet/character.mjs";
 
 Hooks.once("init", () => {
-	CONFIG.Actor.dataModels.character = CharacterData;
+	CONFIG.Actor.dataModels.character = BaseCharacterData;
 	CONFIG.Actor.trackableAttributes = {
 		character: {
 			bar: ["hit_points", "strain"],
@@ -19,5 +19,5 @@ Hooks.once("init", () => {
 });
 
 Hooks.once("i18nInit", () => {
-	foundry.helpers.Localization.localizeDataModel(CharacterData);
+	foundry.helpers.Localization.localizeDataModel(BaseCharacterData);
 });

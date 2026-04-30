@@ -7,7 +7,7 @@ const {
 } = foundry.data.fields;
 const { TypeDataModel } = foundry.abstract;
 
-export class CharacterData extends TypeDataModel {
+export class BaseCharacterData extends TypeDataModel {
 	static LOCALIZATION_PREFIXES = ["warden.character"];
 
 	static defineSchema() {
