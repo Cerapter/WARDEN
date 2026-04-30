@@ -19,5 +19,10 @@
 			"name": "English",
 			"path": "lang/en.json"
 		}
-	]
+	],
+	"flags": {
+		"hotReload": {
+			"extensions": ["hbs", "json", "css"]
+		}
+	}
 }
