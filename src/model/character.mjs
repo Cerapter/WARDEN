@@ -25,7 +25,7 @@ export class CharacterData extends BaseCharacterData {
 
 		const skillField = () =>
 			new SchemaField({
-				proficient: new BooleanField({ required: true }),
+				is_proficient: new BooleanField({ required: true }),
 			});
 
 		return {
@@ -137,6 +137,13 @@ export class CharacterData extends BaseCharacterData {
 		this.#populateProficiencyFields(this.defense.toughness);
 		this.#populateProficiencyFields(this.defense.resolve);
 		this.#populateProficiencyFields(this.defense.perception);
+
+		for (const [_, skill] of Object.entries(this.skill)) {
+			skill.proficiency_bonus = skill.is_proficient
+				? this.path.skill.proficiency_bonus
+				: this.untrainedBonus;
+			skill.bonus = skill.proficiency_bonus;
+		}
 
 		this.speed = {};
 		this.speed.base = 5;
