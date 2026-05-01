@@ -14,12 +14,12 @@ export class BaseCharacterData extends TypeDataModel {
 		return {
 			size: new NumberField({
 				choices: {
-					0: "warden.character.size.tiny",
-					1: "warden.character.size.small",
-					2: "warden.character.size.medium",
-					3: "warden.character.size.large",
-					4: "warden.character.size.huge",
-					5: "warden.character.size.massive",
+					0: this.sizeLocKey(0),
+					1: this.sizeLocKey(1),
+					2: this.sizeLocKey(2),
+					3: this.sizeLocKey(3),
+					4: this.sizeLocKey(4),
+					5: this.sizeLocKey(5),
 				},
 			}),
 
@@ -63,5 +63,22 @@ export class BaseCharacterData extends TypeDataModel {
 			 * defense.perception.proficiency_bonus
 			 * */
 		};
+	}
+
+	static sizeLocKey(size) {
+		switch (size) {
+			case 0:
+				return "warden.character.size.tiny";
+			case 1:
+				return "warden.character.size.small";
+			case 2:
+				return "warden.character.size.medium";
+			case 3:
+				return "warden.character.size.large";
+			case 4:
+				return "warden.character.size.huge";
+			case 5:
+				return "warden.character.size.massive";
+		}
 	}
 }
