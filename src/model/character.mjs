@@ -103,4 +103,43 @@ export class CharacterData extends BaseCharacterData {
 			),
 		};
 	}
+
+	get untrainedBonus() {
+		return Math.min(Math.floor(this.level / 2), 10);
+	}
+
+	#calcProficiencyBonus(rank) {
+		if (rank === 0) return this.untrainedBonus;
+
+		return this.level + rank;
+	}
+	#populateProficiencyFields(prof) {
+		prof.proficiency_bonus = this.#calcProficiencyBonus(prof.rank);
+		prof.bonus = prof.proficiency_bonus;
+	}
+
+	prepareDerivedData() {
+		super.prepareDerivedData();
+
+		this.hit_points.max = 10 + 2 * this.defense.toughness.rank;
+		this.hit_points.value = Math.min(
+			this.hit_points.value,
+			this.hit_points.max,
+		);
+
+		this.strain.max = 10 + 2 * this.defense.resolve.rank;
+		this.strain.value = Math.min(this.strain.value, this.strain.max);
+
+		this.#populateProficiencyFields(this.path.combat);
+		this.#populateProficiencyFields(this.path.skill);
+		this.#populateProficiencyFields(this.path.special);
+
+		this.#populateProficiencyFields(this.defense.toughness);
+		this.#populateProficiencyFields(this.defense.resolve);
+		this.#populateProficiencyFields(this.defense.perception);
+
+		this.speed = {};
+		this.speed.base = 5;
+		this.speed.value = this.speed.base;
+	}
 }
