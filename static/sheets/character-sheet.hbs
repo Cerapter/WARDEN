@@ -221,12 +221,22 @@
 					skill=system.skill.survival
 					name="survival"
 				}}
-			</div>
-			<div class="curve-button">
-				<button><i class="fa-solid fa-plus"></i></button>
+
+				{{#each system.knowledge_skills}}
+					{{#if (eq @index 0)}}
+						<hr class="col-span-6" />
+					{{/if}}
+
+					{{> "systems/warden/static/partials/knowledge-skill-display.hbs"
+						id=@key
+						skill=this
+					}}
+				{{/each}}
 			</div>
 
-			<!-- TODO: Knowledge skills -->
+			<div class="curve-button">
+				<button data-action="addKnowledgeSkill"><i class="fa-solid fa-plus"></i></button>
+			</div>
 		</section>
 	</div>
 

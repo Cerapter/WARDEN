@@ -13,6 +13,9 @@
 .col-span-3 {
 	grid-column: span 3;
 }
+.col-span-6 {
+	grid-column: span 6;
+}
 .row-span-2 {
 	grid-row: span 2;
 }
@@ -292,7 +295,7 @@
 	.skill-wrapper {
 		.skill-grid {
 			display: grid;
-			grid-template-columns: repeat(2, auto auto 1fr);
+			grid-template-columns: repeat(2, min-content min-content 1fr);
 
 			gap: 0.5ch;
 
@@ -300,8 +303,16 @@
 
 			align-items: center;
 
-			> * {
+			> span {
 				height: 1lh;
+			}
+			hr {
+				margin: 0.5em;
+			}
+			input {
+				line-height: 1em;
+				height: unset;
+				padding: 0;
 			}
 		}
 	}

@@ -95,6 +95,7 @@ export class CharacterData extends BaseCharacterData {
 
 			knowledge_skills: new TypedObjectField(
 				new SchemaField({
+					topic: new StringField({ required: true }),
 					is_niche: new BooleanField({
 						required: true,
 						default: false,
@@ -142,6 +143,11 @@ export class CharacterData extends BaseCharacterData {
 			skill.proficiency_bonus = skill.is_proficient
 				? this.path.skill.proficiency_bonus
 				: this.untrainedBonus;
+			skill.bonus = skill.proficiency_bonus;
+		}
+
+		for (const [_, skill] of Object.entries(this.knowledge_skills)) {
+			skill.proficiency_bonus = this.path.skill.proficiency_bonus;
 			skill.bonus = skill.proficiency_bonus;
 		}
 

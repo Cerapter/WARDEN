@@ -9,6 +9,7 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 			templates: [
 				"systems/warden/static/partials/proficiency-display.hbs",
 				"systems/warden/static/partials/skill-display.hbs",
+				"systems/warden/static/partials/knowledge-skill-display.hbs",
 			],
 		},
 	};
@@ -20,6 +21,8 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 				buttons: [0, 2],
 			},
 			toggleValue: CharacterSheet.toggleValue,
+			addKnowledgeSkill: CharacterSheet.addKnowledgeSkill,
+			deleteKnowledgeSkill: CharacterSheet.deleteKnowledgeSkill,
 		},
 		window: {
 			contentClasses: ["zero-pad"],
@@ -64,6 +67,19 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 		const path = target.dataset.path;
 		this.actor.update({
 			[path]: !foundry.utils.getProperty(this.actor, path),
+		});
+	}
+	static async addKnowledgeSkill() {
+		await this.actor.update({
+			[`system.knowledge_skills.${foundry.utils.randomID()}`]: {},
+		});
+	}
+	static async deleteKnowledgeSkill(_, target) {
+		const id = target.dataset.id;
+
+		await this.actor.update({
+			[`system.knowledge_skills.${id}`]:
+				new foundry.data.operators.ForcedDeletion(),
 		});
 	}
 }
