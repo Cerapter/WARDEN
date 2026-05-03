@@ -154,5 +154,7 @@ export class CharacterData extends BaseCharacterData {
 		this.speed = {};
 		this.speed.base = 5;
 		this.speed.value = this.speed.base;
+
+		this.wealth = Math.min(this.wealth, this.vocation.value);
 	}
 }
