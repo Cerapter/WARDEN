@@ -95,17 +95,21 @@
 					}
 				},
 
-				"skill_proficiency": {
-					"crafting": { "label": "Crafting" },
-					"deception": { "label": "Deception" },
-					"diplomacy": { "label": "Diplomacy" },
-					"force": { "label": "Force" },
-					"intimidation": { "label": "Intimidation" },
-					"medicine": { "label": "Medicine" },
-					"mobility": { "label": "Mobility" },
-					"skullduggery": { "label": "Skullduggery" },
-					"stealth": { "label": "Stealth" },
-					"survival": { "label": "Survival" }
+				"skill": {
+					"crafting": { "proficient": { "label": "Crafting" } },
+					"deception": { "proficient": { "label": "Deception" } },
+					"diplomacy": { "proficient": { "label": "Diplomacy" } },
+					"force": { "proficient": { "label": "Force" } },
+					"intimidation": {
+						"proficient": { "label": "Intimidation" }
+					},
+					"medicine": { "proficient": { "label": "Medicine" } },
+					"mobility": { "proficient": { "label": "Mobility" } },
+					"skullduggery": {
+						"proficient": { "label": "Skullduggery" }
+					},
+					"stealth": { "proficient": { "label": "Stealth" } },
+					"survival": { "proficient": { "label": "Survival" } }
 				},
 
 				"knowledge_skills": {
