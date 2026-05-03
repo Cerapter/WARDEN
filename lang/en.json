@@ -7,14 +7,20 @@
 	"warden": {
 		"character": {
 			"sheet": {
-				"label": "WARDEN Player Character Sheet"
+				"label": "WARDEN Player Character Sheet",
+				"equipment": "Equipment"
 			},
 
 			"name": "Character name",
 			"hit_points": "Hit Points",
 			"strain": "Strain",
 
+			"speed": "Speed",
+
+			"fate": "Fate",
+
 			"size": {
+				"label": "Size",
 				"tiny": "Tiny",
 				"small": "Small",
 				"medium": "Medium",
@@ -25,7 +31,8 @@
 
 			"FIELDS": {
 				"pronouns": {
-					"label": "Pronouns"
+					"label": "Pronouns",
+					"placeholder": "Pronouns"
 				},
 				"description": {
 					"label": "Description"
@@ -62,7 +69,8 @@
 						"label": "Vocation"
 					},
 					"value": {
-						"label": "Vocation Value"
+						"label": "Vocation Value",
+						"short": "Value"
 					}
 				},
 				"wealth": {
@@ -74,42 +82,75 @@
 
 				"path": {
 					"combat": {
-						"rank": { "label": "Combat" }
+						"label": "Combat",
+						"rank": { "label": "Combat Rank" }
 					},
 					"skill": {
-						"rank": { "label": "Skill" }
+						"label": "Skill",
+						"rank": { "label": "Skill Rank" }
 					},
 					"special": {
-						"rank": { "label": "Special" }
+						"label": "Special",
+						"rank": { "label": "Special Rank" }
 					}
 				},
 				"defense": {
 					"toughness": {
-						"rank": { "label": "Toughness" }
+						"label": "Toughness",
+						"rank": { "label": "Toughness Rank" }
 					},
 					"perception": {
-						"rank": { "label": "Perception" }
+						"label": "Perception",
+						"rank": { "label": "Perception Rank" }
 					},
 					"resolve": {
-						"rank": { "label": "Resolve" }
+						"label": "Resolve",
+						"rank": { "label": "Resolve Rank" }
 					}
 				},
 
 				"skill": {
-					"crafting": { "is_proficient": { "label": "Crafting" } },
-					"deception": { "is_proficient": { "label": "Deception" } },
-					"diplomacy": { "is_proficient": { "label": "Diplomacy" } },
-					"force": { "is_proficient": { "label": "Force" } },
+					"title": "Skills",
+					"crafting": {
+						"name": "Crafting",
+						"is_proficient": { "label": "Crafting" }
+					},
+					"deception": {
+						"name": "Deception",
+						"is_proficient": { "label": "Deception" }
+					},
+					"diplomacy": {
+						"name": "Diplomacy",
+						"is_proficient": { "label": "Diplomacy" }
+					},
+					"force": {
+						"name": "Force",
+						"is_proficient": { "label": "Force" }
+					},
 					"intimidation": {
+						"name": "Intimidation",
 						"is_proficient": { "label": "Intimidation" }
 					},
-					"medicine": { "is_proficient": { "label": "Medicine" } },
-					"mobility": { "is_proficient": { "label": "Mobility" } },
+					"medicine": {
+						"name": "Medicine",
+						"is_proficient": { "label": "Medicine" }
+					},
+					"mobility": {
+						"name": "Mobility",
+						"is_proficient": { "label": "Mobility" }
+					},
 					"skullduggery": {
+						"name": "Skullduggery",
 						"is_proficient": { "label": "Skullduggery" }
 					},
-					"stealth": { "is_proficient": { "label": "Stealth" } },
-					"survival": { "is_proficient": { "label": "Survival" } }
+					"stealth": {
+						"name": "Stealth",
+						"is_proficient": { "label": "Stealth" }
+					},
+					"survival": {
+						"name": "Survival",
+						"is_proficient": { "label": "Survival" }
+					}
 				},
 
 				"knowledge_skills": {

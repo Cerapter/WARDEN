@@ -1,5 +1,5 @@
-<section class="scrollable character-sheet">
-	<img
+<section class="character-sheet">
+	<!--<img
 		class="profile-img"
 		src="{{actor.img}}"
 		title="{{actor.name}}"
@@ -8,124 +8,233 @@
 		alt=""
 		data-edit="img"
 		data-action="editImage"
-	/>
+	/>-->
 
-	<div class="form-group">
-		<label>
-			{{localize "warden.character.name"}}:
-		</label>
-		<div class="form-field">
-			<input type="text" name="name" value="{{actor.name}}" />
-		</div>
+	{{formInput
+		actor.schema.fields.name
+		value=actor.name
+		classes="col-span-3 gray header"
+	}}
+	{{formInput
+		fields.pronouns
+		value=system.pronouns
+		classes="gray header"
+	}}
+
+	{{formGroup
+		fields.level
+		value=system.level
+		max=10
+		type="number"
+		classes="black subheader"
+	}}
+	<div class="white subheader">
+		<label>Untrained Bonus</label>
+		<div>+1</div>
+	</div>
+	<div class="black subheader">
+		<label>Origin1</label>
+		<div>None yet</div>
+	</div>
+	<div class="white subheader">
+		<label>Origin2</label>
+		<div>None yet</div>
 	</div>
 
-	{{formGroup fields.pronouns value=system.pronouns}}
+	<section class="resource-wrapper col-span-2 white text-center">
+		<div class="grid row-subgrid row-span-2">
+			<div class="slashed value-border flex">
+				{{formInput
+					fields.hit_points.fields.value
+					value=system.hit_points.value
+					max=system.hit_points.max
+					type="number"
+				}}
+				<div class="divider"></div>
+				<div>{{ system.hit_points.max }}</div>
+			</div>
+			<label>{{localize "warden.character.hit_points"}}</label>
+		</div>
+
+		<div class="grid row-subgrid row-span-4">
+			<div class="fate row-span-3" data-action="clickChanger" data-path="system.fate_points">
+				{{> warden-diamonds
+					num=three_fields
+					filled=system.fate_points
+				}}
+			</div>
+			{{localize "warden.character.fate"}}
+		</div>
+
+		<div class="grid row-subgrid row-span-2">
+			<div class="slashed value-border flex">
+				{{formInput
+					fields.strain.fields.value
+					value=system.strain.value
+					max=system.strain.max
+					type="number"
+				}}
+				<div class="divider"></div>
+				<div>{{ system.strain.max }}</div>
+			</div>
+			<label>{{localize "warden.character.strain"}}</label>
+		</div>
+
+		<!-- These two are pretty weird right now -->
+		<div class="grid row-subgrid row-span-2">
+			<div class="slashed value-border flex">
+				<div>{{ system.speed.value }}</div>
+				<div class="divider"></div>
+				<div>{{ system.speed.base }}</div>
+			</div>
+			<label>{{localize "warden.character.speed"}}</label>
+		</div>
+		<div class="grid row-subgrid row-span-2">
+			<div class="value-border grid place-center">{{localize (warden-size-loc-key system.size)}}</div>
+			<label>{{localize "warden.character.size.label"}}</label>
+		</div>
+	</section>
+
 	{{formGroup
 		fields.description
 		value=system.description
 		elementType="textarea"
-		classes="wide"
+		classes="col-span-2 white tag-label textarea-grow"
 	}}
 
-	{{formGroup fields.size value=system.size localize=true}}
+	<div class="flow-col col-span-2">
+		<section class="path-defense-wrapper gray col-span-2">
+			{{> "systems/warden/static/partials/proficiency-display.hbs"
+				locFragment="path.combat"
+				bonus=system.path.combat.bonus
+				rank=system.path.combat.rank
+			}}
+			{{> "systems/warden/static/partials/proficiency-display.hbs"
+				locFragment="defense.toughness"
+				bonus=system.defense.toughness.bonus
+				rank=system.defense.toughness.rank
+			}}
 
-	{{formGroup fields.level value=system.level max=10 type="number"}}
+			{{> "systems/warden/static/partials/proficiency-display.hbs"
+				locFragment="path.skill"
+				bonus=system.path.skill.bonus
+				rank=system.path.skill.rank
+			}}
+			{{> "systems/warden/static/partials/proficiency-display.hbs"
+				locFragment="defense.resolve"
+				bonus=system.defense.resolve.bonus
+				rank=system.defense.resolve.rank
+			}}
 
-	{{formGroup
-		fields.hit_points.fields.value
-		value=system.hit_points.value
-		max=10
-		type="number"
-	}}
+			{{> "systems/warden/static/partials/proficiency-display.hbs"
+				locFragment="path.special"
+				bonus=system.path.special.bonus
+				rank=system.path.special.rank
+			}}
+			{{> "systems/warden/static/partials/proficiency-display.hbs"
+				locFragment="defense.perception"
+				bonus=system.defense.perception.bonus
+				rank=system.defense.perception.rank
+			}}
+		</section>
+
+		<section class="grid col-subgrid col-span-2">
+			<header class="black text-center bold col-span-2">{{localize "warden.character.sheet.equipment"}}</header>
+
+			<div class="wealth-wrapper white col-span-2 text-center">
+				<div class="grid row-subgrid col-subgrid row-span-2 col-span-3">
+					<div class="slashed value-border grid col-subgrid col-span-3">
+						{{formInput
+							fields.vocation.fields.title
+							value=system.vocation.title
+						}}
+						<div class="divider"></div>
+						{{formInput
+							fields.vocation.fields.value
+							value=system.vocation.value
+							type="number"
+						}}
+					</div>
+
+					<label class="col-span-2">{{localize "warden.character.FIELDS.vocation.title.label"}}</label>
+					<label>{{localize "warden.character.FIELDS.vocation.value.short"}}</label>
+				</div>
+				<div class="value-border grid">
+					{{formInput
+						fields.wealth
+						value=system.wealth
+					}}
+				</div>
+				<div class="grid place-center" data-action="toggleValue" data-path="system.has_savings">
+					{{> warden-diamond
+						filled=system.has_savings
+					}}
+				</div>
+
+				<label>{{localize "warden.character.FIELDS.wealth.label"}}</label>
+				<label>{{localize "warden.character.FIELDS.has_savings.label"}}</label>
+			</div>
+		</section>
+	</div>
+
+	<div class="flow-col col-span-2">
+		<section class="skill-wrapper col-span-2 gray">
+			<header class="black bold text-center">{{localize "warden.character.FIELDS.skill.title"}}</header>
+			<div class="skill-grid">
+				{{> "systems/warden/static/partials/skill-display.hbs"
+					skill=system.skill.crafting
+					name="crafting"
+				}}
+				{{> "systems/warden/static/partials/skill-display.hbs"
+					skill=system.skill.deception
+					name="deception"
+				}}
+				{{> "systems/warden/static/partials/skill-display.hbs"
+					skill=system.skill.diplomacy
+					name="diplomacy"
+				}}
+				{{> "systems/warden/static/partials/skill-display.hbs"
+					skill=system.skill.force
+					name="force"
+				}}
+				{{> "systems/warden/static/partials/skill-display.hbs"
+					skill=system.skill.intimidation
+					name="intimidation"
+				}}
+				{{> "systems/warden/static/partials/skill-display.hbs"
+					skill=system.skill.medicine
+					name="medicine"
+				}}
+				{{> "systems/warden/static/partials/skill-display.hbs"
+					skill=system.skill.mobility
+					name="mobility"
+				}}
+				{{> "systems/warden/static/partials/skill-display.hbs"
+					skill=system.skill.skullduggery
+					name="skullduggery"
+				}}
+				{{> "systems/warden/static/partials/skill-display.hbs"
+					skill=system.skill.stealth
+					name="stealth"
+				}}
+				{{> "systems/warden/static/partials/skill-display.hbs"
+					skill=system.skill.survival
+					name="survival"
+				}}
+			</div>
+			<div class="curve-button">
+				<button><i class="fa-solid fa-plus"></i></button>
+			</div>
+
+			<!-- TODO: Knowledge skills -->
+		</section>
+	</div>
+
+	<!-- TODO: Put this somewhere (likely move speed & size somewhere else and put this there)
 	{{formGroup
 		fields.temporary_hit_points
 		value=system.temporary_hit_points
 		type="number"
 	}}
-	{{formGroup
-		fields.strain.fields.value
-		value=system.strain.value
-		max=10
-		type="number"
-	}}
-
-	{{formGroup fields.fate_points value=system.fate_points}}
-
-	{{formGroup fields.vocation.fields.title value=system.vocation.title}}
-	{{formGroup
-		fields.vocation.fields.value
-		value=system.vocation.value
-		type="number"
-	}}
-
-	{{formGroup fields.wealth value=system.wealth}}
-	{{formGroup fields.has_savings value=system.has_savings}}
-
-	{{formGroup
-		fields.path.fields.combat.fields.rank
-		value=system.path.combat.rank
-	}}
-	{{formGroup
-		fields.path.fields.skill.fields.rank
-		value=system.path.skill.rank
-	}}
-	{{formGroup
-		fields.path.fields.special.fields.rank
-		value=system.path.special.rank
-	}}
-	{{formGroup
-		fields.defense.fields.toughness.fields.rank
-		value=system.defense.toughness.rank
-	}}
-	{{formGroup
-		fields.defense.fields.resolve.fields.rank
-		value=system.defense.resolve.rank
-	}}
-	{{formGroup
-		fields.defense.fields.perception.fields.rank
-		value=system.defense.perception.rank
-	}}
-
-	{{formGroup
-		fields.skill.fields.crafting.fields.is_proficient
-		value=system.skill.crafting.is_proficient
-	}}
-	{{formGroup
-		fields.skill.fields.deception.fields.is_proficient
-		value=system.skill.deception.is_proficient
-	}}
-	{{formGroup
-		fields.skill.fields.diplomacy.fields.is_proficient
-		value=system.skill.diplomacy.is_proficient
-	}}
-	{{formGroup
-		fields.skill.fields.force.fields.is_proficient
-		value=system.skill.force.is_proficient
-	}}
-	{{formGroup
-		fields.skill.fields.intimidation.fields.is_proficient
-		value=system.skill.intimidation.is_proficient
-	}}
-	{{formGroup
-		fields.skill.fields.medicine.fields.is_proficient
-		value=system.skill.medicine.is_proficient
-	}}
-	{{formGroup
-		fields.skill.fields.mobility.fields.is_proficient
-		value=system.skill.mobility.is_proficient
-	}}
-	{{formGroup
-		fields.skill.fields.skullduggery.fields.is_proficient
-		value=system.skill.skullduggery.is_proficient
-	}}
-	{{formGroup
-		fields.skill.fields.stealth.fields.is_proficient
-		value=system.skill.stealth.is_proficient
-	}}
-	{{formGroup
-		fields.skill.fields.survival.fields.is_proficient
-		value=system.skill.survival.is_proficient
-	}}
-
-	<!-- TODO: Knowledge skill -->
+	-->
 </section>

@@ -1,0 +1,12 @@
+<span data-action="toggleValue" data-path="system.skill.{{ name }}.is_proficient">
+	{{> warden-diamond
+		filled=skill.is_proficient
+	}}
+</span>
+<span class="text-right">
+	{{~numberFormat
+		skill.bonus
+		sign=true
+	~}}
+</span>
+<span>{{localize (concat "warden.character.FIELDS.skill." name ".name")}}</span>

@@ -1,0 +1,17 @@
+<div class="row-span-2 grid row-subgrid place-center">
+	<label>
+		{{localize (concat "warden.character.FIELDS." locFragment ".label")}}
+		(
+		{{~numberFormat
+			bonus
+			sign=true
+		~}}
+		)
+	</label>
+	<div class="diamonds" data-action="clickChanger" data-path="{{concat 'system.' locFragment '.rank'}}">
+		{{> warden-diamonds
+			num=five_fields
+			filled=rank
+		}}
+	</div>
+</div>

@@ -5,11 +5,25 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 	static PARTS = {
 		main: {
 			template: "systems/warden/static/sheets/character-sheet.hbs",
-			scrollable: [""],
+			scrollable: ["", ".description textarea"],
+			templates: [
+				"systems/warden/static/partials/proficiency-display.hbs",
+				"systems/warden/static/partials/skill-display.hbs",
+			],
 		},
 	};
 
 	static DEFAULT_OPTIONS = {
+		actions: {
+			clickChanger: {
+				handler: CharacterSheet.clickChanger,
+				buttons: [0, 2],
+			},
+			toggleValue: CharacterSheet.toggleValue,
+		},
+		window: {
+			contentClasses: ["zero-pad"],
+		},
 		form: {
 			submitOnChange: true,
 		},
@@ -26,6 +40,30 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 
 		context.fields = system.schema.fields;
 
+		context.three_fields = Array.fromRange(3);
+		context.five_fields = Array.fromRange(5);
+
 		return context;
+	}
+
+	static async clickChanger(e, target) {
+		const path = target.dataset.path;
+		const dataField = this.actor.getFieldForProperty(path);
+		const property = foundry.utils.getProperty(this.actor, path);
+
+		const change = e.button === 0 ? 1 : -1;
+		this.actor.update({
+			[path]: Math.clamp(
+				property + change,
+				dataField.options.min,
+				dataField.options.max,
+			),
+		});
+	}
+	static async toggleValue(_, target) {
+		const path = target.dataset.path;
+		this.actor.update({
+			[path]: !foundry.utils.getProperty(this.actor, path),
+		});
 	}
 }
