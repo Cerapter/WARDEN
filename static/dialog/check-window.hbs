@@ -1,0 +1,24 @@
+<section class="check-window">
+	<div class="modifiers">
+		{{#each parameters.modifiers}}
+			<label class="grid col-subgrid col-span-4 align-center" data-action="toggleModifier" data-id="{{ @index }}">
+				<span class="text-right">
+					{{~numberFormat
+						value
+						sign=true
+					~}}
+				</span>
+				<span>{{ label }}</span>
+				<span class="text-center" title='{{localize (concat "warden.modifier_type." type)}}'>
+					{{localize (concat "warden.modifier_type_abbr." type)}}
+				</span>
+				<input
+					type="checkbox"
+					{{checked enabled}}
+				/>
+			</label>
+		{{/each}}
+	</div>
+
+	<button data-action="execute">Roll ({{ formula }})</button>
+</section>

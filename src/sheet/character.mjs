@@ -1,3 +1,5 @@
+import { CheckWindow } from "../dialog/check.mjs";
+
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheet } = foundry.applications.sheets;
 
@@ -23,6 +25,7 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 			toggleValue: CharacterSheet.toggleValue,
 			addKnowledgeSkill: CharacterSheet.addKnowledgeSkill,
 			deleteKnowledgeSkill: CharacterSheet.deleteKnowledgeSkill,
+			check: CharacterSheet.check,
 		},
 		window: {
 			contentClasses: ["zero-pad"],
@@ -81,5 +84,19 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 			[`system.knowledge_skills.${id}`]:
 				new foundry.data.operators.ForcedDeletion(),
 		});
+	}
+
+	static async check(_, target) {
+		const rollData = this.actor.getRollData();
+		const speaker = ChatMessage.getSpeaker({ actor: this.actor });
+
+		let parameters;
+		switch (target.dataset.type) {
+			case "untrained":
+				parameters = this.actor.system.untrainedRollParameters();
+				break;
+		}
+
+		new CheckWindow(rollData, speaker, parameters).render(true);
 	}
 }

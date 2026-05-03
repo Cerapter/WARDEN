@@ -19,6 +19,9 @@
 
 			"fate": "Fate",
 
+			"untrained": "Untrained",
+			"untrained_check": "Untrained Check",
+
 			"size": {
 				"label": "Size",
 				"tiny": "Tiny",
@@ -157,6 +160,20 @@
 					"label": "Knowledge Skills"
 				}
 			}
+		},
+		"modifier_type": {
+			"universal": "Universal",
+			"proficiency": "Proficiency",
+			"item": "Item",
+			"status": "Status",
+			"circumstance": "Circumstance"
+		},
+		"modifier_type_abbr": {
+			"universal": "UNIV",
+			"proficiency": "PROF",
+			"item": "ITEM",
+			"status": "STAT",
+			"circumstance": "CIRC"
 		}
 	}
 }

@@ -28,9 +28,14 @@
 		type="number"
 		classes="black subheader"
 	}}
-	<div class="white subheader">
+	<div class="white subheader" data-action="check" data-type="untrained">
 		<label>Untrained Bonus</label>
-		<div>+1</div>
+		<div>
+			{{~numberFormat
+				system.untrainedBonus
+				sign=true
+			~}}
+		</div>
 	</div>
 	<div class="black subheader">
 		<label>Origin1</label>

@@ -157,4 +157,17 @@ export class CharacterData extends BaseCharacterData {
 
 		this.wealth = Math.min(this.wealth, this.vocation.value);
 	}
+
+	untrainedRollParameters() {
+		return {
+			title: game.i18n.localize("warden.character.untrained_check"),
+			modifiers: [
+				{
+					label: game.i18n.localize("warden.character.untrained"),
+					type: "proficiency",
+					value: this.untrainedBonus,
+				},
+			],
+		};
+	}
 }
