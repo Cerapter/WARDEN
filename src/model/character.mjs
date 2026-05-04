@@ -158,14 +158,40 @@ export class CharacterData extends BaseCharacterData {
 		this.wealth = Math.min(this.wealth, this.vocation.value);
 	}
 
+	formatProficiency(proficiency) {
+		return game.i18n.format("warden.proficiency_label", {
+			rank: game.i18n.format(
+				`warden.proficiency_rank.${proficiency.rank}`,
+			),
+		});
+	}
 	untrainedRollParameters() {
 		return {
-			title: game.i18n.localize("warden.character.untrained_check"),
+			title: game.i18n.localize("warden.check_label", {
+				type: game.i18n.localize("warden.proficiency_rank.0"),
+			}),
 			modifiers: [
 				{
-					label: game.i18n.localize("warden.character.untrained"),
+					label: this.formatProficiency({ rank: 0 }),
 					type: "proficiency",
 					value: this.untrainedBonus,
+				},
+			],
+		};
+	}
+	proficiencyRollParameters(proficiency_name) {
+		const path = foundry.utils.getProperty(this, proficiency_name);
+		return {
+			title: game.i18n.localize("warden.check_label", {
+				type: game.i18n.localize(
+					`warden.character.FIELDS.${proficiency_name}.label`,
+				),
+			}),
+			modifiers: [
+				{
+					label: this.formatProficiency(path),
+					type: "proficiency",
+					value: path.proficiency_bonus,
 				},
 			],
 		};

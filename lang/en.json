@@ -19,9 +19,6 @@
 
 			"fate": "Fate",
 
-			"untrained": "Untrained",
-			"untrained_check": "Untrained Check",
-
 			"size": {
 				"label": "Size",
 				"tiny": "Tiny",
@@ -174,6 +171,19 @@
 			"item": "ITEM",
 			"status": "STAT",
 			"circumstance": "CIRC"
+		},
+
+		"check_label": "{type} Check",
+
+		"proficiency_label": "Proficiency ({rank})",
+		"proficiency": "Proficiency",
+		"proficiency_rank": {
+			"0": "Untrained",
+			"1": "Novice",
+			"2": "Trained",
+			"3": "Adept",
+			"4": "Expert",
+			"5": "Master"
 		}
 	}
 }

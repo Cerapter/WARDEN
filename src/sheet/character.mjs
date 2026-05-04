@@ -95,6 +95,10 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 			case "untrained":
 				parameters = this.actor.system.untrainedRollParameters();
 				break;
+			case "proficiency":
+				const path = target.dataset.path;
+				parameters = this.actor.system.proficiencyRollParameters(path);
+				break;
 		}
 
 		new CheckWindow(rollData, speaker, parameters).render(true);
