@@ -25,17 +25,17 @@
 		{{/each}}
 		<hr class="col-span-4" />
 		<form class="add-modifier-form grid col-subgrid col-span-4">
-			<input class="text-right" type="number" name="value" value="{{ form_data.value }}" />
+			<input class="text-right" type="number" name="value" value="{{ pending_modifier.value }}" />
 			<input
 				type="text"
 				name="label"
-				value="{{ form_data.label }}"
+				value="{{ pending_modifier.label }}"
 				placeholder="{{localize 'warden.modifier_label'}}"
 			/>
 			<select name="type">
 				{{selectOptions
 					choices
-					selected=form_data.type
+					selected=pending_modifier.type
 					localize=true
 				}}
 			</select>

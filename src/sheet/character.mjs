@@ -1,4 +1,4 @@
-import { CheckWindow } from "../dialog/check.mjs";
+import { runCheck } from "../roll/check_manager.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ActorSheet } = foundry.applications.sheets;
@@ -86,7 +86,7 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 		});
 	}
 
-	static async check(_, target) {
+	static async check(e, target) {
 		const rollData = this.actor.getRollData();
 		const speaker = ChatMessage.getSpeaker({ actor: this.actor });
 
@@ -112,6 +112,6 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 				break;
 		}
 
-		new CheckWindow(rollData, speaker, parameters).render(true);
+		return runCheck(rollData, speaker, parameters, { skip: e.shiftKey });
 	}
 }
