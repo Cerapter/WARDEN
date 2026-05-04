@@ -3,10 +3,12 @@
 		filled=skill.is_proficient
 	}}
 </span>
-<span class="text-right">
-	{{~numberFormat
-		skill.bonus
-		sign=true
-	~}}
+<span class="grid col-span-2 col-subgrid" data-action="check" data-type="skill" data-skill="{{ name }}">
+	<span class="text-right">
+		{{~numberFormat
+			skill.bonus
+			sign=true
+		~}}
+	</span>
+	<span>{{localize (concat "warden.character.FIELDS.skill." name ".name")}}</span>
 </span>
-<span>{{localize (concat "warden.character.FIELDS.skill." name ".name")}}</span>

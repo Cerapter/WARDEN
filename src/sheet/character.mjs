@@ -99,6 +99,14 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 				const path = target.dataset.path;
 				parameters = this.actor.system.proficiencyRollParameters(path);
 				break;
+			case "skill":
+				const skill = target.dataset.skill;
+				parameters = this.actor.system.skillRollParameters(skill);
+				break;
+			case "knowledge":
+				const id = target.dataset.id;
+				parameters = this.actor.system.knowledgeRollParameters(id);
+				break;
 		}
 
 		new CheckWindow(rollData, speaker, parameters).render(true);

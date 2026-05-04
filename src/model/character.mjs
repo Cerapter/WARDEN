@@ -158,11 +158,9 @@ export class CharacterData extends BaseCharacterData {
 		this.wealth = Math.min(this.wealth, this.vocation.value);
 	}
 
-	formatProficiency(proficiency) {
+	formatProficiency(rank) {
 		return game.i18n.format("warden.proficiency_label", {
-			rank: game.i18n.format(
-				`warden.proficiency_rank.${proficiency.rank}`,
-			),
+			rank: game.i18n.format(`warden.proficiency_rank.${rank}`),
 		});
 	}
 	untrainedRollParameters() {
@@ -172,7 +170,7 @@ export class CharacterData extends BaseCharacterData {
 			}),
 			modifiers: [
 				{
-					label: this.formatProficiency({ rank: 0 }),
+					label: this.formatProficiency(0),
 					type: "proficiency",
 					value: this.untrainedBonus,
 				},
@@ -189,9 +187,44 @@ export class CharacterData extends BaseCharacterData {
 			}),
 			modifiers: [
 				{
-					label: this.formatProficiency(path),
+					label: this.formatProficiency(path.rank),
 					type: "proficiency",
 					value: path.proficiency_bonus,
+				},
+			],
+		};
+	}
+	skillRollParameters(skill_name) {
+		const skill = this.skill[skill_name];
+		return {
+			title: game.i18n.localize("warden.check_label", {
+				type: game.i18n.localize(
+					`warden.character.FIELDS.skill.${skill_name}.name`,
+				),
+			}),
+			modifiers: [
+				{
+					label: this.formatProficiency(
+						skill.is_proficient ? this.path.skill.rank : 0,
+					),
+					type: "proficiency",
+					value: skill.proficiency_bonus,
+				},
+			],
+		};
+	}
+	knowledgeRollParameters(id) {
+		const skill = this.knowledge_skills[id];
+		return {
+			title: game.i18n.localize("warden.check_label", {
+				type: skill.topic,
+			}),
+			benefit: skill.is_niche,
+			modifiers: [
+				{
+					label: this.formatProficiency(this.path.skill.rank),
+					type: "proficiency",
+					value: skill.proficiency_bonus,
 				},
 			],
 		};
