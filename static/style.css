@@ -356,9 +356,16 @@
 
 	.modifiers {
 		display: grid;
-		grid-template-columns: min-content max-content min-content min-content;
+		grid-template-columns: min-content max-content max-content min-content;
 
 		gap: 0.25em 1ch;
 		margin-bottom: 1em;
+
+		button {
+			height: 100%;
+		}
+	}
+	input[type="number"] {
+		min-width: calc(4ch + 1rem);
 	}
 }

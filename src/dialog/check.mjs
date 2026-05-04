@@ -16,6 +16,12 @@ export class CheckWindow extends HandlebarsApplicationMixin(ApplicationV2) {
 		this.#enableBiggestModifiers("item");
 		this.#enableBiggestModifiers("status");
 		this.#enableBiggestModifiers("circumstance");
+
+		this.form_data = {
+			value: 0,
+			label: "",
+			type: "circumstance",
+		};
 	}
 	#enableBiggestModifiers(type) {
 		const sorted = this.parameters.modifiers
@@ -36,6 +42,13 @@ export class CheckWindow extends HandlebarsApplicationMixin(ApplicationV2) {
 	static PARTS = {
 		main: {
 			template: "systems/warden/static/dialog/check-window.hbs",
+			forms: {
+				".add-modifier-form": {
+					handler: CheckWindow.#onSubmit,
+					submitOnChange: true,
+					closeOnSubmit: false,
+				},
+			},
 		},
 	};
 
@@ -55,6 +68,15 @@ export class CheckWindow extends HandlebarsApplicationMixin(ApplicationV2) {
 
 		context.parameters = this.parameters;
 		context.formula = this.#formula;
+
+		context.form_data = this.form_data;
+		context.choices = {
+			universal: "warden.modifier_type_abbr.universal",
+			proficiency: "warden.modifier_type_abbr.proficiency",
+			item: "warden.modifier_type_abbr.item",
+			status: "warden.modifier_type_abbr.status",
+			circumstance: "warden.modifier_type_abbr.circumstance",
+		};
 
 		return context;
 	}
@@ -100,6 +122,24 @@ export class CheckWindow extends HandlebarsApplicationMixin(ApplicationV2) {
 		}
 
 		mod.enabled = !mod.enabled;
+
+		this.render();
+	}
+	static async #onSubmit(e, form, data) {
+		this.form_data = data.object;
+
+		if (e.type !== "submit") return;
+
+		this.parameters.modifiers.push({
+			label: this.form_data.label,
+			type: this.form_data.type,
+			value: this.form_data.value,
+		});
+		this.form_data = {
+			value: 0,
+			label: "",
+			type: "circumstance",
+		};
 
 		this.render();
 	}

@@ -184,6 +184,8 @@
 			"3": "Adept",
 			"4": "Expert",
 			"5": "Master"
-		}
+		},
+
+		"modifier_label": "Label"
 	}
 }
