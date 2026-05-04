@@ -1,9 +1,14 @@
-<span data-action="toggleValue" data-path="system.skill.{{ name }}.is_proficient">
+<span class="pointer" data-action="toggleValue" data-path="system.skill.{{ name }}.is_proficient">
 	{{> warden-diamond
 		filled=skill.is_proficient
 	}}
 </span>
-<span class="grid col-span-2 col-subgrid" data-action="check" data-type="skill" data-skill="{{ name }}">
+<span
+	class="grid col-span-2 col-subgrid pointer hover-glow"
+	data-action="check"
+	data-type="skill"
+	data-skill="{{ name }}"
+>
 	<span class="text-right">
 		{{~numberFormat
 			skill.bonus

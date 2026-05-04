@@ -185,6 +185,13 @@
 	}
 }
 
+.pointer {
+	cursor: pointer;
+}
+.hover-glow:hover {
+	text-shadow: #efa608 0 0 5px;
+}
+
 /* Character sheet classes */
 .character-sheet {
 	display: grid;

@@ -1,7 +1,8 @@
 <!-- TODO: Niche setting -->
-<span data-action="deleteKnowledgeSkill" data-id="{{ id }}"><i class="fa-solid fa-trash-can"></i></span>
-<span class="grid col-span-2 col-subgrid" data-action="check" data-type="knowledge" data-id="{{ id }}">
-	<span class="text-right">
+<!-- TODO: Edit mode with no <input>-->
+<span class="pointer" data-action="deleteKnowledgeSkill" data-id="{{ id }}"><i class="fa-solid fa-trash-can"></i></span>
+<span class="grid col-span-2 col-subgrid">
+	<span class="text-right pointer hover-glow" data-action="check" data-type="knowledge" data-id="{{ id }}">
 		{{~numberFormat
 			skill.bonus
 			sign=true

@@ -1,5 +1,5 @@
 <div class="row-span-2 grid row-subgrid place-center">
-	<label data-action="check" data-type="proficiency" data-path="{{ path }}">
+	<label class="pointer hover-glow" data-action="check" data-type="proficiency" data-path="{{ path }}">
 		{{localize (concat "warden.character.FIELDS." path ".label")}}
 		(
 		{{~numberFormat
@@ -8,7 +8,7 @@
 		~}}
 		)
 	</label>
-	<div class="diamonds" data-action="clickChanger" data-path="{{concat 'system.' path '.rank'}}">
+	<div class="diamonds pointer" data-action="clickChanger" data-path="{{concat 'system.' path '.rank'}}">
 		{{> warden-diamonds
 			num=five_fields
 			filled=rank

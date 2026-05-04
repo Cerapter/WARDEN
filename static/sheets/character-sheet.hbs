@@ -28,7 +28,7 @@
 		type="number"
 		classes="black subheader"
 	}}
-	<div class="white subheader" data-action="check" data-type="untrained">
+	<div class="white subheader pointer hover-glow" data-action="check" data-type="untrained">
 		<label>Untrained Bonus</label>
 		<div>
 			{{~numberFormat
@@ -62,7 +62,7 @@
 		</div>
 
 		<div class="grid row-subgrid row-span-4">
-			<div class="fate row-span-3" data-action="clickChanger" data-path="system.fate_points">
+			<div class="fate row-span-3 pointer" data-action="clickChanger" data-path="system.fate_points">
 				{{> warden-diamonds
 					num=three_fields
 					filled=system.fate_points
@@ -172,7 +172,7 @@
 						type="number"
 					}}
 				</div>
-				<div class="grid place-center" data-action="toggleValue" data-path="system.has_savings">
+				<div class="grid place-center pointer" data-action="toggleValue" data-path="system.has_savings">
 					{{> warden-diamond
 						filled=system.has_savings
 					}}
