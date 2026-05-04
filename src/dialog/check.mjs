@@ -47,7 +47,7 @@ export class CheckWindow extends HandlebarsApplicationMixin(ApplicationV2) {
 	};
 
 	get title() {
-		return this.parameters.title;
+		return this.parameters.title ?? "Check";
 	}
 
 	async _prepareContext(options) {
