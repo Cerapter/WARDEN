@@ -1,6 +1,41 @@
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
+/**
+ * @typedef {"universal"|"proficiency"|"item"|"status"|"circumstance"} ModifierType
+ */
+
+/**
+ * The label, type, and value of a modifier for a check.
+ * @typedef {Object} Modifier
+ * @property {string} label - The label used to identify the modifier in the roll window and chat.
+ * @property {ModifierType} type - The modifier type.
+ * @property {number} value - The value of the modifier, positive or negative.
+ * @property {boolean?} disabled - Whether to apply the modifier. Defaults to true for universal modifiers and the highest/lowset per type.
+ */
+
+/**
+ * All the data and descriptions for presenting and making a Check.
+ * @typedef {Object} CheckParameters
+ * @property {string} title - Title for the roll window and chat message.
+ * @property {Modifier[]} modifiers - All the applicable modifiers for the roll.
+ * @property {boolean?} benefit - Should the roll gain a benefit.
+ * @property {boolean?} detriment - Should the roll suffer a detriment.
+ */
+
+/**
+ * The window used to describe and edit check rolls.
+ * @property {object} rollData
+ * @property {ChatSpeakerData} speaker - Who should the roll message originate from.
+ * @property {CheckParameters} parameters - The parameters used for the roll.
+ * @property {Modifier} form_data - The work in progress modifier being input.
+ */
 export class CheckWindow extends HandlebarsApplicationMixin(ApplicationV2) {
+	/**
+	 * Create a CheckWindow.
+	 * @param {object} rollData
+	 * @param {ChatSpeakerData} speaker
+	 * @param {CheckParameters} parameters
+	 */
 	constructor(rollData, speaker, parameters) {
 		super();
 
@@ -21,8 +56,14 @@ export class CheckWindow extends HandlebarsApplicationMixin(ApplicationV2) {
 			value: 0,
 			label: "",
 			type: "circumstance",
+			enabled: true,
 		};
 	}
+
+	/**
+	 * Enables the biggest (positive or negative) modifier of a type.
+	 * @param {ModifierType} type
+	 */
 	#enableBiggestModifiers(type) {
 		const sorted = this.parameters.modifiers
 			.filter((m) => m.type === type)
@@ -81,6 +122,10 @@ export class CheckWindow extends HandlebarsApplicationMixin(ApplicationV2) {
 		return context;
 	}
 
+	/**
+	 * Generate the roll formula to be used.
+	 * @returns {string} - The formula used for the roll.
+	 */
 	get #formula() {
 		const sum =
 			this.parameters.modifiers
@@ -139,6 +184,7 @@ export class CheckWindow extends HandlebarsApplicationMixin(ApplicationV2) {
 			value: 0,
 			label: "",
 			type: "circumstance",
+			enabled: true,
 		};
 
 		this.render();

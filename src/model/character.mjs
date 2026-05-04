@@ -8,9 +8,55 @@ const {
 	TypedObjectField,
 } = foundry.data.fields;
 
+/**
+ * @typedef ProficiencyData
+ * @property {number} rank
+ * @property {number} proficiency_bonus
+ * @property {number} bonus
+ */
+/**
+ * @typedef SkillData
+ * @property {boolean} is_proficient
+ * @property {number} proficiency_bonus
+ * @property {number} bonus
+ */
+/**
+ * @typedef KnowledgeSkillData
+ * @property {string} topic
+ * @property {boolean} is_niche
+ * @property {number} proficiency_bonus
+ * @property {number} bonus
+ */
+
+/**
+ * The PC class
+ * @property {string} pronouns
+ * @property {string} description
+ * @property {number} temporary_hit_points
+ * @property {0|1|2|3} fate_points
+ * @property {{title: string, value: number}} vocation
+ * @property {number} wealth
+ * @property {boolean} has_savings
+ * @property {{combat: ProficiencyData, skill: ProficiencyData, special: ProficiencyData}} path
+ * @property {{toughness: ProficiencyData, resolve: ProficiencyData, perception: ProficiencyData}} defense
+ * @property {{ crafting: SkillData,
+ * 				deception: SkillData,
+ * 				diplomacy: SkillData,
+ * 				force: SkillData,
+ * 				intimidation: SkillData,
+ * 				medicine: SkillData,
+ * 				mobility: SkillData,
+ * 				skullduggery: SkillData,
+ * 				stealth: SkillData,
+ * 				survival: SkillData }} skill
+ * @property {Object.<string, KnowledgeSkillData>} knowledge_skills
+ */
 export class CharacterData extends BaseCharacterData {
 	static LOCALIZATION_PREFIXES = ["warden.character"];
 
+	/**
+	 * @returns Object
+	 */
 	static defineSchema() {
 		const proficiencyField = () =>
 			new SchemaField({
@@ -163,7 +209,12 @@ export class CharacterData extends BaseCharacterData {
 			rank: game.i18n.format(`warden.proficiency_rank.${rank}`),
 		});
 	}
-	untrainedRollParameters() {
+
+	/**
+	 * Parameters to make an untrained check.
+	 * @returns CheckParameters
+	 */
+	untrainedCheckParameters() {
 		return {
 			title: game.i18n.localize("warden.check_label", {
 				type: game.i18n.localize("warden.proficiency_rank.0"),
@@ -177,7 +228,13 @@ export class CharacterData extends BaseCharacterData {
 			],
 		};
 	}
-	proficiencyRollParameters(proficiency_name) {
+
+	/**
+	 * Parameters to make a check with a path.
+	 * @param {string} proficiency_name - The path of the proficiency, e.g. "path.combat".
+	 * @returns CheckParameters
+	 */
+	proficiencyCheckParameters(proficiency_name) {
 		const path = foundry.utils.getProperty(this, proficiency_name);
 		return {
 			title: game.i18n.localize("warden.check_label", {
@@ -194,7 +251,13 @@ export class CharacterData extends BaseCharacterData {
 			],
 		};
 	}
-	skillRollParameters(skill_name) {
+
+	/**
+	 * Parameters to make a check with a skill.
+	 * @param {string} skill_name - The skill name to check e.g. "crafting", "medicine".
+	 * @returns CheckParameters
+	 */
+	skillCheckParameters(skill_name) {
 		const skill = this.skill[skill_name];
 		return {
 			title: game.i18n.localize("warden.check_label", {
@@ -213,7 +276,12 @@ export class CharacterData extends BaseCharacterData {
 			],
 		};
 	}
-	knowledgeRollParameters(id) {
+	/**
+	 * Parameters to make a check with a knowledge skill.
+	 * @param {string} id - The id of the knowledge skill.
+	 * @returns CheckParameters
+	 */
+	knowledgeCheckParameters(id) {
 		const skill = this.knowledge_skills[id];
 		return {
 			title: game.i18n.localize("warden.check_label", {

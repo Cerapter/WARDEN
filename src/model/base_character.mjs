@@ -1,12 +1,13 @@
-const {
-	BooleanField,
-	SchemaField,
-	StringField,
-	NumberField,
-	TypedObjectField,
-} = foundry.data.fields;
+const { SchemaField, NumberField } = foundry.data.fields;
 const { TypeDataModel } = foundry.abstract;
 
+/**
+ * Base class for characters and opponents
+ * @property {0,1,2,3,4,5} size
+ * @property {number} level
+ * @property {{value: number, max: number}} hit_points
+ * @property {{value: number, max: number}} strain
+ */
 export class BaseCharacterData extends TypeDataModel {
 	static LOCALIZATION_PREFIXES = ["warden.character"];
 
@@ -47,21 +48,6 @@ export class BaseCharacterData extends TypeDataModel {
 					initial: 10,
 				}),
 			}),
-
-			/*
-			 * There are some shadow properties that need to be defined by
-			 * subclasses. Things will/do rely on them existing:
-			 * hit_points.max
-			 * strain.max
-			 *
-			 * path.combat.proficiency_bonus
-			 * path.skill.proficiency_bonus
-			 * path.special.proficiency_bonus
-			 *
-			 * defense.toughness.proficiency_bonus
-			 * defense.resolve.proficiency_bonus
-			 * defense.perception.proficiency_bonus
-			 * */
 		};
 	}
 

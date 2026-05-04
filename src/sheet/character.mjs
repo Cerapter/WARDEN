@@ -90,22 +90,25 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 		const rollData = this.actor.getRollData();
 		const speaker = ChatMessage.getSpeaker({ actor: this.actor });
 
+		/**
+		 * @type CheckParameters
+		 */
 		let parameters;
 		switch (target.dataset.type) {
 			case "untrained":
-				parameters = this.actor.system.untrainedRollParameters();
+				parameters = this.actor.system.untrainedCheckParameters();
 				break;
 			case "proficiency":
 				const path = target.dataset.path;
-				parameters = this.actor.system.proficiencyRollParameters(path);
+				parameters = this.actor.system.proficiencyCheckParameters(path);
 				break;
 			case "skill":
 				const skill = target.dataset.skill;
-				parameters = this.actor.system.skillRollParameters(skill);
+				parameters = this.actor.system.skillCheckParameters(skill);
 				break;
 			case "knowledge":
 				const id = target.dataset.id;
-				parameters = this.actor.system.knowledgeRollParameters(id);
+				parameters = this.actor.system.knowledgeCheckParameters(id);
 				break;
 		}
 
