@@ -357,6 +357,49 @@
 			text-align: center;
 		}
 	}
+
+	.equipped-grid,
+	.inventory-grid {
+		> div {
+			padding: 0.25em 1ch;
+			box-sizing: content-box;
+
+			border-color: black;
+			border-style: solid;
+			border-width: 0 1px 1px 0;
+
+			&:nth-of-type(even) {
+				border-right-width: 0;
+			}
+		}
+	}
+
+	.equipped-grid {
+		> div {
+			min-height: 3lh;
+		}
+		.kit {
+			display: grid;
+			grid-template-columns: 1fr min-content;
+
+			align-items: center;
+
+			.charges {
+				height: 3lh;
+				display: flex;
+				flex-direction: column;
+				.diamond {
+					margin: 2px;
+				}
+			}
+		}
+	}
+
+	.inventory-grid {
+		> div {
+			min-height: 2lh;
+		}
+	}
 }
 
 /* Check window classes */
