@@ -443,3 +443,20 @@
 		}
 	}
 }
+
+/* Roll message classes */
+.modifiers {
+	display: flex;
+	flex-wrap: wrap;
+
+	gap: 0.1em 0.5ch;
+
+	padding: 0.5em 0.25em;
+
+	.modifier {
+		font-size: 0.75em;
+		border: 1px solid #999;
+		border-radius: 4px;
+		padding: 1px 0.5em;
+	}
+}

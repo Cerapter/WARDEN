@@ -3,6 +3,7 @@ export class WardenCheck extends Roll {
 		super(formula, data, options);
 
 		this.difficulty = options.difficulty;
+		this.modifiers = options.modifiers;
 	}
 
 	/**
@@ -82,6 +83,7 @@ export class WardenCheck extends Roll {
 				: this.d20_result === 1
 					? "failure-color"
 					: "";
+		context.modifiers = this.modifiers;
 
 		return context;
 	}

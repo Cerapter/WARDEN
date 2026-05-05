@@ -19,6 +19,23 @@
 			}}
 		</div>
 	{{/unless}}
+	{{#if modifiers.length}}
+		<div class="modifiers">
+
+			{{#each modifiers}}
+				<span class="modifier">
+					{{~numberFormat
+						value
+						sign=true
+					~}}:{{#if label.length}}
+						{{ label }}
+					{{else}}
+						{{localize (concat "warden.roll.unnamed_modifier." type)}}
+					{{/if}}
+				</span>
+			{{/each}}
+		</div>
+	{{/if}}
 	<div class="dice-result">
 		<div class="dice-formula">{{ formula }}</div>
 		{{{ tooltip }}}

@@ -133,13 +133,20 @@ class CheckManager {
 	}
 
 	/**
+	 * All the modifiers that are currently active
+	 * @return {Modifier[]}
+	 */
+	get enabledModifiers() {
+		return this.parameters.modifiers.filter((m) => m.enabled);
+	}
+
+	/**
 	 * Generate the roll formula to be used.
 	 * @returns {string} - The formula used for the roll.
 	 */
 	get formula() {
 		const sum =
-			this.parameters.modifiers
-				?.filter((o) => o.enabled ?? false)
+			this.enabledModifiers
 				?.map((o) => o.value)
 				?.reduce((a, b) => a + b, 0) ?? 0;
 
@@ -202,6 +209,7 @@ class CheckManager {
 
 		this.roll = new WardenCheck(this.formula, this.rollData, {
 			difficulty: this.difficulty,
+			modifiers: this.enabledModifiers,
 		});
 
 		await this.roll.evaluate();

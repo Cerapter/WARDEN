@@ -213,6 +213,13 @@
 				"success": "Success",
 				"failure": "Failure",
 				"critical_failure": "Critical Failure"
+			},
+			"unnamed_modifier": {
+				"universal": "Universal Modifier",
+				"proficiency": "Proficiency Modifier",
+				"item": "Item Modifier",
+				"status": "Status Modifier",
+				"circumstance": "Circumstance Modifier"
 			}
 		}
 	}
