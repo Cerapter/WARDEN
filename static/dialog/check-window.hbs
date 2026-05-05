@@ -52,7 +52,7 @@
 		<span class="col-span-5 pointer b {{ifThen (eq parameters.difficulty 'open') 'active' ''}}" data-action="setDifficulty" data-difficulty="open">{{localize "warden.roll.difficulty.open"}}</span>
 	</div>
 
-	{{#if (ne parameters.difficulty "open")}}
+	{{#unless isOpen}}
 		<div class="benefit-detriment-grid text-center">
 			<span class="pointer benefit {{ifThen parameters.benefit 'active' ''}}" data-action="toggleBenefit">
 				{{localize "warden.roll.benefit"}}
@@ -61,10 +61,10 @@
 				{{localize "warden.roll.detriment"}}
 			</span>
 		</div>
-	{{/if}}
+	{{/unless}}
 
 	<button data-action="execute">
-		{{#if (eq parameters.difficulty "open")}}
+		{{#if isOpen}}
 			{{localize
 				"warden.roll.submit_label_open"
 				formula=formula

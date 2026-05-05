@@ -195,6 +195,9 @@
 			"benefit": "Benefit",
 			"detriment": "Detriment",
 
+			"result_by": "{result} by {difference}",
+			"vs_difficulty": "vs. DV {difficulty}",
+
 			"difficulty": {
 				"open": "Open Check",
 
@@ -203,6 +206,13 @@
 				"daunting": "Daunting",
 				"extreme": "Extreme",
 				"impossible": "Impossible"
+			},
+
+			"result_tier": {
+				"critical_success": "Critical Success",
+				"success": "Success",
+				"failure": "Failure",
+				"critical_failure": "Critical Failure"
 			}
 		}
 	}

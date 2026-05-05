@@ -57,6 +57,12 @@
 .bold {
 	font-weight: bold;
 }
+.success-color {
+	color: green;
+}
+.failure-color {
+	color: red;
+}
 
 .textarea-grow {
 	display: grid;

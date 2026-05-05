@@ -60,6 +60,7 @@ export class CheckWindow extends HandlebarsApplicationMixin(ApplicationV2) {
 		context.formula = this.manager.formula;
 
 		context.difficulty = this.manager.difficulty;
+		context.isOpen = this.manager.isOpen;
 
 		context.pending_modifier = this.pending_modifier;
 		context.choices = {

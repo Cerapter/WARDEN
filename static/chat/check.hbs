@@ -4,9 +4,24 @@
 			{{ flavor }}
 		</div>
 	{{/if}}
+	{{#unless isOpen}}
+		<div>
+			<span class="{{ tier_classes }}">
+				{{localize
+					"warden.roll.result_by"
+					result=(localize (concat "warden.roll.result_tier." result_key))
+					difference=(numberFormat difference sign=true)
+				}}
+			</span>
+			{{localize
+				"warden.roll.vs_difficulty"
+				difficulty=difficulty
+			}}
+		</div>
+	{{/unless}}
 	<div class="dice-result">
 		<div class="dice-formula">{{ formula }}</div>
 		{{{ tooltip }}}
-		<h4 class="dice-total">{{ total }}</h4>
+		<h4 class="dice-total {{ nat_class }}">{{ total }}</h4>
 	</div>
 </div>

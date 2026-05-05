@@ -22,6 +22,7 @@ import { WardenCheck } from "./warden_check.mjs";
  * @property {number|"open"?} difficulty - The difficulty of the check, or "open" if open
  * @property {boolean?} benefit - Should the roll gain a benefit.
  * @property {boolean?} detriment - Should the roll suffer a detriment.
+ * @property {number?} total - The final total of the roll.
  */
 
 /**
@@ -148,33 +149,77 @@ class CheckManager {
 	}
 
 	/**
-	 * Benefit and detriment-adjusted difficulty
+	 * Is the check currently and open check
+	 * @returns {boolean}
+	 */
+	get isOpen() {
+		return this.parameters.difficulty === "open";
+	}
+
+	/**
+	 * Benefit and detriment-adjusted difficulty, or "open"
 	 */
 	get difficulty() {
-		return (
-			this.parameters.difficulty -
-			(this.parameters.benefit ? 5 : 0) +
-			(this.parameters.detriment ? 5 : 0)
-		);
+		return this.isOpen
+			? "open"
+			: this.parameters.difficulty -
+					(this.parameters.benefit ? 5 : 0) +
+					(this.parameters.detriment ? 5 : 0);
 	}
 
 	async display() {
 		return CheckWindow.wait(this, {});
 	}
 
+	/**
+	 * Calculate the result tier and difference
+	 * @returns {{difference: number, result_tier: -1|0|1|2}}
+	 */
+	calculateResult() {
+		const difference = this.roll.total - this.difficulty;
+
+		let result_tier;
+		if (difference >= 10) result_tier = 2;
+		else if (difference >= 0) result_tier = 1;
+		else if (difference > -10) result_tier = 0;
+		else result_tier = -1;
+
+		const d20_result = this.roll.d20_result;
+
+		if (d20_result === 20) result_tier += 1;
+		else if (d20_result === 1) result_tier -= 1;
+
+		result_tier = Math.clamp(result_tier, -1, 2);
+
+		return {
+			difference,
+			result_tier,
+		};
+	}
+
 	async execute() {
 		const rollMode = game.settings.get("core", "messageMode");
 
-		const roll = new WardenCheck(this.formula, this.rollData);
+		this.roll = new WardenCheck(this.formula, this.rollData, {
+			difficulty: this.difficulty,
+		});
 
-		await roll.evaluate();
-		await roll.toMessage({
+		await this.roll.evaluate();
+
+		if (!this.isOpen) {
+			this.roll.options = {
+				...this.roll.options,
+				...this.calculateResult(),
+			};
+		}
+
+		await this.roll.toMessage({
 			speaker: this.speaker,
 			rollMode,
 			flavor: this.parameters.title,
 		});
 
-		return roll;
+		return this.roll;
 	}
 }
 
