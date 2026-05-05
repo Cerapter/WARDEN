@@ -205,9 +205,7 @@ export class CharacterData extends BaseCharacterData {
 	}
 
 	formatProficiency(rank) {
-		return game.i18n.format("warden.proficiency_label", {
-			rank: game.i18n.format(`warden.proficiency_rank.${rank}`),
-		});
+		return game.i18n.format(`warden.proficiency_rank.${rank}`);
 	}
 
 	/**

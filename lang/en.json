@@ -175,7 +175,6 @@
 
 		"check_label": "{type} Check",
 
-		"proficiency_label": "Proficiency ({rank})",
 		"proficiency": "Proficiency",
 		"proficiency_rank": {
 			"0": "Untrained",
