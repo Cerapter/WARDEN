@@ -24,6 +24,11 @@
 					"non-kit-in-kit-slot": "Only kits may be inserted into the kit slot.",
 					"kit-in-non-kit-slot": "Kits may only be put into the kit slot.",
 					"pocket-weight": "Only Light items fit inside pockets."
+				},
+
+				"button": {
+					"edit": "Edit",
+					"delete": "Delete"
 				}
 			},
 

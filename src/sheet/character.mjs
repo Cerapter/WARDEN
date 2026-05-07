@@ -197,6 +197,61 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 		await this.actor.system.editInventory(item, { destArea });
 	}
 
+	async _onFirstRender(context, options) {
+		await super._onFirstRender(context, options);
+
+		this._createContextMenu(
+			() => [
+				{
+					label: "warden.character.sheet.button.edit",
+					icon: "fas fa-edit",
+					onClick: (e) => {
+						const id =
+							e.target.closest("[data-item-id]").dataset.itemId;
+						this.actor.items.get(id).sheet.render(true);
+					},
+				},
+				{
+					label: "warden.character.sheet.button.delete",
+					icon: "fas fa-trash-can",
+					onClick: async (_, target) => {
+						const id =
+							target.closest("[data-item-id]").dataset.itemId;
+						const item = this.actor.items.get(id);
+
+						const question = _loc("COMMON.AreYouSure");
+						const warning = _loc("SIDEBAR.DeleteWarning", {
+							type: "Equipment",
+						});
+						const content = `<p><strong>${question}</strong> ${warning}</p>`;
+
+						await foundry.applications.api.DialogV2.confirm({
+							content,
+							yes: {
+								callback: () => {
+									const srcArea = target.closest(
+										"[data-inventory-area]",
+									).dataset.inventoryArea;
+									this.actor.system.editInventory(item, {
+										srcArea,
+									});
+								},
+							},
+							window: {
+								icon: "fa-solid fa-trash",
+								title: `${_loc("DOCUMENT.Delete", { type: "Equipment" })}: ${item.name}`,
+							},
+						});
+					},
+					visible: (target) =>
+						target.closest("[data-inventory-area]").dataset
+							.inventoryArea !== "kit",
+				},
+			],
+			".equipment-context",
+		);
+	}
+
 	static async clickChanger(e, target) {
 		const path = target.dataset.path;
 		const dataField = this.actor.getFieldForProperty(path);

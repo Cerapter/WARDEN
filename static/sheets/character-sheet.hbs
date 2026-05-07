@@ -183,8 +183,8 @@
 			</div>
 		</section>
 
-		<section class="grid col-subgrid col-span-2 gray equipped-grid" data-inventory-area="equipped">
-			<div class="kit" data-inventory-area="kit">
+		<section class="grid col-subgrid col-span-2 gray inventory-grid">
+			<div class="kit equipped equipment-context" data-inventory-area="kit" data-item-id="{{ kit.id }}">
 				<span>{{ kit.name }}</span>
 				<div class="charges">
 					<!-- TODO: Hook up clicks -->
@@ -196,37 +196,37 @@
 			</div>
 			{{#each equipped_items}}
 				{{#if this}}
-					<div class="draggable" data-item-id="{{ id }}">
+					<div
+						class="draggable equipped equipment-context"
+						data-inventory-area="equipped"
+						data-item-id="{{ id }}"
+					>
 						{{ name }}
 					</div>
 				{{else}}
-					<div data-empty></div>
+					<div class="equipped" data-inventory-area="equipped" data-empty></div>
 				{{/if}}
 			{{/each}}
-		</section>
 
-		<section class="grid col-subgrid col-span-2 gray inventory-grid" data-inventory-area="pockets">
 			<header class="col-span-2 bold black text-center">{{localize "warden.character.sheet.pockets"}}</header>
 			{{#each pocket_items}}
 				{{#if this}}
-					<div class="draggable" data-item-id="{{ id }}">
+					<div class="draggable equipment-context" data-inventory-area="pockets" data-item-id="{{ id }}">
 						{{ name }}
 					</div>
 				{{else}}
-					<div data-empty></div>
+					<div data-inventory-area="pockets" data-empty></div>
 				{{/if}}
 			{{/each}}
-		</section>
 
-		<section class="grid col-subgrid col-span-2 gray inventory-grid" data-inventory-area="pack">
 			<header class="col-span-2 bold black text-center">{{localize "warden.character.sheet.pack"}}</header>
 			{{#each pack_items}}
 				{{#if this}}
-					<div class="draggable" data-item-id="{{ id }}">
+					<div class="draggable equipment-context" data-inventory-area="pack" data-item-id="{{ id }}">
 						{{ name }}
 					</div>
 				{{else}}
-					<div data-empty></div>
+					<div data-inventory-area="pack" data-empty></div>
 				{{/if}}
 			{{/each}}
 		</section>
@@ -234,7 +234,9 @@
 
 	<div class="flow-col col-span-2">
 		<section class="skill-wrapper col-span-2 gray">
-			<header class="black bold text-center">{{localize "warden.character.FIELDS.skill.title"}}</header>
+			<header class="black bold text-center equipment-context">
+				{{localize "warden.character.FIELDS.skill.title"}}
+			</header>
 			<div class="skill-grid">
 				{{> "systems/warden/static/partials/skill-display.hbs"
 					skill=system.skill.crafting
