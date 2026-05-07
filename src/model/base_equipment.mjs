@@ -25,6 +25,7 @@ export class BaseEquipment extends TypeDataModel {
 				min: 0,
 				max: 10,
 				initial: 0,
+				integer: true,
 			}),
 
 			weight: new StringField({
@@ -56,6 +57,7 @@ export class BaseEquipment extends TypeDataModel {
 		properties.rarity = {
 			field: this.schema.fields.rarity,
 			value: this.rarity,
+			type: "number",
 		};
 		properties.weight = {
 			field: this.schema.fields.weight,
