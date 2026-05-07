@@ -404,6 +404,22 @@
 	}
 }
 
+/* Item sheets */
+.item-sheet {
+	.property-grid {
+		display: grid;
+		grid-template-columns: auto 1fr;
+
+		gap: 0.25em 2ch;
+
+		padding: 0.5em 2ch;
+
+		label {
+			text-align: right;
+		}
+	}
+}
+
 /* Check window classes */
 .check-window {
 	display: grid;

@@ -50,6 +50,25 @@ export class BaseEquipment extends TypeDataModel {
 		};
 	}
 
+	getProperties() {
+		const properties = {};
+
+		properties.rarity = {
+			field: this.schema.fields.rarity,
+			value: this.rarity,
+		};
+		properties.weight = {
+			field: this.schema.fields.weight,
+			value: this.weight,
+		};
+		properties.condition = {
+			field: this.schema.fields.condition,
+			value: this.condition,
+		};
+
+		return properties;
+	}
+
 	isEquipment() {
 		return true;
 	}

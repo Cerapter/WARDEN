@@ -1,0 +1,18 @@
+<section class="col-span-2 bold flex">
+	<img
+		class="profile-img"
+		src="{{ item.img }}"
+		title="{{ item.name }}"
+		height="100"
+		width="100"
+		alt=""
+		data-edit="img"
+		data-action="editImage"
+	/>
+
+	{{formInput
+		item.schema.fields.name
+		value=item.name
+		classes="col-span-2 gray header"
+	}}
+</section>

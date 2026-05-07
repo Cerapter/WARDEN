@@ -1,0 +1,12 @@
+<section class="tab scrollable {{ tab.cssClass }}" data-group="primary" data-tab="properties">
+	<section class="property-grid">
+		{{#each properties}}
+			{{formGroup
+				field
+				value=value
+				localize=true
+				classes="grid col-span-2 col-subgrid align-center"
+			}}
+		{{/each}}
+	</section>
+</section>

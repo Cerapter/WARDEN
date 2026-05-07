@@ -180,6 +180,10 @@
 			}
 		},
 		"equipment": {
+			"sheet": {
+				"label": "WARDEN Equipment Sheet"
+			},
+
 			"weight": {
 				"light": "Light",
 				"normal": "Normal",
@@ -190,6 +194,27 @@
 				"undamaged": "Undamaged",
 				"damaged": "Damaged",
 				"broken": "Broken"
+			},
+
+			"FIELDS": {
+				"rarity": {
+					"label": "Rarity"
+				},
+				"weight": {
+					"label": "Weight"
+				},
+				"condition": {
+					"label": "Condition"
+				}
+			}
+		},
+		"item": {
+			"sheet": {
+				"tab": {
+					"properties": "Properties",
+					"traits": "Traits",
+					"effects": "Effects"
+				}
 			}
 		},
 

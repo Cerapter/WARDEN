@@ -8,6 +8,7 @@ import { UtilityItem } from "./model/utility_item.mjs";
 import { Weapon } from "./model/weapon.mjs";
 import { WardenCheck } from "./roll/warden_check.mjs";
 import { CharacterSheet } from "./sheet/character.mjs";
+import { EquipmentSheet } from "./sheet/item.mjs";
 
 Hooks.once("init", () => {
 	CONFIG.Actor.dataModels.character = CharacterData;
@@ -31,6 +32,12 @@ Hooks.once("init", () => {
 		types: ["character"],
 		makeDefault: true,
 		label: "warden.character.sheet.label",
+	});
+
+	DocumentSheetConfig.registerSheet(Item, "warden", EquipmentSheet, {
+		types: ["utilityItem", "weapon", "apparel", "shield", "kit"],
+		makeDefault: true,
+		label: "warden.equipment.sheet.label",
 	});
 
 	registerHelpers();
