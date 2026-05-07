@@ -1,3 +1,4 @@
+import { DAMAGE_TYPE_CHOICES, DAMAGE_TYPES } from "./damage_type.mjs";
 import { registerHelpers } from "./handlebars.mjs";
 import { Apparel } from "./model/apparel.mjs";
 import { BaseCharacterData } from "./model/base_character.mjs";
@@ -9,6 +10,10 @@ import { Weapon } from "./model/weapon.mjs";
 import { WardenCheck } from "./roll/warden_check.mjs";
 import { CharacterSheet } from "./sheet/character.mjs";
 import { EquipmentSheet } from "./sheet/item.mjs";
+
+globalThis["WARDEN"] = {};
+globalThis["WARDEN"].DAMAGE_TYPES = DAMAGE_TYPES;
+globalThis["WARDEN"].DAMAGE_TYPE_CHOICES = DAMAGE_TYPE_CHOICES;
 
 Hooks.once("init", () => {
 	CONFIG.Actor.dataModels.character = CharacterData;
