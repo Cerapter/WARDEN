@@ -247,6 +247,14 @@
 				"label": "Weakness"
 			}
 		},
+		"shield": {
+			"defense": {
+				"label": "Defense"
+			},
+			"block": {
+				"label": "Block"
+			}
+		},
 
 		"modifier_type": {
 			"universal": "Universal",
