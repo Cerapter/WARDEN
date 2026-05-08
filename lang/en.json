@@ -236,6 +236,17 @@
 				"label": "Range"
 			}
 		},
+		"apparel": {
+			"armor": {
+				"label": "Armor"
+			},
+			"strength": {
+				"label": "Strength"
+			},
+			"weakness": {
+				"label": "Weakness"
+			}
+		},
 
 		"modifier_type": {
 			"universal": "Universal",
