@@ -72,18 +72,9 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 	 * @return {any[]}
 	 */
 	paddedInventoryList(list, length) {
-		const sorted = this.sortedInventoryList(list);
-		return Array.fromRange(Math.max(length, sorted.length)).map(
-			(i) => sorted[i] ?? null,
+		return Array.fromRange(Math.max(length, list.length)).map(
+			(i) => list[i] ?? null,
 		);
-	}
-	/**
-	 * Sorts list according to element. sorted
-	 * @param {any[]} list
-	 * @returns {any[]}
-	 */
-	sortedInventoryList(list) {
-		return Array.from(list).sort((i1, i2) => i1.sort - i2.sort);
 	}
 
 	/**
@@ -115,11 +106,9 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 				}
 
 				// We're putting in a past-the-end empty slot, sort just after the end element
-				const sortedList = this.sortedInventoryList(
-					this.actor.system.inventoryListByName(destArea),
-				);
+				const list = this.actor.system.inventoryListByName(destArea);
 				await item.update({
-					sort: sortedList[sortedList.length - 1].sort + 1,
+					sort: list[list.length - 1].sort + 1,
 				});
 				return item;
 			}

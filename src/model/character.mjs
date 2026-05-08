@@ -180,13 +180,22 @@ export class CharacterData extends BaseCharacterData {
 		return this.parent.items.get(this.kit_item_id);
 	}
 	get equipped_items() {
-		return this.equipped_item_ids.map((id) => this.parent.items.get(id));
+		const mapped = this.equipped_item_ids.map((id) =>
+			this.parent.items.get(id),
+		);
+		return Array.from(mapped).sort((i1, i2) => i1.sort - i2.sort);
 	}
 	get pocket_items() {
-		return this.pocket_item_ids.map((id) => this.parent.items.get(id));
+		const mapped = this.pocket_item_ids.map((id) =>
+			this.parent.items.get(id),
+		);
+		return Array.from(mapped).sort((i1, i2) => i1.sort - i2.sort);
 	}
 	get pack_items() {
-		return this.pack_item_ids.map((id) => this.parent.items.get(id));
+		const mapped = this.pack_item_ids.map((id) =>
+			this.parent.items.get(id),
+		);
+		return Array.from(mapped).sort((i1, i2) => i1.sort - i2.sort);
 	}
 
 	/**
