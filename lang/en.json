@@ -319,6 +319,15 @@
 				"circumstance": "Circumstance Modifier"
 			}
 		},
+		"action": {
+			"strike": "Strike",
+
+			"melee_strike": "Melee Strike",
+			"melee_strike_weapon_title": "Melee Strike ({weapon})",
+
+			"ranged_strike": "Ranged Strike",
+			"ranged_strike_weapon_title": "Ranged Strike ({weapon})"
+		},
 
 		"damage_type": {
 			"bleed": "Bleed",

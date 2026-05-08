@@ -202,6 +202,13 @@
 						data-item-id="{{ id }}"
 					>
 						{{ name }}
+						<div class="equipped-buttons">
+							{{#each this.system.equippedButtons}}
+								<button>
+									{{ label }}
+								</button>
+							{{/each}}
+						</div>
 					</div>
 				{{else}}
 					<div class="equipped" data-inventory-area="equipped" data-empty></div>

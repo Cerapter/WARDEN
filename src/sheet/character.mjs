@@ -186,6 +186,24 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 		await this.actor.system.editInventory(item, { destArea });
 	}
 
+	async _onRender(context, options) {
+		await super._onRender(context, options);
+
+		for (const item of this.actor.system.equipped_items) {
+			const itemButtons = item.system.equippedButtons;
+
+			if (itemButtons.length === 0) continue;
+
+			const buttonElements = this.element.querySelectorAll(
+				`[data-item-id=${item.id}] button`,
+			);
+
+			buttonElements.forEach((button, index) => {
+				button.addEventListener("click", itemButtons[index].onClick);
+			});
+		}
+	}
+
 	async _onFirstRender(context, options) {
 		await super._onFirstRender(context, options);
 

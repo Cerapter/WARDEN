@@ -81,6 +81,25 @@ export class BaseEquipment extends TypeDataModel {
 		return properties;
 	}
 
+	/**
+	 * @callback ActionCallback
+	 * @param {PointerEvent} event
+	 */
+
+	/**
+	 * @typedef ActionButton
+	 * @property {string} label
+	 * @property {ActionCallback} onClick
+	 */
+
+	/**
+	 * Returns an array of buttons to be displayed in the item area when equipped
+	 * @returns {ActionButton[]}
+	 */
+	get equippedButtons() {
+		return [];
+	}
+
 	isEquipment() {
 		return true;
 	}

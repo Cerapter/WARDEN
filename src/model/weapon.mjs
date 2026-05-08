@@ -1,3 +1,4 @@
+import { runCheck } from "../roll/check_manager.mjs";
 import { BaseEquipment } from "./base_equipment.mjs";
 
 const { NumberField, StringField } = foundry.data.fields;
@@ -87,5 +88,69 @@ export class Weapon extends BaseEquipment {
 		};
 
 		return properties;
+	}
+
+	/**
+	 * @returns {ActionButton[]}
+	 */
+	get equippedButtons() {
+		const rollData = this.parent.actor.getRollData();
+		const speaker = ChatMessage.getSpeaker({
+			actor: this.parent.actor,
+		});
+
+		const parameters =
+			this.parent.actor.system.proficiencyCheckParameters("path.combat");
+		const strike_title = _loc(
+			this.type === "melee"
+				? "warden.action.melee_strike_weapon_title"
+				: "warden.action.ranged_strike_weapon_title",
+			{ weapon: this.parent.name },
+		);
+
+		return [
+			{
+				label: "Strike v. 10",
+				onClick: (e) =>
+					runCheck(
+						rollData,
+						speaker,
+						{
+							...parameters,
+							difficulty: 10,
+							title: strike_title,
+						},
+						{ skip: e.shiftKey },
+					),
+			},
+			{
+				label: "v. 15",
+				onClick: (e) =>
+					runCheck(
+						rollData,
+						speaker,
+						{
+							...parameters,
+							difficulty: 15,
+							title: strike_title,
+						},
+						{ skip: e.shiftKey },
+					),
+			},
+			{
+				label: "v. 20",
+				onClick: (e) =>
+					runCheck(
+						rollData,
+						speaker,
+						{
+							...parameters,
+							difficulty: 20,
+							title: strike_title,
+						},
+						{ skip: e.shiftKey },
+					),
+			},
+		];
 	}
 }

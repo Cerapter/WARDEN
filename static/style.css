@@ -375,7 +375,19 @@
 		}
 
 		.equipped {
-			min-height: 3lh;
+			min-height: 3.5lh;
+
+			.equipped-buttons {
+				display: flex;
+				flex-wrap: wrap;
+
+				button {
+					padding: 1px 0.5ch;
+					height: unset;
+					min-height: unset;
+					line-height: unset;
+				}
+			}
 		}
 
 		.kit {
