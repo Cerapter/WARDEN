@@ -183,39 +183,52 @@
 			</div>
 		</section>
 
-		<section class="grid col-subgrid col-span-2 gray equipped-grid">
-			<div class="kit">
-				<span>KIT</span>
+		<section class="grid col-subgrid col-span-2 gray equipped-grid" data-inventory-area="equipped">
+			<div class="kit" data-inventory-area="kit">
+				<span>{{ kit.name }}</span>
 				<div class="charges">
+					<!-- TODO: Hook up clicks -->
 					{{> warden-diamonds
-						num=three_fields
-						filled=3
+						num=kit.system.chargesBoolArray
+						filled=kit.system.charges.current
 					}}
 				</div>
 			</div>
-			<div></div>
-			<div></div>
-			<div></div>
-			<div></div>
-			<div></div>
+			{{#each equipped_items}}
+				{{#if this}}
+					<div class="draggable" data-item-id="{{ id }}">
+						{{ name }}
+					</div>
+				{{else}}
+					<div data-empty></div>
+				{{/if}}
+			{{/each}}
 		</section>
 
-		<section class="grid col-subgrid col-span-2 gray inventory-grid">
+		<section class="grid col-subgrid col-span-2 gray inventory-grid" data-inventory-area="pockets">
 			<header class="col-span-2 bold black text-center">{{localize "warden.character.sheet.pockets"}}</header>
-			<div></div>
-			<div></div>
-			<div></div>
-			<div></div>
+			{{#each pocket_items}}
+				{{#if this}}
+					<div class="draggable" data-item-id="{{ id }}">
+						{{ name }}
+					</div>
+				{{else}}
+					<div data-empty></div>
+				{{/if}}
+			{{/each}}
 		</section>
 
-		<section class="grid col-subgrid col-span-2 gray inventory-grid">
+		<section class="grid col-subgrid col-span-2 gray inventory-grid" data-inventory-area="pack">
 			<header class="col-span-2 bold black text-center">{{localize "warden.character.sheet.pack"}}</header>
-			<div></div>
-			<div></div>
-			<div></div>
-			<div></div>
-			<div></div>
-			<div></div>
+			{{#each pack_items}}
+				{{#if this}}
+					<div class="draggable" data-item-id="{{ id }}">
+						{{ name }}
+					</div>
+				{{else}}
+					<div data-empty></div>
+				{{/if}}
+			{{/each}}
 		</section>
 	</div>
 

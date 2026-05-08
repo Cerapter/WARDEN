@@ -12,6 +12,13 @@
 	"documentTypes": {
 		"Actor": {
 			"character": {}
+		},
+		"Item": {
+			"utilityItem": {},
+			"weapon": {},
+			"apparel": {},
+			"shield": {},
+			"kit": {}
 		}
 	},
 	"languages": [

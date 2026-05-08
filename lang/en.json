@@ -2,6 +2,13 @@
 	"TYPES": {
 		"Actor": {
 			"character": "Player Character"
+		},
+		"Item": {
+			"utilityItem": "Utility Item",
+			"weapon": "Weapon",
+			"apparel": "Apparel",
+			"shield": "Shield",
+			"kit": "Kit"
 		}
 	},
 	"warden": {
@@ -10,7 +17,14 @@
 				"label": "WARDEN Player Character Sheet",
 				"equipment": "Equipment",
 				"pockets": "Pockets",
-				"pack": "Pack"
+				"pack": "Pack",
+
+				"warnings": {
+					"no-inventory-area": "Equipment must be dropped on an inventory slot.",
+					"non-kit-in-kit-slot": "Only kits may be inserted into the kit slot.",
+					"kit-in-non-kit-slot": "Kits may only be put into the kit slot.",
+					"pocket-weight": "Only Light items fit inside pockets."
+				}
 			},
 
 			"name": "Character name",
@@ -160,6 +174,20 @@
 				}
 			}
 		},
+		"equipment": {
+			"weight": {
+				"light": "Light",
+				"normal": "Normal",
+				"heavy": "Heavy",
+				"huge": "Huge"
+			},
+			"condition": {
+				"undamaged": "Undamaged",
+				"damaged": "Damaged",
+				"broken": "Broken"
+			}
+		},
+
 		"modifier_type": {
 			"universal": "Universal",
 			"proficiency": "Proficiency",

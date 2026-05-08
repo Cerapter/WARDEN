@@ -1,8 +1,11 @@
 import { BaseCharacterData } from "./base_character.mjs";
+import { BaseEquipment } from "./base_equipment.mjs";
 
 const {
 	BooleanField,
+	DocumentIdField,
 	SchemaField,
+	SetField,
 	StringField,
 	NumberField,
 	TypedObjectField,
@@ -50,6 +53,10 @@ const {
  * 				stealth: SkillData,
  * 				survival: SkillData }} skill
  * @property {Object.<string, KnowledgeSkillData>} knowledge_skills
+ * @property {string} kit_item_id
+ * @property {string[]} equipped_item_ids
+ * @property {string[]} pocket_item_ids
+ * @property {string[]} pack_item_ids
  */
 export class CharacterData extends BaseCharacterData {
 	static LOCALIZATION_PREFIXES = ["warden.character"];
@@ -148,7 +155,252 @@ export class CharacterData extends BaseCharacterData {
 					}),
 				}),
 			),
+
+			// TODO: creation hook to fill this with the standard kit
+			kit_item_id: new DocumentIdField({
+				type: "Item",
+				readonly: false,
+			}),
+			equipped_item_ids: new SetField(
+				new DocumentIdField({
+					type: "Item",
+					readonly: false,
+				}),
+			),
+			pocket_item_ids: new SetField(
+				new DocumentIdField({ type: "Item", readonly: false }),
+			),
+			pack_item_ids: new SetField(
+				new DocumentIdField({ type: "Item", readonly: false }),
+			),
 		};
+	}
+
+	get kit() {
+		return this.parent.items.get(this.kit_item_id);
+	}
+	get equipped_items() {
+		return this.equipped_item_ids.map((id) => this.parent.items.get(id));
+	}
+	get pocket_items() {
+		return this.pocket_item_ids.map((id) => this.parent.items.get(id));
+	}
+	get pack_items() {
+		return this.pack_item_ids.map((id) => this.parent.items.get(id));
+	}
+
+	/**
+	 * Could the area contain the item in theory? i.e. this does not check if it can currently fit, only if it possibly could
+	 * @param {Item} item
+	 * @param {"kit"|"equipped"|"pockets"|"pack"} area
+	 * @return {boolean|string} Success or a warning message
+	 */
+	couldAreaStoreEquipment(item, area) {
+		if (item.type === "kit" && area !== "kit") {
+			return game.i18n.localize(
+				"warden.character.sheet.warnings.kit-in-non-kit-slot",
+			);
+		}
+		if (item.type !== "kit" && area === "kit") {
+			return game.i18n.localize(
+				"warden.character.sheet.warnings.non-kit-in-kit-slot",
+			);
+		}
+		if (area === "pockets" && item.system.weight !== "light") {
+			return game.i18n.localize(
+				"warden.character.sheet.warnings.pocket-weight",
+			);
+		}
+
+		return true;
+	}
+	/**
+	 * Find out if a piece of equipment can be inserted in a specified area at a specified slot
+	 * @param {Item} item
+	 * @param {"kit"|"equipped"|"pockets"|"pack"} area
+	 * @return {true|string} Success or a warning message
+	 */
+	canAreaFitEquipment(item, area) {
+		if (!BaseEquipment.isItemEquipment(item)) return false;
+
+		switch (area) {
+			case "kit":
+				return true;
+			case "equipped":
+				return this.equipped_item_ids.size < 5;
+			case "pockets":
+				return this.pocket_item_ids.size < 4;
+			case "pack":
+				return this.pack_item_ids.size < this.kit.system.pack_slots;
+		}
+
+		return false;
+	}
+
+	areaToPath(area) {
+		switch (area) {
+			case "equipped":
+				return "equipped_item_ids";
+			case "pockets":
+				return "pocket_item_ids";
+			case "pack":
+				return "pack_item_ids";
+		}
+	}
+	inventoryListByName(name) {
+		switch (name) {
+			case "equipped":
+				return this.equipped_items;
+			case "pockets":
+				return this.pocket_items;
+			case "pack":
+				return this.pack_items;
+		}
+	}
+
+	async replaceKit(newKit) {
+		newKit = newKit.inCompendium
+			? game.items.fromCompendium(newKit, { clearFolder: true })
+			: newKit.toObject();
+
+		const id = foundry.utils.randomID();
+		newKit._id = id;
+
+		return foundry.documents.modifyBatch([
+			{
+				action: "delete",
+				documentName: "Item",
+				ids: [this.kit.id],
+				parent: this.parent,
+			},
+			{
+				action: "create",
+				documentName: "Item",
+				data: [newKit],
+				keepId: true,
+				parent: this.parent,
+			},
+			{
+				action: "update",
+				documentName: "Actor",
+				updates: [
+					{
+						_id: this.parent.id,
+						"system.kit_item_id": id,
+					},
+				],
+			},
+		]);
+	}
+	/**
+	 * Performs mutation of the inventory, adding a new item, removing an existing item, or swapping the area of items.
+	 * There are many forms the function can take depending on what options are supplied
+	 * - If srcArea and destArea are specified we move the item between areas
+	 * - If srcArea, destArea and destItem are specified we swap the items' areas and sort order
+	 * - If destArea is specified but not srcArea, we create the item ex nihilo
+	 * - If srcArea are specified but not destArea we delete the item
+	 * @param {Item} srcItem
+	 * @param options
+	 * @param {"equipped"|"pockets"|"pack"?} options.destArea
+	 * @param {"equipped"|"pockets"|"pack"} options.srcArea
+	 * @param {Item?} options.destItem
+	 */
+	async editInventory(srcItem, { destArea, srcArea, destItem }) {
+		if (srcItem.type === "kit") {
+			return this.replaceKit(srcItem);
+		}
+
+		const operations = [];
+
+		// The relative path to the target Set, or null
+		const srcPath = srcArea == null ? srcArea : this.areaToPath(srcArea);
+		// A copy of the target Set to modify, or null
+		const srcSet =
+			srcPath == null
+				? srcPath
+				: new Set(foundry.utils.getProperty(this, srcPath));
+
+		// The relative path to the target Set, or null
+		const destPath =
+			destArea == null ? destArea : this.areaToPath(destArea);
+		// A copy of the target Set to modify, or null
+		const destSet =
+			destPath == null
+				? destPath
+				: new Set(foundry.utils.getProperty(this, destPath));
+
+		let id = srcItem.id;
+
+		if (srcArea == null) {
+			// If the srcItem comes from nowhere we need to create it
+			srcItem = srcItem.inCompendium
+				? game.items.fromCompendium(srcItem, { clearFolder: true })
+				: srcItem.toObject();
+
+			id = foundry.utils.randomID();
+
+			srcItem._id = id;
+
+			operations.push({
+				action: "create",
+				documentName: "Item",
+				data: [srcItem],
+				keepId: true,
+				parent: this.parent,
+			});
+		} else {
+			// Else we'll need to edit where it came from
+			srcSet.delete(id);
+			operations.push({
+				action: "update",
+				documentName: "Actor",
+				updates: [
+					{
+						_id: this.parent.id,
+						[`system.${srcPath}`]: srcSet,
+					},
+				],
+			});
+		}
+
+		if (destArea == null) {
+			// If the item is going nowhere we delete it
+			operations.push({
+				action: "delete",
+				documentName: "Item",
+				ids: [srcItem.id],
+				parent: this.parent,
+			});
+		} else {
+			// Else we add it to the destination
+			destSet.add(id);
+			operations.push({
+				action: "update",
+				documentName: "Actor",
+				updates: [
+					{ _id: this.parent.id, [`system.${destPath}`]: destSet },
+				],
+			});
+		}
+
+		if (destItem != null) {
+			// If we're swapping the Sets need to be updated inversely to the dropped srcItem
+			srcSet.add(destItem.id);
+			destSet.delete(destItem.id);
+
+			// And we can just swap their sort values to preserve orders
+			operations.push({
+				action: "update",
+				documentName: "Item",
+				updates: [
+					{ _id: srcItem.id, sort: destItem.sort },
+					{ _id: destItem.id, sort: srcItem.sort },
+				],
+				parent: this.parent,
+			});
+		}
+
+		await foundry.documents.modifyBatch(operations);
 	}
 
 	get untrainedBonus() {
