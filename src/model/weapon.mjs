@@ -1,3 +1,91 @@
 import { BaseEquipment } from "./base_equipment.mjs";
 
-export class Weapon extends BaseEquipment {}
+const { NumberField, StringField } = foundry.data.fields;
+
+/**
+ * @property {"melee"|"ranged"} type
+ * @property {number} hands
+ * @property {number} range
+ * @property {4|6|8|10|12} dic_size
+ * @property {string} damage_type
+ */
+export class Weapon extends BaseEquipment {
+	static defineSchema() {
+		return {
+			...super.defineSchema(),
+
+			type: new StringField({
+				required: true,
+				initial: "melee",
+				choices: {
+					melee: "warden.weapon.type.melee",
+					ranged: "warden.weapon.type.ranged",
+				},
+				label: "warden.weapon.type.label",
+			}),
+
+			hands: new NumberField({
+				required: true,
+				initial: 1,
+				choices: {
+					1: "1",
+					2: "2",
+				},
+				label: "warden.weapon.hands.label",
+			}),
+
+			range: new NumberField({
+				required: true,
+				initial: 1,
+				integer: true,
+				label: "warden.weapon.range.label",
+			}),
+
+			damage_die: new NumberField({
+				required: true,
+				initial: 6,
+				choices: {
+					4: "d4",
+					6: "d6",
+					8: "d8",
+					10: "d10",
+					12: "d12",
+				},
+				label: "warden.weapon.damage_die.label",
+			}),
+			damage_type: new StringField({
+				required: true,
+				initial: "slash",
+				choices: WARDEN.DAMAGE_TYPE_CHOICES,
+				label: "warden.weapon.damage_type.label",
+			}),
+		};
+	}
+
+	getProperties() {
+		const properties = { ...super.getProperties() };
+
+		properties.type = {
+			field: this.schema.fields.type,
+			value: this.type,
+		};
+		properties.hands = {
+			field: this.schema.fields.hands,
+			value: this.hands,
+		};
+		properties.range = {
+			field: this.schema.fields.range,
+			value: this.range,
+		};
+		properties.damage_die = {
+			field: this.schema.fields.damage_die,
+			value: this.damage_die,
+		};
+		properties.damage_type = {
+			field: this.schema.fields.damage_type,
+			value: this.damage_type,
+		};
+
+		return properties;
+	}
+}

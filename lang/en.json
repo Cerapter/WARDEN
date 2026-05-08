@@ -217,6 +217,25 @@
 				}
 			}
 		},
+		"weapon": {
+			"type": {
+				"label": "Weapon Type",
+				"melee": "Melee",
+				"ranged": "Ranged"
+			},
+			"hands": {
+				"label": "Hands Required"
+			},
+			"damage_die": {
+				"label": "Damage Die"
+			},
+			"damage_type": {
+				"label": "Damage Type"
+			},
+			"range": {
+				"label": "Range"
+			}
+		},
 
 		"modifier_type": {
 			"universal": "Universal",
@@ -280,6 +299,29 @@
 				"status": "Status Modifier",
 				"circumstance": "Circumstance Modifier"
 			}
+		},
+
+		"damage_type": {
+			"bleed": "Bleed",
+			"blunt": "Blunt",
+			"pierce": "Pierce",
+			"slash": "Slash",
+
+			"acid": "Acid",
+			"cold": "Cold",
+			"electricity": "Electricity",
+			"fire": "Fire",
+			"toxic": "Toxic",
+
+			"aether": "Aether",
+			"dark": "Dark",
+			"holy": "Holy",
+			"psychic": "Psychic"
+		},
+		"damage_category": {
+			"physical": "Physical",
+			"energy": "Energy",
+			"special": "Special"
 		}
 	}
 }

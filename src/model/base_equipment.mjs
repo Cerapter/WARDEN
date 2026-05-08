@@ -51,6 +51,16 @@ export class BaseEquipment extends TypeDataModel {
 		};
 	}
 
+	/**
+	 * @typedef ParameterInput
+	 * @property {DataField} field
+	 * @property {any} value
+	 * @property {string?} type
+	 */
+
+	/**
+	 * @returns {Record<string, ParameterInput>}
+	 */
 	getProperties() {
 		const properties = {};
 
