@@ -186,6 +186,24 @@
 			"5": "Master"
 		},
 
-		"modifier_label": "Label"
+		"modifier_label": "Label",
+
+		"roll": {
+			"submit_label_open": "Roll ({formula})",
+			"submit_label_difficulty": "Roll ({formula}) vs. DV {difficulty}",
+
+			"benefit": "Benefit",
+			"detriment": "Detriment",
+
+			"difficulty": {
+				"open": "Open Check",
+
+				"standard": "Standard",
+				"difficult": "Difficult",
+				"daunting": "Daunting",
+				"extreme": "Extreme",
+				"impossible": "Impossible"
+			}
+		}
 	}
 }

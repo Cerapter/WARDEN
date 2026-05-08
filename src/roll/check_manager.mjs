@@ -1,4 +1,5 @@
 import { CheckWindow } from "../dialog/check.mjs";
+import { WardenCheck } from "./warden_check.mjs";
 
 /**
  * @typedef {"universal"|"proficiency"|"item"|"status"|"circumstance"} ModifierType
@@ -18,6 +19,7 @@ import { CheckWindow } from "../dialog/check.mjs";
  * @typedef {Object} CheckParameters
  * @property {string} title - Title for the roll window and chat message.
  * @property {Modifier[]} modifiers - All the applicable modifiers for the roll.
+ * @property {number|"open"?} difficulty - The difficulty of the check, or "open" if open
  * @property {boolean?} benefit - Should the roll gain a benefit.
  * @property {boolean?} detriment - Should the roll suffer a detriment.
  */
@@ -39,6 +41,10 @@ class CheckManager {
 		this.rollData = rollData;
 		this.speaker = speaker;
 		this.parameters = parameters;
+
+		this.parameters.difficulty ??= "open";
+		this.parameters.benefit ??= false;
+		this.parameters.detriment ??= false;
 
 		for (const modifier of this.parameters.modifiers) {
 			modifier.enabled = modifier.type === "universal";
@@ -111,6 +117,21 @@ class CheckManager {
 	}
 
 	/**
+	 * Set the check base difficulty
+	 * @param {number|"open"} difficulty
+	 */
+	setDifficulty(difficulty) {
+		this.parameters.difficulty = difficulty;
+	}
+
+	toggleBenefit() {
+		this.parameters.benefit = !this.parameters.benefit;
+	}
+	toggleDetriment() {
+		this.parameters.detriment = !this.parameters.detriment;
+	}
+
+	/**
 	 * Generate the roll formula to be used.
 	 * @returns {string} - The formula used for the roll.
 	 */
@@ -126,6 +147,17 @@ class CheckManager {
 		return `d20${sumStr}`;
 	}
 
+	/**
+	 * Benefit and detriment-adjusted difficulty
+	 */
+	get difficulty() {
+		return (
+			this.parameters.difficulty -
+			(this.parameters.benefit ? 5 : 0) +
+			(this.parameters.detriment ? 5 : 0)
+		);
+	}
+
 	async display() {
 		return CheckWindow.wait(this, {});
 	}
@@ -133,7 +165,7 @@ class CheckManager {
 	async execute() {
 		const rollMode = game.settings.get("core", "messageMode");
 
-		const roll = new Roll(this.formula, this.rollData);
+		const roll = new WardenCheck(this.formula, this.rollData);
 
 		await roll.evaluate();
 		await roll.toMessage({

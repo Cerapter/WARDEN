@@ -43,6 +43,9 @@ export class CheckWindow extends HandlebarsApplicationMixin(ApplicationV2) {
 		actions: {
 			execute: CheckWindow.#confirm,
 			toggleModifier: CheckWindow.#toggleModifier,
+			setDifficulty: CheckWindow.#setDifficulty,
+			toggleBenefit: CheckWindow.#toggleBenefit,
+			toggleDetriment: CheckWindow.#toggleDetriment,
 		},
 	};
 
@@ -55,6 +58,8 @@ export class CheckWindow extends HandlebarsApplicationMixin(ApplicationV2) {
 
 		context.parameters = this.manager.parameters;
 		context.formula = this.manager.formula;
+
+		context.difficulty = this.manager.difficulty;
 
 		context.pending_modifier = this.pending_modifier;
 		context.choices = {
@@ -95,6 +100,25 @@ export class CheckWindow extends HandlebarsApplicationMixin(ApplicationV2) {
 			enabled: true,
 		};
 
+		this.render();
+	}
+	static async #setDifficulty(_, target) {
+		const rawDifficulty = target.dataset.difficulty;
+		const difficulty =
+			target.dataset.difficulty === "open"
+				? rawDifficulty
+				: parseInt(rawDifficulty);
+
+		this.manager.setDifficulty(difficulty);
+
+		this.render();
+	}
+	static async #toggleBenefit() {
+		this.manager.toggleBenefit();
+		this.render();
+	}
+	static async #toggleDetriment() {
+		this.manager.toggleDetriment();
 		this.render();
 	}
 
