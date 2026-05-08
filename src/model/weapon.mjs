@@ -1,4 +1,5 @@
 import { runCheck } from "../roll/check_manager.mjs";
+import { WardenEffect } from "../roll/warden_effect.mjs";
 import { BaseEquipment } from "./base_equipment.mjs";
 
 const { NumberField, StringField } = foundry.data.fields;
@@ -150,6 +151,28 @@ export class Weapon extends BaseEquipment {
 						},
 						{ skip: e.shiftKey },
 					),
+			},
+			{
+				label: _loc("warden.weapon.damage_button"),
+				onClick: async () => {
+					const rollMode = game.settings.get("core", "messageMode");
+
+					const roll = WardenEffect.fromParts(
+						this.damage_die,
+						Math.max(this.parent.actor.system.path.combat.rank, 1),
+						1,
+						0,
+						rollData,
+					);
+
+					await roll.toMessage({
+						speaker,
+						rollMode,
+						flavor: _loc("warden.weapon.damage_flavor", {
+							weapon: this.parent.name,
+						}),
+					});
+				},
 			},
 		];
 	}

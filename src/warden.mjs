@@ -8,6 +8,7 @@ import { Shield } from "./model/shield.mjs";
 import { UtilityItem } from "./model/utility_item.mjs";
 import { Weapon } from "./model/weapon.mjs";
 import { WardenCheck } from "./roll/warden_check.mjs";
+import { WardenEffect } from "./roll/warden_effect.mjs";
 import { CharacterSheet } from "./sheet/character.mjs";
 import { EquipmentSheet } from "./sheet/item.mjs";
 
@@ -31,6 +32,7 @@ Hooks.once("init", () => {
 	CONFIG.Item.dataModels.kit = Kit;
 
 	CONFIG.Dice.rolls.push(WardenCheck);
+	CONFIG.Dice.rolls.push(WardenEffect);
 
 	const DocumentSheetConfig = foundry.applications.apps.DocumentSheetConfig;
 	DocumentSheetConfig.registerSheet(Actor, "warden", CharacterSheet, {

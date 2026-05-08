@@ -234,7 +234,9 @@
 			},
 			"range": {
 				"label": "Range"
-			}
+			},
+			"damage_button": "Damage",
+			"damage_flavor": "Weapon Damage ({weapon})"
 		},
 		"apparel": {
 			"armor": {
