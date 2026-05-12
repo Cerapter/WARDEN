@@ -110,36 +110,24 @@
 	<div class="flow-col col-span-2">
 		<section class="path-defense-wrapper gray col-span-2">
 			{{> "systems/warden/static/partials/proficiency-display.hbs"
-				path="path.combat"
-				bonus=system.path.combat.bonus
-				rank=system.path.combat.rank
+				path.combat
 			}}
 			{{> "systems/warden/static/partials/proficiency-display.hbs"
-				path="defense.toughness"
-				bonus=system.defense.toughness.bonus
-				rank=system.defense.toughness.rank
+				defense.toughness
 			}}
 
 			{{> "systems/warden/static/partials/proficiency-display.hbs"
-				path="path.skill"
-				bonus=system.path.skill.bonus
-				rank=system.path.skill.rank
+				path.skill
 			}}
 			{{> "systems/warden/static/partials/proficiency-display.hbs"
-				path="defense.resolve"
-				bonus=system.defense.resolve.bonus
-				rank=system.defense.resolve.rank
+				defense.resolve
 			}}
 
 			{{> "systems/warden/static/partials/proficiency-display.hbs"
-				path="path.special"
-				bonus=system.path.special.bonus
-				rank=system.path.special.rank
+				path.special
 			}}
 			{{> "systems/warden/static/partials/proficiency-display.hbs"
-				path="defense.perception"
-				bonus=system.defense.perception.bonus
-				rank=system.defense.perception.rank
+				defense.perception
 			}}
 		</section>
 

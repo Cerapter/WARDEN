@@ -59,7 +59,29 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 			system.kit?.system?.pack_slots ?? 2,
 		);
 
+		context.path = {};
+		for (const name of Object.keys(system.path)) {
+			context.path[name] = this.#prepareProficiencyDisplay(
+				name,
+				`path.${name}`,
+			);
+		}
+		context.defense = {};
+		for (const name of Object.keys(system.defense)) {
+			context.defense[name] = this.#prepareProficiencyDisplay(
+				name,
+				`defense.${name}`,
+			);
+		}
+
 		return context;
+	}
+
+	#prepareProficiencyDisplay(name, dataPath) {
+		const resolver = this.actor.system.getDynamicResultResolver([name]);
+		const rank = resolver.resolve("proficiency_rank");
+		const bonus = resolver.checkModifierSum();
+		return { rank, bonus, path: dataPath };
 	}
 
 	/**
