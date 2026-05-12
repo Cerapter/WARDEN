@@ -4,11 +4,11 @@
 <span class="grid col-span-2 col-subgrid">
 	<span class="text-right pointer hover-glow" data-action="check" data-type="knowledge" data-id="{{ id }}">
 		{{~numberFormat
-			skill.bonus
+			bonus
 			sign=true
 		~}}
 	</span>
 	<span>
-		<input type="text" name="system.knowledge_skills.{{ id }}.topic" value="{{ skill.topic }}" />
+		<input type="text" name="system.knowledge_skills.{{ id }}.topic" value="{{ topic }}" />
 	</span>
 </span>

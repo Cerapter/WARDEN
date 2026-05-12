@@ -264,14 +264,13 @@
 					skill.survival
 				}}
 
-				{{#each system.knowledge_skills}}
+				{{#each knowledge_skills}}
 					{{#if (eq @index 0)}}
 						<hr class="col-span-6" />
 					{{/if}}
 
 					{{> "systems/warden/static/partials/knowledge-skill-display.hbs"
-						id=@key
-						skill=this
+						this
 					}}
 				{{/each}}
 			</div>

@@ -86,6 +86,14 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 			context.skill[name] = this.#prepareSkillDisplay(name, data);
 		}
 
+		context.knowledge_skills = {};
+		for (const [id, data] of Object.entries(system.knowledge_skills)) {
+			context.knowledge_skills[id] = this.#prepareKnowledgeSkillDisplay(
+				id,
+				data,
+			);
+		}
+
 		return context;
 	}
 
@@ -104,6 +112,17 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 		const rank = resolver.resolve("proficiency_rank");
 		const bonus = resolver.checkModifierSum();
 		return { name, rank, bonus, is_proficient: data.is_proficient };
+	}
+	#prepareKnowledgeSkillDisplay(id, data) {
+		const resolver = this.actor.system.getDynamicResultResolver([
+			"skill",
+			"skill.knowledge",
+			`skill.knowledge.${id}`,
+		]);
+
+		const rank = resolver.resolve("proficiency_rank");
+		const bonus = resolver.checkModifierSum();
+		return { id, topic: data.topic, rank, bonus };
 	}
 
 	/**
