@@ -81,6 +81,11 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 			);
 		}
 
+		context.skill = {};
+		for (const [name, data] of Object.entries(system.skill)) {
+			context.skill[name] = this.#prepareSkillDisplay(name, data);
+		}
+
 		return context;
 	}
 
@@ -89,6 +94,16 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 		const rank = resolver.resolve("proficiency_rank");
 		const bonus = resolver.checkModifierSum();
 		return { rank, bonus, path: dataPath };
+	}
+	#prepareSkillDisplay(name, data) {
+		const resolver = this.actor.system.getDynamicResultResolver([
+			"skill",
+			`skill.${name}`,
+		]);
+
+		const rank = resolver.resolve("proficiency_rank");
+		const bonus = resolver.checkModifierSum();
+		return { name, rank, bonus, is_proficient: data.is_proficient };
 	}
 
 	/**
