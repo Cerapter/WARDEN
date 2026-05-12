@@ -5,7 +5,7 @@
 	"version": "0.0.1",
 	"compatibility": {
 		"minimum": "14",
-		"verified": "14.360"
+		"verified": "14.361"
 	},
 	"esmodules": ["src/warden.mjs"],
 	"styles": ["static/style.css"],
