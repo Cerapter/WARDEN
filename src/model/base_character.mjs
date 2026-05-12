@@ -1,4 +1,4 @@
-const { AnyField, SchemaField, NumberField, SetField } = foundry.data.fields;
+const { AnyField, SchemaField, NumberField, ArrayField } = foundry.data.fields;
 const { TypeDataModel } = foundry.abstract;
 
 /**
@@ -7,7 +7,7 @@ const { TypeDataModel } = foundry.abstract;
  * @property {number} level
  * @property {{value: number, max: number}} hit_points
  * @property {{value: number, max: number}} strain
- * @property {Record<string, Set<DynamicEffect>>} dynamic_effects
+ * @property {Record<string, DynamicEffect[]>} dynamic_effects
  */
 export class BaseCharacterData extends TypeDataModel {
 	static LOCALIZATION_PREFIXES = ["warden.character"];
@@ -105,7 +105,7 @@ export class BaseCharacterData extends TypeDataModel {
 	/**
 	 * @typedef DynamicEffect
 	 * @property {string} label
-	 * @property {string[]} domains
+	 * @property {Set<string>} domains
 	 * @property {DynamicEffectMode} mode
 	 * @property {boolean|string|string[]} applicable_if
 	 * @property {any} value
@@ -116,24 +116,24 @@ export class BaseCharacterData extends TypeDataModel {
 	 * Prepare the sets where effects are stored
 	 */
 	prepareDynamicEffects() {
-		/** @type {Record<string, Set<DynamicEffect>>} */
+		/** @type {Record<string, DynamicEffect[]>} */
 		this.dynamic_effects = {
-			proficiency_rank: new Set(),
+			proficiency_rank: [],
 
-			check_bonus: new Set(),
-			check_penalty: new Set(),
+			check_bonus: [],
+			check_penalty: [],
 
-			effect_dice: new Set(),
-			effect_potency: new Set(),
-			effect_bonus: new Set(),
-			effect_penalty: new Set(),
+			effect_dice: [],
+			effect_potency: [],
+			effect_bonus: [],
+			effect_penalty: [],
 
-			benefit: new Set(),
-			detriment: new Set(),
+			benefit: [],
+			detriment: [],
 		};
 
 		// I don't like this, but without a fake field it coerces all values to strings
-		this.dynamic_effect_field_type = new SetField(new AnyField());
+		this.dynamic_effect_field_type = new ArrayField(new AnyField());
 	}
 
 	getFieldForProperty(key) {
@@ -189,7 +189,7 @@ class DynamicResultResolver {
 	/**
 	 * @param {Set<string>} domains
 	 * @param {Set<string>} discriminators
-	 * @param {Record<string, Set<DynamicEffect>>} effects
+	 * @param {Record<string, DynamicEffect[]>} effects
 	 * @param {Record<string, any>} data
 	 */
 	constructor(domains, discriminators, effects, data) {

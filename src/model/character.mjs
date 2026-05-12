@@ -467,7 +467,7 @@ export class CharacterData extends BaseCharacterData {
 		this.#prepareBaseDynamicEffects();
 	}
 	#prepareBaseDynamicEffects() {
-		this.dynamic_effects.proficiency_rank.add({
+		this.dynamic_effects.proficiency_rank.push({
 			label: _loc("warden.proficiency_rank_label", {
 				type: _loc("warden.character.FIELDS.path.combat.label"),
 			}),
@@ -477,7 +477,7 @@ export class CharacterData extends BaseCharacterData {
 			mode: "upgrade",
 			value: this.path.combat.rank,
 		});
-		this.dynamic_effects.proficiency_rank.add({
+		this.dynamic_effects.proficiency_rank.push({
 			label: _loc("warden.proficiency_rank_label", {
 				type: _loc("warden.character.FIELDS.path.skill.label"),
 			}),
@@ -488,7 +488,7 @@ export class CharacterData extends BaseCharacterData {
 			value: this.path.skill.rank,
 		});
 		for (const [name, data] of Object.entries(this.skill)) {
-			this.dynamic_effects.proficiency_rank.add({
+			this.dynamic_effects.proficiency_rank.push({
 				label: _loc("warden.proficiency_rank_label", {
 					type: _loc("warden.character.FIELDS.path.skill.label"),
 				}),
@@ -499,7 +499,7 @@ export class CharacterData extends BaseCharacterData {
 				value: data.is_proficient ? this.path.skill.rank : 0,
 			});
 		}
-		this.dynamic_effects.proficiency_rank.add({
+		this.dynamic_effects.proficiency_rank.push({
 			label: _loc("warden.proficiency_rank_label", {
 				type: _loc("warden.character.FIELDS.path.special.label"),
 			}),
@@ -509,7 +509,7 @@ export class CharacterData extends BaseCharacterData {
 			mode: "upgrade",
 			value: this.path.special.rank,
 		});
-		this.dynamic_effects.proficiency_rank.add({
+		this.dynamic_effects.proficiency_rank.push({
 			label: _loc("warden.proficiency_rank_label", {
 				type: _loc("warden.character.FIELDS.defense.toughness.label"),
 			}),
@@ -519,7 +519,7 @@ export class CharacterData extends BaseCharacterData {
 			mode: "upgrade",
 			value: this.defense.toughness.rank,
 		});
-		this.dynamic_effects.proficiency_rank.add({
+		this.dynamic_effects.proficiency_rank.push({
 			label: _loc("warden.proficiency_rank_label", {
 				type: _loc("warden.character.FIELDS.defense.resolve.label"),
 			}),
@@ -529,7 +529,7 @@ export class CharacterData extends BaseCharacterData {
 			mode: "upgrade",
 			value: this.defense.resolve.rank,
 		});
-		this.dynamic_effects.proficiency_rank.add({
+		this.dynamic_effects.proficiency_rank.push({
 			label: "Perception Rank",
 			domains: new Set(["perception"]),
 			defaultEnabled: true,
@@ -538,7 +538,7 @@ export class CharacterData extends BaseCharacterData {
 			value: this.defense.perception.rank,
 		});
 
-		this.dynamic_effects.check_bonus.add({
+		this.dynamic_effects.check_bonus.push({
 			label: "Untrained Proficiency",
 			domains: new Set(["untrained"]),
 
@@ -550,7 +550,7 @@ export class CharacterData extends BaseCharacterData {
 			value: this.level / 2,
 		});
 
-		this.dynamic_effects.check_bonus.add({
+		this.dynamic_effects.check_bonus.push({
 			label: "Combat Proficiency",
 			domains: new Set(["combat"]),
 			defaultEnabled: true,
@@ -560,7 +560,7 @@ export class CharacterData extends BaseCharacterData {
 			mode: "upgrade",
 			value: "@profCalc",
 		});
-		this.dynamic_effects.check_bonus.add({
+		this.dynamic_effects.check_bonus.push({
 			label: "Skill Proficiency",
 			domains: new Set(["skill"]),
 			defaultEnabled: true,
@@ -570,7 +570,7 @@ export class CharacterData extends BaseCharacterData {
 			mode: "upgrade",
 			value: "@profCalc",
 		});
-		this.dynamic_effects.check_bonus.add({
+		this.dynamic_effects.check_bonus.push({
 			label: "Special Proficiency",
 			domains: new Set(["special"]),
 			defaultEnabled: true,
@@ -580,7 +580,7 @@ export class CharacterData extends BaseCharacterData {
 			mode: "upgrade",
 			value: "@profCalc",
 		});
-		this.dynamic_effects.check_bonus.add({
+		this.dynamic_effects.check_bonus.push({
 			label: "Toughness Proficiency",
 			domains: new Set(["toughness"]),
 			defaultEnabled: true,
@@ -590,7 +590,7 @@ export class CharacterData extends BaseCharacterData {
 			mode: "upgrade",
 			value: "@profCalc",
 		});
-		this.dynamic_effects.check_bonus.add({
+		this.dynamic_effects.check_bonus.push({
 			label: "Resolve Proficiency",
 			domains: new Set(["resolve"]),
 			defaultEnabled: true,
@@ -600,7 +600,7 @@ export class CharacterData extends BaseCharacterData {
 			mode: "upgrade",
 			value: "@profCalc",
 		});
-		this.dynamic_effects.check_bonus.add({
+		this.dynamic_effects.check_bonus.push({
 			label: "Perception Proficiency",
 			domains: new Set(["perception"]),
 			defaultEnabled: true,
