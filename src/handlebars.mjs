@@ -1,4 +1,4 @@
-import { BaseCharacterData } from "./model/base_character.mjs";
+import { BaseCharacterData } from "./model/character/base_character.mjs";
 
 export const registerHelpers = async () => {
 	Handlebars.registerHelper(

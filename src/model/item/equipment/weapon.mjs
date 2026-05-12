@@ -1,5 +1,5 @@
-import { runCheck } from "../roll/check_manager.mjs";
-import { WardenEffect } from "../roll/warden_effect.mjs";
+import { runCheck } from "../../../roll/check_manager.mjs";
+import { WardenEffect } from "../../../roll/warden_effect.mjs";
 import { BaseEquipment } from "./base_equipment.mjs";
 
 const { NumberField, StringField } = foundry.data.fields;

@@ -1,5 +1,5 @@
-import {BaseCharacterData} from "./base_character.mjs";
-import {BaseEquipment} from "./base_equipment.mjs";
+import { BaseEquipment } from "../item/equipment/base_equipment.mjs";
+import { BaseCharacterData } from "./base_character.mjs";
 
 const {
 	BooleanField,

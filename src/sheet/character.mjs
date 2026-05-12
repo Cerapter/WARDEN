@@ -1,4 +1,4 @@
-import { BaseEquipment } from "../model/base_equipment.mjs";
+import { BaseEquipment } from "../model/item/equipment/base_equipment.mjs";
 import { runCheck } from "../roll/check_manager.mjs";
 
 const { HandlebarsApplicationMixin } = foundry.applications.api;
