@@ -60,23 +60,17 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 		);
 
 		context.path = {};
-		context.path.combat = this.#prepareProficiencyDisplay(
-			["combat"],
-			"path.combat",
-		);
-		context.path.skill = this.#prepareProficiencyDisplay(
-			["skill", "skill-path"],
-			"path.skill",
-		);
-		context.path.special = this.#prepareProficiencyDisplay(
-			["special"],
-			"path.special",
-		);
+		for (const name of Object.keys(system.path)) {
+			context.path[name] = this.#prepareProficiencyDisplay(
+				name,
+				`path.${name}`,
+			);
+		}
 
 		context.defense = {};
 		for (const name of Object.keys(system.defense)) {
 			context.defense[name] = this.#prepareProficiencyDisplay(
-				[name],
+				name,
 				`defense.${name}`,
 			);
 		}
@@ -97,28 +91,21 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 		return context;
 	}
 
-	#prepareProficiencyDisplay(domains, dataPath) {
-		const resolver = this.actor.system.getDynamicResultResolver(domains);
+	#prepareProficiencyDisplay(name, dataPath) {
+		const resolver = this.actor.system.proficiencyCheckResolver(name);
 		const rank = resolver.resolve("proficiency_rank");
 		const bonus = resolver.checkModifierSum();
 		return { rank, bonus, path: dataPath };
 	}
 	#prepareSkillDisplay(name, data) {
-		const resolver = this.actor.system.getDynamicResultResolver([
-			"skill",
-			`skill.${name}`,
-		]);
+		const resolver = this.actor.system.skillCheckResolver(name);
 
 		const rank = resolver.resolve("proficiency_rank");
 		const bonus = resolver.checkModifierSum();
 		return { name, rank, bonus, is_proficient: data.is_proficient };
 	}
 	#prepareKnowledgeSkillDisplay(id, data) {
-		const resolver = this.actor.system.getDynamicResultResolver([
-			"skill",
-			"skill.knowledge",
-			`skill.knowledge.${id}`,
-		]);
+		const resolver = this.actor.system.knowledgeCheckResolver(id);
 
 		const rank = resolver.resolve("proficiency_rank");
 		const bonus = resolver.checkModifierSum();

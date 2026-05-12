@@ -1,5 +1,5 @@
-import {BaseCharacterData} from "./base_character.mjs";
-import {BaseEquipment} from "./base_equipment.mjs";
+import { BaseCharacterData } from "./base_character.mjs";
+import { BaseEquipment } from "./base_equipment.mjs";
 
 const {
 	BooleanField,
@@ -702,5 +702,54 @@ export class CharacterData extends BaseCharacterData {
 				},
 			],
 		};
+	}
+
+	// TODO: add effect parameter for all of these when the system's worked out
+	/**
+	 * Parameters to make an untrained check.
+	 * @param {string[]|Set<string>} discriminators - Extra discriminators for this check.
+	 * @returns DynamicResultResolver
+	 */
+	untrainedCheckResolver({ discriminators = [] } = {}) {
+		return this.getDynamicResultResolver(["untrained"], discriminators);
+	}
+
+	/**
+	 * Parameters to make a check with a path.
+	 * @param {string} proficiency_name - The path of the proficiency, e.g. "path.combat".
+	 * @param {string[]|Set<string>} discriminators - Extra discriminators for this check.
+	 * @returns DynamicResultResolver
+	 */
+	proficiencyCheckResolver(proficiency_name, { discriminators = [] } = {}) {
+		const domains = [proficiency_name];
+		if (proficiency_name === "skill") {
+			domains.push("skill-path");
+		}
+		return this.getDynamicResultResolver(domains, discriminators);
+	}
+
+	/**
+	 * Parameters to make a check with a skill.
+	 * @param {string} skill_name - The skill name to check e.g. "crafting", "medicine".
+	 * @param {string[]|Set<string>} discriminators - Extra discriminators for this check.
+	 * @returns DynamicResultResolver
+	 */
+	skillCheckResolver(skill_name, { discriminators = [] } = {}) {
+		return this.getDynamicResultResolver(
+			["skill", `skill.${skill_name}`],
+			discriminators,
+		);
+	}
+	/**
+	 * Parameters to make a check with a knowledge skill.
+	 * @param {string} id - The id of the knowledge skill.
+	 * @param {string[]|Set<string>} discriminators - Extra discriminators for this check.
+	 * @returns DynamicResultResolver
+	 */
+	knowledgeCheckResolver(id, { discriminators = [] } = {}) {
+		return this.getDynamicResultResolver(
+			["skill", "skill.knowledge", `skill.knowledge.${id}`],
+			discriminators,
+		);
 	}
 }
