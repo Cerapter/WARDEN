@@ -64,7 +64,7 @@
 		<div class="grid row-subgrid row-span-4">
 			<div class="fate row-span-3 pointer" data-action="clickChanger" data-path="system.fate_points">
 				{{> warden-diamonds
-					num=three_fields
+					num=3
 					filled=system.fate_points
 				}}
 			</div>
@@ -189,7 +189,7 @@
 				<div class="charges">
 					<!-- TODO: Hook up clicks -->
 					{{> warden-diamonds
-						num=kit.system.chargesBoolArray
+						num=kit.system.charges.max
 						filled=kit.system.charges.current
 					}}
 				</div>

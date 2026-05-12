@@ -47,9 +47,6 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 
 		context.fields = system.schema.fields;
 
-		context.three_fields = Array.fromRange(3);
-		context.five_fields = Array.fromRange(5);
-
 		context.kit = system.kit;
 
 		context.equipped_items = this.paddedInventoryList(

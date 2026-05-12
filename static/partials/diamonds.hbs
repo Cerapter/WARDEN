@@ -1,3 +1,5 @@
-{{#each num}}
-	{{>warden-diamond filled=(lt @index ../filled)}}
+{{#each (warden-generate-bool-array num filled=filled reverse=reverse)}}
+	{{> warden-diamond
+		filled=this
+	}}
 {{/each}}
