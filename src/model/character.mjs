@@ -463,6 +463,131 @@ export class CharacterData extends BaseCharacterData {
 		this.speed.value = this.speed.base;
 
 		this.wealth = Math.min(this.wealth, this.vocation.value);
+
+		this.#prepareBaseDynamicEffects();
+	}
+	#prepareBaseDynamicEffects() {
+		this.dynamic_effects.proficiency_rank.add({
+			label: "Combat Rank",
+			domains: new Set(["combat"]),
+			defaultEnabled: true,
+
+			mode: "upgrade",
+			value: this.path.combat.rank,
+		});
+		this.dynamic_effects.proficiency_rank.add({
+			label: "Skill Rank",
+			domains: new Set(["skill"]),
+			defaultEnabled: true,
+
+			mode: "upgrade",
+			value: this.path.skill.rank,
+		});
+		this.dynamic_effects.proficiency_rank.add({
+			label: "Special Rank",
+			domains: new Set(["special"]),
+			defaultEnabled: true,
+
+			mode: "upgrade",
+			value: this.path.special.rank,
+		});
+		this.dynamic_effects.proficiency_rank.add({
+			label: "Toughness Rank",
+			domains: new Set(["toughness"]),
+			defaultEnabled: true,
+
+			mode: "upgrade",
+			value: this.defense.toughness.rank,
+		});
+		this.dynamic_effects.proficiency_rank.add({
+			label: "Resolve Rank",
+			domains: new Set(["resolve"]),
+			defaultEnabled: true,
+
+			mode: "upgrade",
+			value: this.defense.resolve.rank,
+		});
+		this.dynamic_effects.proficiency_rank.add({
+			label: "Perception Rank",
+			domains: new Set(["perception"]),
+			defaultEnabled: true,
+
+			mode: "upgrade",
+			value: this.defense.perception.rank,
+		});
+
+		this.dynamic_effects.check_bonus.add({
+			label: "Untrained Proficiency",
+			domains: new Set(["untrained"]),
+
+			defaultEnabled: true,
+
+			modifier_type: "proficiency",
+
+			mode: "upgrade",
+			value: this.level / 2,
+		});
+
+		this.dynamic_effects.check_bonus.add({
+			label: "Combat Proficiency",
+			domains: new Set(["combat"]),
+			defaultEnabled: true,
+
+			modifier_type: "proficiency",
+
+			mode: "upgrade",
+			value: "@profCalc",
+		});
+		this.dynamic_effects.check_bonus.add({
+			label: "Skill Proficiency",
+			domains: new Set(["skill"]),
+			defaultEnabled: true,
+
+			modifier_type: "proficiency",
+
+			mode: "upgrade",
+			value: "@profCalc",
+		});
+		this.dynamic_effects.check_bonus.add({
+			label: "Special Proficiency",
+			domains: new Set(["special"]),
+			defaultEnabled: true,
+
+			modifier_type: "proficiency",
+
+			mode: "upgrade",
+			value: "@profCalc",
+		});
+		this.dynamic_effects.check_bonus.add({
+			label: "Toughness Proficiency",
+			domains: new Set(["toughness"]),
+			defaultEnabled: true,
+
+			modifier_type: "proficiency",
+
+			mode: "upgrade",
+			value: "@profCalc",
+		});
+		this.dynamic_effects.check_bonus.add({
+			label: "Resolve Proficiency",
+			domains: new Set(["resolve"]),
+			defaultEnabled: true,
+
+			modifier_type: "proficiency",
+
+			mode: "upgrade",
+			value: "@profCalc",
+		});
+		this.dynamic_effects.check_bonus.add({
+			label: "Perception Proficiency",
+			domains: new Set(["perception"]),
+			defaultEnabled: true,
+
+			modifier_type: "proficiency",
+
+			mode: "upgrade",
+			value: "@profCalc",
+		});
 	}
 
 	formatProficiency(rank) {
