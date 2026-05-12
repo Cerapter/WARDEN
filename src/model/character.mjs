@@ -1,5 +1,5 @@
-import { BaseCharacterData } from "./base_character.mjs";
-import { BaseEquipment } from "./base_equipment.mjs";
+import {BaseCharacterData} from "./base_character.mjs";
+import {BaseEquipment} from "./base_equipment.mjs";
 
 const {
 	BooleanField,
@@ -617,25 +617,6 @@ export class CharacterData extends BaseCharacterData {
 	}
 
 	/**
-	 * Parameters to make an untrained check.
-	 * @returns CheckParameters
-	 */
-	untrainedCheckParameters() {
-		return {
-			title: game.i18n.localize("warden.check_label", {
-				type: game.i18n.localize("warden.proficiency_rank.0"),
-			}),
-			modifiers: [
-				{
-					label: this.formatProficiency(0),
-					type: "proficiency",
-					value: this.untrainedBonus,
-				},
-			],
-		};
-	}
-
-	/**
 	 * Parameters to make a check with a path.
 	 * @param {string} proficiency_name - The path of the proficiency, e.g. "path.combat".
 	 * @returns CheckParameters
@@ -658,98 +639,74 @@ export class CharacterData extends BaseCharacterData {
 		};
 	}
 
-	/**
-	 * Parameters to make a check with a skill.
-	 * @param {string} skill_name - The skill name to check e.g. "crafting", "medicine".
-	 * @returns CheckParameters
-	 */
-	skillCheckParameters(skill_name) {
-		const skill = this.skill[skill_name];
-		return {
-			title: game.i18n.localize("warden.check_label", {
-				type: game.i18n.localize(
-					`warden.character.FIELDS.skill.${skill_name}.name`,
-				),
-			}),
-			modifiers: [
-				{
-					label: this.formatProficiency(
-						skill.is_proficient ? this.path.skill.rank : 0,
-					),
-					type: "proficiency",
-					value: skill.proficiency_bonus,
-				},
-			],
-		};
-	}
-	/**
-	 * Parameters to make a check with a knowledge skill.
-	 * @param {string} id - The id of the knowledge skill.
-	 * @returns CheckParameters
-	 */
-	knowledgeCheckParameters(id) {
-		const skill = this.knowledge_skills[id];
-		return {
-			title: game.i18n.localize("warden.check_label", {
-				type: skill.topic,
-			}),
-			benefit: skill.is_niche,
-			modifiers: [
-				{
-					label: this.formatProficiency(this.path.skill.rank),
-					type: "proficiency",
-					value: skill.proficiency_bonus,
-				},
-			],
-		};
-	}
-
 	// TODO: add effect parameter for all of these when the system's worked out
 	/**
 	 * Parameters to make an untrained check.
+	 * @param {string[]|Set<string>} domains - Extra domains for this check.
 	 * @param {string[]|Set<string>} discriminators - Extra discriminators for this check.
 	 * @returns DynamicResultResolver
 	 */
-	untrainedCheckResolver({ discriminators = [] } = {}) {
-		return this.getDynamicResultResolver(["untrained"], discriminators);
+	untrainedCheckResolver({ domains = [], discriminators = [] } = {}) {
+		if (Array.isArray(domains)) {
+			domains = new Set(domains);
+		}
+		domains = domains.union(new Set(["untrained"]));
+		return this.getDynamicResultResolver(domains, discriminators);
 	}
 
 	/**
 	 * Parameters to make a check with a path.
 	 * @param {string} proficiency_name - The path of the proficiency, e.g. "path.combat".
+	 * @param {string[]|Set<string>} domains - Extra domains for this check.
 	 * @param {string[]|Set<string>} discriminators - Extra discriminators for this check.
 	 * @returns DynamicResultResolver
 	 */
-	proficiencyCheckResolver(proficiency_name, { discriminators = [] } = {}) {
-		const domains = [proficiency_name];
-		if (proficiency_name === "skill") {
-			domains.push("skill-path");
+	proficiencyCheckResolver(
+		proficiency_name,
+		{ domains = [], discriminators = [] } = {},
+	) {
+		if (Array.isArray(domains)) {
+			domains = new Set(domains);
 		}
+		domains = domains.union(new Set([proficiency_name]));
+
+		if (proficiency_name === "skill") {
+			domains.add("skill-path");
+		}
+
 		return this.getDynamicResultResolver(domains, discriminators);
 	}
 
 	/**
 	 * Parameters to make a check with a skill.
 	 * @param {string} skill_name - The skill name to check e.g. "crafting", "medicine".
+	 * @param {string[]|Set<string>} domains - Extra domains for this check.
 	 * @param {string[]|Set<string>} discriminators - Extra discriminators for this check.
 	 * @returns DynamicResultResolver
 	 */
-	skillCheckResolver(skill_name, { discriminators = [] } = {}) {
-		return this.getDynamicResultResolver(
-			["skill", `skill.${skill_name}`],
-			discriminators,
-		);
+	skillCheckResolver(skill_name, { domains = [], discriminators = [] } = {}) {
+		if (Array.isArray(domains)) {
+			domains = new Set(domains);
+		}
+		domains = domains.union(new Set(["skill", `skill.${skill_name}`]));
+
+		return this.getDynamicResultResolver(domains, discriminators);
 	}
 	/**
 	 * Parameters to make a check with a knowledge skill.
 	 * @param {string} id - The id of the knowledge skill.
+	 * @param {string[]|Set<string>} domains - Extra domains for this check.
 	 * @param {string[]|Set<string>} discriminators - Extra discriminators for this check.
 	 * @returns DynamicResultResolver
 	 */
-	knowledgeCheckResolver(id, { discriminators = [] } = {}) {
-		return this.getDynamicResultResolver(
-			["skill", "skill.knowledge", `skill.knowledge.${id}`],
-			discriminators,
+	knowledgeCheckResolver(id, { domains = [], discriminators = [] } = {}) {
+		if (Array.isArray(domains)) {
+			domains = new Set(domains);
+		}
+		domains = domains.union(
+			new Set(["skill", "skill.knowledge", `skill.knowledge.${id}`]),
 		);
+
+		return this.getDynamicResultResolver(domains, discriminators);
 	}
 }

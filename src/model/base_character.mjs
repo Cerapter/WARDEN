@@ -198,7 +198,7 @@ class DynamicResultResolver {
 		this.effects = effects;
 		this.data = data;
 
-		this.#resetResults();
+		this.reset();
 
 		for (const effect_type of Object.values(this.effects)) {
 			for (const effect of effect_type) {
@@ -238,15 +238,17 @@ class DynamicResultResolver {
 		);
 	}
 
+	reset() {
+		this.results = {};
+		this.appliedEffects = {};
+	}
 	resolve(type) {
-		this.#resetResults();
-
 		this.#resolveType(type);
 
 		return this.results[type];
 	}
 	resolveAll() {
-		this.#resetResults();
+		this.reset();
 
 		this.#resolveType("proficiency_rank");
 
@@ -262,6 +264,24 @@ class DynamicResultResolver {
 		this.#resolveType("detriment");
 
 		return this.results;
+	}
+
+	parseValue(value) {
+		if (typeof value === "string" && value.startsWith("@")) {
+			if (value === "@profCalc") {
+				// Very special case here
+				const rank = this.#resolveType("proficiency_rank");
+				if (rank > 0) {
+					return rank + this.data.level;
+				} else {
+					return Math.floor(this.data.level / 2);
+				}
+			}
+
+			return this.#resolveType(value.substring(1));
+		} else {
+			return value;
+		}
 	}
 
 	#getDefaultValue(type) {
@@ -280,10 +300,6 @@ class DynamicResultResolver {
 			default:
 				return 0;
 		}
-	}
-	#resetResults() {
-		this.results = {};
-		this.appliedEffects = [];
 	}
 
 	#resolveType(type) {
@@ -329,46 +345,66 @@ class DynamicResultResolver {
 				return [this.results[type], (v) => (this.results[type] = v)];
 		}
 	}
-	#getEffectValue(type, effect) {
-		if (typeof effect.value === "string" && effect.value.startsWith("@")) {
-			if (effect.value === "@profCalc") {
-				// Very special case here
-				const rank = this.#resolveType("proficiency_rank");
-				if (rank > 0) {
-					return rank + this.data.level;
-				} else {
-					return Math.floor(this.data.level / 2);
-				}
-			}
 
-			return this.#resolveType(effect.value.substring(1));
-		} else {
-			return effect.value;
+	#overrideEffectApplied(type, effect) {
+		switch (type) {
+			case "check_bonus":
+			case "check_penalty":
+			case "effect_bonus":
+			case "effect_penalty":
+				this.appliedEffects[type] =
+					this.appliedEffects[type]?.filter(
+						(e) => e.modifier_type !== effect.modifier_type,
+					) ?? [];
+				this.appliedEffects[type].push(effect);
+				break;
+			default:
+				this.appliedEffects[type] = [effect];
+				break;
 		}
+	}
+
+	/**
+	 *
+	 * @param {DynamicEffectType} type
+	 * @param {DynamicEffect} effect
+	 * @param {boolean} override
+	 */
+	#setEffectApplied(type, effect, override = false) {
+		if (override) {
+			this.#overrideEffectApplied(type, effect);
+			return;
+		}
+
+		if (this.appliedEffects[type] === undefined) {
+			this.appliedEffects[type] = [];
+		}
+
+		this.appliedEffects[type].push(effect);
 	}
 	#applyEffect(type, effect) {
 		let [accumulator, setter] = this.#getEffectTarget(type, effect);
-		const value = this.#getEffectValue(type, effect);
+		const value = this.parseValue(effect.value);
 
 		switch (effect.mode) {
 			case "add":
 				setter(accumulator + value);
-				this.appliedEffects.push(effect);
+				this.#setEffectApplied(type, effect);
 				break;
 			case "subtract":
 				setter(accumulator - value);
-				this.appliedEffects.push(effect);
+				this.#setEffectApplied(type, effect);
 				break;
 			case "upgrade":
 				if (accumulator < value) {
 					setter(value);
-					this.appliedEffects.push(effect); // This will double count TODO: Fix
+					this.#setEffectApplied(type, effect, true);
 				}
 				break;
 			case "downgrade":
 				if (accumulator > value) {
 					setter(value);
-					this.appliedEffects.push(effect); // This will double count TODO: Fix
+					this.#setEffectApplied(type, effect, true);
 				}
 				break;
 		}

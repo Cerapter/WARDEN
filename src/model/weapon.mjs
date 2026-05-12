@@ -91,70 +91,75 @@ export class Weapon extends BaseEquipment {
 		return properties;
 	}
 
-	/**
-	 * @returns {ActionButton[]}
-	 */
-	get equippedButtons() {
+	runStrike({ skip = false, map = 0 }) {
 		const rollData = this.parent.actor.getRollData();
 		const speaker = ChatMessage.getSpeaker({
 			actor: this.parent.actor,
 		});
 
-		const parameters =
-			this.parent.actor.system.proficiencyCheckParameters("path.combat");
-		const strike_title = _loc(
-			this.type === "melee"
-				? "warden.action.melee_strike_weapon_title"
-				: "warden.action.ranged_strike_weapon_title",
-			{ weapon: this.parent.name },
+		let title;
+		const domains = new Set(["strike", `strike.${this.parent.id}`]);
+		const discriminators = new Set();
+		const difficulty = 10 + map * 5;
+
+		if (this.type === "melee") {
+			title = _loc("warden.action.melee_strike_weapon_title", {
+				weapon: this.parent.name,
+			});
+			domains.add("strike.melee");
+		} else {
+			title = _loc("warden.action.ranged_strike_weapon_title", {
+				weapon: this.parent.name,
+			});
+			domains.add("strike.ranged");
+		}
+
+		if (map > 0) {
+			discriminators.add("map");
+		}
+
+		const resolver = this.parent.actor.system.proficiencyCheckResolver(
+			"combat",
+			{ domains, discriminators },
 		);
 
+		return runCheck(
+			rollData,
+			speaker,
+			resolver,
+			{
+				difficulty,
+				title,
+			},
+			{ skip },
+		);
+	}
+
+	/**
+	 * @returns {ActionButton[]}
+	 */
+	get equippedButtons() {
 		return [
 			{
 				label: "Strike v. 10",
-				onClick: (e) =>
-					runCheck(
-						rollData,
-						speaker,
-						{
-							...parameters,
-							difficulty: 10,
-							title: strike_title,
-						},
-						{ skip: e.shiftKey },
-					),
+				onClick: (e) => this.runStrike({ skip: e.shiftKey }),
 			},
 			{
 				label: "v. 15",
-				onClick: (e) =>
-					runCheck(
-						rollData,
-						speaker,
-						{
-							...parameters,
-							difficulty: 15,
-							title: strike_title,
-						},
-						{ skip: e.shiftKey },
-					),
+				onClick: (e) => this.runStrike({ skip: e.shiftKey, map: 1 }),
 			},
 			{
 				label: "v. 20",
-				onClick: (e) =>
-					runCheck(
-						rollData,
-						speaker,
-						{
-							...parameters,
-							difficulty: 20,
-							title: strike_title,
-						},
-						{ skip: e.shiftKey },
-					),
+				onClick: (e) => this.runStrike({ skip: e.shiftKey, map: 2 }),
 			},
 			{
 				label: _loc("warden.weapon.damage_button"),
 				onClick: async () => {
+					const rollData = this.parent.actor.getRollData();
+					const speaker = ChatMessage.getSpeaker({
+						actor: this.parent.actor,
+					});
+
 					const rollMode = game.settings.get("core", "messageMode");
 
 					const roll = WardenEffect.fromParts(

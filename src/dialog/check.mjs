@@ -1,9 +1,19 @@
+import { transformEffectsForDisplay } from "../roll/check_manager.mjs";
+
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
+
+/**
+ * A work in progress effect being input.
+ * @typedef {Object} PendingEffect
+ * @property {string} label - The label used to identify the modifier in the roll window and chat.
+ * @property {ModifierType} modifier_type - The modifier type.
+ * @property {number} value - The value of the modifier, positive or negative.
+ */
 
 /**
  * The window used to describe and edit check rolls.
  * @property {CheckManager} manager
- * @property {Modifier} pending_modifier - The work in progress modifier being input.
+ * @property {PendingEffect} pending_modifier
  */
 export class CheckWindow extends HandlebarsApplicationMixin(ApplicationV2) {
 	/**
@@ -18,11 +28,11 @@ export class CheckWindow extends HandlebarsApplicationMixin(ApplicationV2) {
 		this.manager = manager;
 
 		this.resolve = resolve;
-		this.pending_modifier = {
+
+		this.pending_effect = {
 			value: 0,
 			label: "",
-			type: "circumstance",
-			enabled: true,
+			modifier_type: "circumstance",
 		};
 	}
 
@@ -56,13 +66,13 @@ export class CheckWindow extends HandlebarsApplicationMixin(ApplicationV2) {
 	async _prepareContext(options) {
 		const context = await super._prepareContext(options);
 
-		context.parameters = this.manager.parameters;
+		context.resolver = this.manager.resolver;
 		context.formula = this.manager.formula;
 
 		context.difficulty = this.manager.difficulty;
 		context.isOpen = this.manager.isOpen;
 
-		context.pending_modifier = this.pending_modifier;
+		context.pending_effect = this.pending_effect;
 		context.choices = {
 			universal: "warden.modifier_type_abbr.universal",
 			proficiency: "warden.modifier_type_abbr.proficiency",
@@ -70,6 +80,11 @@ export class CheckWindow extends HandlebarsApplicationMixin(ApplicationV2) {
 			status: "warden.modifier_type_abbr.status",
 			circumstance: "warden.modifier_type_abbr.circumstance",
 		};
+
+		context.modifiers = transformEffectsForDisplay(
+			this.manager.resolver.applicableEffects,
+			this.manager.resolver,
+		);
 
 		return context;
 	}
@@ -82,23 +97,23 @@ export class CheckWindow extends HandlebarsApplicationMixin(ApplicationV2) {
 	}
 
 	static async #toggleModifier(_, target) {
-		const id = target.dataset.id;
-		this.manager.toggle(id);
+		const path = target.dataset.path;
+		const index = target.dataset.index;
+		this.manager.toggle(path, index);
 
 		this.render();
 	}
 	static async #addModifier(e, form, data) {
-		Object.assign(this.pending_modifier, data.object);
+		Object.assign(this.pending_effect, data.object);
 
 		if (e.type !== "submit") return;
 
-		this.manager.addModifier(this.pending_modifier);
+		this.manager.addModifier(this.pending_effect);
 
-		this.pending_modifier = {
+		this.pending_effect = {
 			value: 0,
 			label: "",
-			type: "circumstance",
-			enabled: true,
+			modifier_type: "circumstance",
 		};
 
 		this.render();

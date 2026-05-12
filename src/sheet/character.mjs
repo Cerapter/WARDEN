@@ -95,7 +95,7 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 		const resolver = this.actor.system.proficiencyCheckResolver(name);
 		const rank = resolver.resolve("proficiency_rank");
 		const bonus = resolver.checkModifierSum();
-		return { rank, bonus, path: dataPath };
+		return { name, rank, bonus, path: dataPath };
 	}
 	#prepareSkillDisplay(name, data) {
 		const resolver = this.actor.system.skillCheckResolver(name);
@@ -208,9 +208,7 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 
 		if (destArea === undefined) {
 			ui.notifications.warn(
-				game.i18n.localize(
-					"warden.character.sheet.warnings.no-inventory-area",
-				),
+				_loc("warden.character.sheet.warnings.no-inventory-area"),
 			);
 			return null;
 		}
@@ -348,24 +346,53 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 		 * @type CheckParameters
 		 */
 		let parameters;
+		let resolver;
 		switch (target.dataset.type) {
 			case "untrained":
-				parameters = this.actor.system.untrainedCheckParameters();
+				resolver = this.actor.system.untrainedCheckResolver();
+				parameters = {
+					title: _loc("warden.check_label", {
+						type: _loc("warden.proficiency_rank.0"),
+					}),
+				};
 				break;
 			case "proficiency":
-				const path = target.dataset.path;
-				parameters = this.actor.system.proficiencyCheckParameters(path);
+				const name = target.dataset.name;
+				const locPath = target.dataset.path;
+				resolver = this.actor.system.proficiencyCheckResolver(name);
+				parameters = {
+					title: _loc("warden.check_label", {
+						type: _loc(`warden.character.FIELDS.${locPath}.label`),
+					}),
+				};
 				break;
 			case "skill":
 				const skill = target.dataset.skill;
-				parameters = this.actor.system.skillCheckParameters(skill);
+				resolver = this.actor.system.skillCheckResolver(skill);
+				parameters = {
+					title: _loc("warden.check_label", {
+						type: _loc(
+							`warden.character.FIELDS.skill.${skill}.name`,
+						),
+					}),
+				};
 				break;
 			case "knowledge":
 				const id = target.dataset.id;
-				parameters = this.actor.system.knowledgeCheckParameters(id);
+				const knowledge_skill = this.actor.system.knowledge_skills[id];
+
+				resolver = this.actor.system.knowledgeCheckResolver(id);
+				parameters = {
+					title: _loc("warden.check_label", {
+						type: knowledge_skill.topic,
+					}),
+					benefit: knowledge_skill.is_niche,
+				};
 				break;
 		}
 
-		return runCheck(rollData, speaker, parameters, { skip: e.shiftKey });
+		return runCheck(rollData, speaker, resolver, parameters, {
+			skip: e.shiftKey,
+		});
 	}
 }

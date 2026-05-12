@@ -1,5 +1,11 @@
 <div class="row-span-2 grid row-subgrid place-center">
-	<label class="pointer hover-glow" data-action="check" data-type="proficiency" data-path="{{ path }}">
+	<label
+		class="pointer hover-glow"
+		data-action="check"
+		data-type="proficiency"
+		data-path="{{ path }}"
+		data-name="{{ name }}"
+	>
 		{{localize (concat "warden.character.FIELDS." path ".label")}}
 		(
 		{{~numberFormat

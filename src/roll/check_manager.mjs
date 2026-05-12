@@ -6,23 +6,12 @@ import { WardenCheck } from "./warden_check.mjs";
  */
 
 /**
- * The label, type, and value of a modifier for a check.
- * @typedef {Object} Modifier
- * @property {string} label - The label used to identify the modifier in the roll window and chat.
- * @property {ModifierType} type - The modifier type.
- * @property {number} value - The value of the modifier, positive or negative.
- * @property {boolean?} enabled - Whether to apply the modifier. Defaults to true for universal modifiers and the highest/lowset per type.
- */
-
-/**
  * All the data and descriptions for presenting and making a Check.
  * @typedef {Object} CheckParameters
  * @property {string} title - Title for the roll window and chat message.
- * @property {Modifier[]} modifiers - All the applicable modifiers for the roll.
  * @property {number|"open"?} difficulty - The difficulty of the check, or "open" if open
- * @property {boolean?} benefit - Should the roll gain a benefit.
- * @property {boolean?} detriment - Should the roll suffer a detriment.
- * @property {number?} total - The final total of the roll.
+ * @property {boolean?} benefit - Should the roll gain a benefit. TODO: temp until dynamic effects can deal with it
+ * @property {boolean?} detriment - Should the roll suffer a detriment. TODO: temp until dynamic effects can deal with it
  */
 
 /**
@@ -36,85 +25,81 @@ class CheckManager {
 	 * Create a CheckManager.
 	 * @param {object} rollData
 	 * @param {ChatSpeakerData} speaker
+	 * @param {DynamicResultResolver} resolver
 	 * @param {CheckParameters} parameters
 	 */
-	constructor(rollData, speaker, parameters) {
+	constructor(rollData, speaker, resolver, parameters) {
+		this.id = foundry.utils.randomID();
+		this.idDomain = `check.${this.id}`;
+
 		this.rollData = rollData;
 		this.speaker = speaker;
 		this.parameters = parameters;
+		this.resolver = resolver;
+		this.resolver.domains.add(this.idDomain);
 
 		this.parameters.difficulty ??= "open";
 		this.parameters.benefit ??= false;
 		this.parameters.detriment ??= false;
 
-		for (const modifier of this.parameters.modifiers) {
-			modifier.enabled = modifier.type === "universal";
-		}
-
-		this.#enableBiggestModifiers("proficiency");
-		this.#enableBiggestModifiers("item");
-		this.#enableBiggestModifiers("status");
-		this.#enableBiggestModifiers("circumstance");
-	}
-	/**
-	 * Enables the biggest (positive or negative) modifier of a type.
-	 * @param {ModifierType} type
-	 */
-	#enableBiggestModifiers(type) {
-		this.#disableModifierType(type, 1);
-		this.#disableModifierType(type, -1);
-
-		const sorted = this.parameters.modifiers
-			.filter((m) => m.type === type)
-			.sort((a, b) => a.value - b.value);
-
-		const smallest = sorted[0];
-		const biggest = sorted[sorted.length - 1];
-
-		if (smallest && smallest.value < 0) {
-			smallest.enabled = true;
-		}
-		if (biggest && biggest.value >= 0) {
-			biggest.enabled = true;
-		}
+		this.resolver.resolveAll();
 	}
 
 	/**
 	 * Disabled all modifiers of a give type and sign
+	 * @param {string} path
 	 * @param {ModifierType} modifierType
-	 * @param {-1|1} sign
 	 */
-	#disableModifierType(modifierType, sign) {
-		this.parameters.modifiers
-			.filter((m) => m.type === modifierType)
-			.filter((m) => Math.sign(m.value) === sign)
+	#disableModifierType(path, modifierType) {
+		this.resolver.effects[path]
+			.filter((m) => m.modifier_type === modifierType)
 			.forEach((m) => (m.enabled = false));
 	}
 
 	/**
 	 * Add a new modifier to the check
-	 * @param {Modifier} modifier
+	 * @param {PendingEffect} pendingEffect
 	 */
-	addModifier(modifier) {
-		if (modifier.enabled && modifier.type !== "universal") {
-			this.#disableModifierType(modifier.type, Math.sign(modifier.value));
+	addModifier(pendingEffect) {
+		const path = pendingEffect.value < 0 ? "check_penalty" : "check_bonus";
+
+		if (pendingEffect.modifier_type !== "universal") {
+			this.#disableModifierType(path, pendingEffect.modifier_type);
 		}
-		this.parameters.modifiers.push(modifier);
+
+		/** @type DynamicEffect */
+		const newEffect = {
+			label: pendingEffect.label,
+			mode:
+				pendingEffect.modifier_type === "universal" ? "add" : "upgrade",
+
+			domains: new Set([this.idDomain]),
+			applicable_if: true,
+			enabled: true,
+
+			modifier_type: pendingEffect.modifier_type,
+			value: Math.abs(pendingEffect.value),
+		};
+
+		this.resolver.effects[path].push(newEffect);
+		this.resolver.reset();
 	}
 
 	/**
-	 * Toggle the modifier with a give id, will disable all others of type and sign if needed.
-	 * @param {number} id
+	 * Toggle the effect, will disable all others of type and sign if needed.
+	 * @param {string} path
+	 * @param {string} index
 	 */
-	toggle(id) {
-		const modifier = this.parameters.modifiers[id];
+	toggle(path, index) {
+		const effect = this.resolver.effects[path][index];
 
 		// If we're enabling a non-universal modifier we disable all with the same type and sign first
-		if (!modifier.enabled && modifier.type !== "universal") {
-			this.#disableModifierType(modifier.type, Math.sign(modifier.value));
+		if (!effect.enabled && effect.modifier_type !== "universal") {
+			this.#disableModifierType(path, effect.modifier_type);
 		}
 
-		modifier.enabled = !modifier.enabled;
+		effect.enabled = !effect.enabled;
+		this.resolver.reset();
 	}
 
 	/**
@@ -133,22 +118,11 @@ class CheckManager {
 	}
 
 	/**
-	 * All the modifiers that are currently active
-	 * @return {Modifier[]}
-	 */
-	get enabledModifiers() {
-		return this.parameters.modifiers.filter((m) => m.enabled);
-	}
-
-	/**
 	 * Generate the roll formula to be used.
 	 * @returns {string} - The formula used for the roll.
 	 */
 	get formula() {
-		const sum =
-			this.enabledModifiers
-				?.map((o) => o.value)
-				?.reduce((a, b) => a + b, 0) ?? 0;
+		const sum = this.resolver.checkModifierSum();
 
 		const sumStr = sum === 0 ? "" : sum < 0 ? sum.toString() : `+${sum}`;
 
@@ -156,7 +130,7 @@ class CheckManager {
 	}
 
 	/**
-	 * Is the check currently and open check
+	 * Is the check currently an open check
 	 * @returns {boolean}
 	 */
 	get isOpen() {
@@ -204,21 +178,23 @@ class CheckManager {
 		};
 	}
 
-	async execute() {
+	async executeCheck() {
+		this.resolver.resolveAll();
+
 		const rollMode = game.settings.get("core", "messageMode");
 
 		this.roll = new WardenCheck(this.formula, this.rollData, {
 			difficulty: this.difficulty,
-			modifiers: this.enabledModifiers,
+			modifiers: transformEffectsForDisplay(
+				this.resolver.appliedEffects,
+				this.resolver,
+			),
 		});
 
 		await this.roll.evaluate();
 
 		if (!this.isOpen) {
-			this.roll.options = {
-				...this.roll.options,
-				...this.calculateResult(),
-			};
+			Object.assign(this.roll.options, this.calculateResult());
 		}
 
 		await this.roll.toMessage({
@@ -235,11 +211,18 @@ class CheckManager {
  * Create a CheckWindow.
  * @param {object} rollData
  * @param {ChatSpeakerData} speaker
- * @param {CheckParameters} parameters
+ * @param {DynamicResultResolver} resolver
+ * @param {Partial<CheckParameters>} parameters
  * @param {{skip?:boolean}} options
  */
-export const runCheck = async (rollData, speaker, parameters, options) => {
-	const manager = new CheckManager(rollData, speaker, parameters);
+export const runCheck = async (
+	rollData,
+	speaker,
+	resolver,
+	parameters,
+	options,
+) => {
+	const manager = new CheckManager(rollData, speaker, resolver, parameters);
 
 	options.skip ??= false;
 
@@ -250,5 +233,49 @@ export const runCheck = async (rollData, speaker, parameters, options) => {
 		}
 	}
 
-	return manager.execute();
+	return manager.executeCheck();
+};
+
+const TYPES_ORDER = {
+	universal: 0,
+	proficiency: 1,
+	item: 2,
+	status: 3,
+	circumstance: 4,
+};
+// Sort by modifier type, bonus/penalty, label, then index
+const modifierSort = (a, b) => {
+	return (
+		TYPES_ORDER[a.modifier_type] - TYPES_ORDER[b.modifier_type] ||
+		a.dir - b.dir ||
+		a.label.localeCompare(b.label) ||
+		a.index - b.index
+	);
+};
+export const transformEffectsForDisplay = (effects, resolver) => {
+	const annotatedBonuses =
+		effects.check_bonus?.map((e, i) => ({
+			path: "check_bonus",
+			index: i,
+			modifier_type: e.modifier_type,
+			dir: 1,
+			label: e.label ?? "",
+			value: resolver.parseValue(e.value),
+			enabled: e.enabled,
+		})) ?? [];
+	const annotatedPenalties =
+		effects.check_penalty?.map((e, i) => ({
+			path: "check_penalty",
+			index: i,
+			modifier_type: e.modifier_type,
+			dir: -1,
+			label: e.label ?? "",
+			value: -resolver.parseValue(e.value),
+			enabled: e.enabled,
+		})) ?? [];
+
+	const modifiers = annotatedBonuses.concat(annotatedPenalties);
+	modifiers.sort(modifierSort);
+
+	return modifiers;
 };

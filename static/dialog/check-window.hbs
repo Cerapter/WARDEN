@@ -1,10 +1,11 @@
 <section class="check-window">
 	<div class="modifiers">
-		{{#each parameters.modifiers}}
+		{{#each modifiers}}
 			<label
 				class="grid col-subgrid col-span-4 align-center pointer"
 				data-action="toggleModifier"
-				data-id="{{ @index }}"
+				data-path="{{ path }}"
+				data-index="{{ index }}"
 			>
 				<span class="text-right">
 					{{~numberFormat
@@ -13,8 +14,8 @@
 					~}}
 				</span>
 				<span>{{ label }}</span>
-				<span class="text-center" title='{{localize (concat "warden.modifier_type." type)}}'>
-					{{localize (concat "warden.modifier_type_abbr." type)}}
+				<span class="text-center" title='{{localize (concat "warden.modifier_type." modifier_type)}}'>
+					{{localize (concat "warden.modifier_type_abbr." modifier_type)}}
 				</span>
 				<input
 					class="grid place-center"
@@ -25,17 +26,17 @@
 		{{/each}}
 		<hr class="col-span-4" />
 		<form class="add-modifier-form grid col-subgrid col-span-4">
-			<input class="text-right" type="number" name="value" value="{{ pending_modifier.value }}" />
+			<input class="text-right" type="number" name="value" value="{{ pending_effect.value }}" />
 			<input
 				type="text"
 				name="label"
-				value="{{ pending_modifier.label }}"
+				value="{{ pending_effect.label }}"
 				placeholder="{{localize 'warden.modifier_label'}}"
 			/>
-			<select name="type">
+			<select name="modifier_type">
 				{{selectOptions
 					choices
-					selected=pending_modifier.type
+					selected=pending_effect.modifier_type
 					localize=true
 				}}
 			</select>
