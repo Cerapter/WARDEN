@@ -1,5 +1,5 @@
-import { BaseCharacterData } from "./base_character.mjs";
-import { BaseEquipment } from "./base_equipment.mjs";
+import {BaseCharacterData} from "./base_character.mjs";
+import {BaseEquipment} from "./base_equipment.mjs";
 
 const {
 	BooleanField,
@@ -468,7 +468,9 @@ export class CharacterData extends BaseCharacterData {
 	}
 	#prepareBaseDynamicEffects() {
 		this.dynamic_effects.proficiency_rank.add({
-			label: "Combat Rank",
+			label: _loc("warden.proficiency_rank_label", {
+				type: _loc("warden.character.FIELDS.path.combat.label"),
+			}),
 			domains: new Set(["combat"]),
 			defaultEnabled: true,
 
@@ -476,15 +478,31 @@ export class CharacterData extends BaseCharacterData {
 			value: this.path.combat.rank,
 		});
 		this.dynamic_effects.proficiency_rank.add({
-			label: "Skill Rank",
-			domains: new Set(["skill"]),
+			label: _loc("warden.proficiency_rank_label", {
+				type: _loc("warden.character.FIELDS.path.skill.label"),
+			}),
+			domains: new Set(["skill-path", "skill.knowledge"]),
 			defaultEnabled: true,
 
 			mode: "upgrade",
 			value: this.path.skill.rank,
 		});
+		for (const [name, data] of Object.entries(this.skill)) {
+			this.dynamic_effects.proficiency_rank.add({
+				label: _loc("warden.proficiency_rank_label", {
+					type: _loc("warden.character.FIELDS.path.skill.label"),
+				}),
+				domains: new Set([`skill.${name}`]),
+				defaultEnabled: true,
+
+				mode: "upgrade",
+				value: data.is_proficient ? this.path.skill.rank : 0,
+			});
+		}
 		this.dynamic_effects.proficiency_rank.add({
-			label: "Special Rank",
+			label: _loc("warden.proficiency_rank_label", {
+				type: _loc("warden.character.FIELDS.path.special.label"),
+			}),
 			domains: new Set(["special"]),
 			defaultEnabled: true,
 
@@ -492,7 +510,9 @@ export class CharacterData extends BaseCharacterData {
 			value: this.path.special.rank,
 		});
 		this.dynamic_effects.proficiency_rank.add({
-			label: "Toughness Rank",
+			label: _loc("warden.proficiency_rank_label", {
+				type: _loc("warden.character.FIELDS.defense.toughness.label"),
+			}),
 			domains: new Set(["toughness"]),
 			defaultEnabled: true,
 
@@ -500,7 +520,9 @@ export class CharacterData extends BaseCharacterData {
 			value: this.defense.toughness.rank,
 		});
 		this.dynamic_effects.proficiency_rank.add({
-			label: "Resolve Rank",
+			label: _loc("warden.proficiency_rank_label", {
+				type: _loc("warden.character.FIELDS.defense.resolve.label"),
+			}),
 			domains: new Set(["resolve"]),
 			defaultEnabled: true,
 

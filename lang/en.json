@@ -284,6 +284,7 @@
 			"4": "Expert",
 			"5": "Master"
 		},
+		"proficiency_rank_label": "{type} Rank",
 
 		"modifier_label": "Label",
 

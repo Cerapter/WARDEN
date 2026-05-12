@@ -60,16 +60,23 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 		);
 
 		context.path = {};
-		for (const name of Object.keys(system.path)) {
-			context.path[name] = this.#prepareProficiencyDisplay(
-				name,
-				`path.${name}`,
-			);
-		}
+		context.path.combat = this.#prepareProficiencyDisplay(
+			["combat"],
+			"path.combat",
+		);
+		context.path.skill = this.#prepareProficiencyDisplay(
+			["skill", "skill-path"],
+			"path.skill",
+		);
+		context.path.special = this.#prepareProficiencyDisplay(
+			["special"],
+			"path.special",
+		);
+
 		context.defense = {};
 		for (const name of Object.keys(system.defense)) {
 			context.defense[name] = this.#prepareProficiencyDisplay(
-				name,
+				[name],
 				`defense.${name}`,
 			);
 		}
@@ -77,8 +84,8 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 		return context;
 	}
 
-	#prepareProficiencyDisplay(name, dataPath) {
-		const resolver = this.actor.system.getDynamicResultResolver([name]);
+	#prepareProficiencyDisplay(domains, dataPath) {
+		const resolver = this.actor.system.getDynamicResultResolver(domains);
 		const rank = resolver.resolve("proficiency_rank");
 		const bonus = resolver.checkModifierSum();
 		return { rank, bonus, path: dataPath };
