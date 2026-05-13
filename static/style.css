@@ -35,6 +35,9 @@
 .flex {
 	display: flex;
 }
+.flex-grow {
+	flex-grow: 1;
+}
 
 .zero-pad {
 	padding: 0;
@@ -49,6 +52,9 @@
 
 .place-center {
 	place-items: center;
+}
+.place-stretch {
+	place-items: stretch;
 }
 .align-center {
 	align-items: center;
