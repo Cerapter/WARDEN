@@ -23,11 +23,15 @@
 				"pockets": "Pockets",
 				"pack": "Pack",
 
+				"origin": "Origin",
+
 				"warnings": {
 					"no-inventory-area": "Equipment must be dropped on an inventory slot.",
 					"non-kit-in-kit-slot": "Only kits may be inserted into the kit slot.",
 					"kit-in-non-kit-slot": "Kits may only be put into the kit slot.",
-					"pocket-weight": "Only Light items fit inside pockets."
+					"pocket-weight": "Only Light items fit inside pockets.",
+
+					"too-many-origins": "The character already has two origins"
 				},
 
 				"button": {

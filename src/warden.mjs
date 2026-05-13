@@ -1,4 +1,5 @@
 import { DAMAGE_TYPE_CHOICES, DAMAGE_TYPES } from "./damage_type.mjs";
+import { WardenItem } from "./document/item.mjs";
 import { registerHelpers } from "./handlebars.mjs";
 import { BaseCharacterData } from "./model/character/base_character.mjs";
 import { CharacterData } from "./model/character/character.mjs";
@@ -27,6 +28,8 @@ Hooks.once("init", () => {
 			value: [],
 		},
 	};
+
+	CONFIG.Item.documentClass = WardenItem;
 
 	CONFIG.Item.dataModels.utilityItem = UtilityItem;
 	CONFIG.Item.dataModels.weapon = Weapon;

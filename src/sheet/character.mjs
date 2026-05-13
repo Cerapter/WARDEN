@@ -256,6 +256,7 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 	async _onFirstRender(context, options) {
 		await super._onFirstRender(context, options);
 
+		// Equipment edit/delete menu
 		this._createContextMenu(
 			() => [
 				{
@@ -305,6 +306,30 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 				},
 			],
 			".equipment-context",
+		);
+
+		this._createContextMenu(
+			() => [
+				{
+					label: "warden.character.sheet.button.edit",
+					icon: "fas fa-edit",
+					onClick: (e) => {
+						const id =
+							e.target.closest("[data-item-id]").dataset.itemId;
+						this.actor.items.get(id).sheet.render(true);
+					},
+				},
+				{
+					label: "warden.character.sheet.button.delete",
+					icon: "fas fa-trash-can",
+					onClick: async (_, target) => {
+						const id =
+							target.closest("[data-item-id]").dataset.itemId;
+						this.actor.items.get(id).deleteDialog();
+					},
+				},
+			],
+			".origin",
 		);
 	}
 

@@ -198,6 +198,16 @@ export class CharacterData extends BaseCharacterData {
 		return Array.from(mapped).sort((i1, i2) => i1.sort - i2.sort);
 	}
 
+	get origins() {
+		return this.parent.items.filter((i) => i.type === "origin");
+	}
+	get abilities() {
+		return this.parent.items.filter((i) => i.type === "ability");
+	}
+	get feats() {
+		return this.parent.items.filter((i) => i.type === "feat");
+	}
+
 	/**
 	 * Could the area contain the item in theory? i.e. this does not check if it can currently fit, only if it possibly could
 	 * @param {Item} item

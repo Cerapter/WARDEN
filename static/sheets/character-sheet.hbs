@@ -38,12 +38,26 @@
 		</div>
 	</div>
 	<div class="black subheader">
-		<label>Origin1</label>
-		<div>None yet</div>
+		<label>{{localize "warden.character.sheet.origin"}}</label>
+
+		{{#if system.origins.[0]}}
+			<div class="origin" data-item-id="{{ system.origins.[0].id }}">
+				{{ system.origins.[0].name }}
+			</div>
+		{{else}}
+			<div>&mdash;</div>
+		{{/if}}
 	</div>
 	<div class="white subheader">
-		<label>Origin2</label>
-		<div>None yet</div>
+		<label>{{localize "warden.character.sheet.origin"}}</label>
+
+		{{#if system.origins.[1]}}
+			<div class="origin" data-item-id="{{ system.origins.[1].id }}">
+				{{ system.origins.[1].name }}
+			</div>
+		{{else}}
+			<div>&mdash;</div>
+		{{/if}}
 	</div>
 
 	<section class="resource-wrapper col-span-2 white text-center">
