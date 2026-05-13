@@ -412,20 +412,6 @@ export class CharacterData extends BaseCharacterData {
 		await foundry.documents.modifyBatch(operations);
 	}
 
-	get untrainedBonus() {
-		return Math.min(Math.floor(this.level / 2), 10);
-	}
-
-	#calcProficiencyBonus(rank) {
-		if (rank === 0) return this.untrainedBonus;
-
-		return this.level + rank;
-	}
-	#populateProficiencyFields(prof) {
-		prof.proficiency_bonus = this.#calcProficiencyBonus(prof.rank);
-		prof.bonus = prof.proficiency_bonus;
-	}
-
 	prepareDerivedData() {
 		super.prepareDerivedData();
 
@@ -437,26 +423,6 @@ export class CharacterData extends BaseCharacterData {
 
 		this.strain.max = 10 + 2 * this.defense.resolve.rank;
 		this.strain.value = Math.min(this.strain.value, this.strain.max);
-
-		this.#populateProficiencyFields(this.path.combat);
-		this.#populateProficiencyFields(this.path.skill);
-		this.#populateProficiencyFields(this.path.special);
-
-		this.#populateProficiencyFields(this.defense.toughness);
-		this.#populateProficiencyFields(this.defense.resolve);
-		this.#populateProficiencyFields(this.defense.perception);
-
-		for (const [_, skill] of Object.entries(this.skill)) {
-			skill.proficiency_bonus = skill.is_proficient
-				? this.path.skill.proficiency_bonus
-				: this.untrainedBonus;
-			skill.bonus = skill.proficiency_bonus;
-		}
-
-		for (const [_, skill] of Object.entries(this.knowledge_skills)) {
-			skill.proficiency_bonus = this.path.skill.proficiency_bonus;
-			skill.bonus = skill.proficiency_bonus;
-		}
 
 		this.speed = {};
 		this.speed.base = 5;
@@ -610,33 +576,6 @@ export class CharacterData extends BaseCharacterData {
 			mode: "upgrade",
 			value: "@profCalc",
 		});
-	}
-
-	formatProficiency(rank) {
-		return game.i18n.format(`warden.proficiency_rank.${rank}`);
-	}
-
-	/**
-	 * Parameters to make a check with a path.
-	 * @param {string} proficiency_name - The path of the proficiency, e.g. "path.combat".
-	 * @returns CheckParameters
-	 */
-	proficiencyCheckParameters(proficiency_name) {
-		const path = foundry.utils.getProperty(this, proficiency_name);
-		return {
-			title: game.i18n.localize("warden.check_label", {
-				type: game.i18n.localize(
-					`warden.character.FIELDS.${proficiency_name}.label`,
-				),
-			}),
-			modifiers: [
-				{
-					label: this.formatProficiency(path.rank),
-					type: "proficiency",
-					value: path.proficiency_bonus,
-				},
-			],
-		};
 	}
 
 	// TODO: add effect parameter for all of these when the system's worked out

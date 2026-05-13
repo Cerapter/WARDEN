@@ -59,6 +59,10 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 			system.kit?.system?.pack_slots ?? 2,
 		);
 
+		const untrainedResolver = system.untrainedCheckResolver();
+		untrainedResolver.resolve("check_bonus");
+		context.untrainedBonus = untrainedResolver.checkModifierSum();
+
 		context.path = {};
 		for (const name of Object.keys(system.path)) {
 			context.path[name] = this.#prepareProficiencyDisplay(
