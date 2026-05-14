@@ -437,22 +437,35 @@
 				font-size: 1.2em;
 				padding: 0.25em 0;
 			}
-			.content {
-				padding: 0.25em 2ch;
-				overflow-y: hidden;
+		}
 
-				display: grid;
-				grid-template-rows: 0fr;
+		.content {
+			padding: 0.25em 2ch;
+			overflow-y: hidden;
 
-				transition: grid-template-rows 1s ease;
+			display: grid;
+			grid-template-rows: 0fr;
 
-				> div {
-					min-height: 0;
-				}
+			transition: grid-template-rows 1s ease;
+
+			> div {
+				min-height: 0;
 			}
-			&.expanded .content {
-				grid-template-rows: 1fr;
-			}
+		}
+
+		.expanded > .content {
+			grid-template-rows: 1fr;
+			overflow-y: visible;
+
+			/* Some transition trickery here.
+			 * Overflow-y needs to be visible when this is expanded, otherwise the context menu doesn't render,
+			 * but it also needs to be hidden during the transition. So when the opening transition starts we set
+			 * a 1 second delay on starting the 0 second transition of overflow-y, thus it is still set to hidden
+			 * until the real transition is done. But when closing, that rule is no longer there, so it sets to
+			 * hidden immediately. */
+			transition:
+				grid-template-rows 1s ease,
+				overflow-y 0s 1s allow-discrete;
 		}
 	}
 }

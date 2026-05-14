@@ -107,6 +107,23 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 						a.system.description,
 					),
 				expanded: this.expandedDescriptions.has(a.id),
+				feats: await Promise.all(
+					this.actor.system.feats
+						.filter(
+							(f) =>
+								a.system.slug !== "" &&
+								f.system.parentAbilitySlug === a.system.slug,
+						)
+						.map(async (f) => ({
+							id: f.id,
+							name: f.name,
+							description:
+								await foundry.applications.ux.TextEditor.implementation.enrichHTML(
+									f.system.description,
+								),
+							expanded: this.expandedDescriptions.has(f.id),
+						})),
+				),
 			})),
 		);
 
@@ -347,7 +364,7 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 					},
 				},
 			],
-			".origin, .ability",
+			".origin, .ability, .feat",
 		);
 	}
 

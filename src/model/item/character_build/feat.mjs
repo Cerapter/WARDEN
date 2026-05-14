@@ -1,4 +1,4 @@
-const { HTMLField } = foundry.data.fields;
+const { HTMLField, StringField } = foundry.data.fields;
 const { TypeDataModel } = foundry.abstract;
 
 /**
@@ -12,10 +12,31 @@ export class Feat extends TypeDataModel {
 			description: new HTMLField({
 				required: true,
 			}),
+			slug: new StringField({
+				required: true,
+			}),
+			parentAbilitySlug: new StringField({
+				required: true,
+			}),
 		};
 	}
 
 	get supportedTabs() {
-		return ["description"];
+		return ["description", "properties"];
+	}
+
+	getProperties() {
+		const properties = {};
+
+		properties.slug = {
+			field: this.schema.fields.slug,
+			value: this.slug,
+		};
+		properties.parentAbilitySlug = {
+			field: this.schema.fields.parentAbilitySlug,
+			value: this.parentAbilitySlug,
+		};
+
+		return properties;
 	}
 }

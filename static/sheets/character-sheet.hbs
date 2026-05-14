@@ -74,9 +74,33 @@
 				"
 				data-item-id="{{ id }}"
 			>
-				<header class="black text-center bold" data-action="toggleDescription">{{ name }}</header>
+				<header class="black text-center bold pointer" data-action="toggleDescription">{{ name }}</header>
 				<div class="content">
-					<div>{{{ description }}}</div>
+					<div>
+						<div>{{{ description }}}</div>
+						{{#if feats.length}}
+							<div class="feats">
+								{{#each feats}}
+									<article
+										class="
+											feat
+											{{#if expanded}}
+												expanded
+											{{/if}}
+										"
+										data-item-id="{{ id }}"
+									>
+										<header class="black text-center bold pointer" data-action="toggleDescription">
+											{{ name }}
+										</header>
+										<div class="content white">
+											<div>{{{ description }}}</div>
+										</div>
+									</article>
+								{{/each}}
+							</div>
+						{{/if}}
+					</div>
 				</div>
 			</article>
 		{{/each}}

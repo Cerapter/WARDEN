@@ -267,6 +267,30 @@
 				"label": "Block"
 			}
 		},
+		"ability": {
+			"FIELDS": {
+				"description": {
+					"label": "Description"
+				},
+				"slug": {
+					"label": "Slug identifier"
+				}
+			}
+		},
+		"feat": {
+			"FIELDS": {
+				"description": {
+					"label": "Description"
+				},
+				"slug": {
+					"label": "Slug identifier"
+				},
+				"parentAbilitySlug": {
+					"label": "Ability",
+					"placeholder": "Slug ID of the Feat's Ability"
+				}
+			}
+		},
 
 		"modifier_type": {
 			"universal": "Universal",
