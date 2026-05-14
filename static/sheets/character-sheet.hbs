@@ -21,6 +21,8 @@
 		classes="gray header"
 	}}
 
+	<div class="col-span-2 gray header grid place-center">Abilities</div>
+
 	{{formGroup
 		fields.level
 		value=system.level
@@ -58,6 +60,26 @@
 		{{else}}
 			<div>&mdash;</div>
 		{{/if}}
+	</div>
+
+	<div class="scrollable abilities">
+		{{#each abilities}}
+			<article
+				class="
+					ability
+					gray
+					{{#if expanded}}
+						expanded
+					{{/if}}
+				"
+				data-item-id="{{ id }}"
+			>
+				<header class="black text-center bold" data-action="toggleDescription">{{ name }}</header>
+				<div class="content">
+					<div>{{{ description }}}</div>
+				</div>
+			</article>
+		{{/each}}
 	</div>
 
 	<section class="resource-wrapper col-span-2 white text-center">

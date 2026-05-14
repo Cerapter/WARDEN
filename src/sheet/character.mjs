@@ -8,7 +8,7 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 	static PARTS = {
 		main: {
 			template: "systems/warden/static/sheets/character-sheet.hbs",
-			scrollable: ["", ".description textarea"],
+			scrollable: ["", ".description textarea", ".scrollable"],
 			templates: [
 				"systems/warden/static/partials/proficiency-display.hbs",
 				"systems/warden/static/partials/skill-display.hbs",
@@ -27,14 +27,20 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 			addKnowledgeSkill: CharacterSheet.addKnowledgeSkill,
 			deleteKnowledgeSkill: CharacterSheet.deleteKnowledgeSkill,
 			check: CharacterSheet.check,
+			toggleDescription: CharacterSheet.#toggleDescription,
 		},
 		window: {
 			contentClasses: ["zero-pad"],
+		},
+		position: {
+			width: 900,
 		},
 		form: {
 			submitOnChange: true,
 		},
 	};
+
+	expandedDescriptions = new Set();
 
 	async _prepareContext(options) {
 		const context = await super._prepareContext(options);
@@ -91,6 +97,18 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 				data,
 			);
 		}
+
+		context.abilities = await Promise.all(
+			system.abilities.map(async (a) => ({
+				id: a.id,
+				name: a.name,
+				description:
+					await foundry.applications.ux.TextEditor.implementation.enrichHTML(
+						a.system.description,
+					),
+				expanded: this.expandedDescriptions.has(a.id),
+			})),
+		);
 
 		return context;
 	}
@@ -329,7 +347,7 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 					},
 				},
 			],
-			".origin",
+			".origin, .ability",
 		);
 	}
 
@@ -423,5 +441,18 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 		return runCheck(rollData, speaker, resolver, parameters, {
 			skip: e.shiftKey,
 		});
+	}
+
+	static async #toggleDescription(_, target) {
+		const container = target.closest("[data-item-id]");
+		const id = container.dataset.itemId;
+
+		if (this.expandedDescriptions.has(id)) {
+			this.expandedDescriptions.delete(id);
+			container.classList.remove("expanded");
+		} else {
+			this.expandedDescriptions.add(id);
+			container.classList.add("expanded");
+		}
 	}
 }
