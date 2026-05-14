@@ -2,6 +2,9 @@ import { DAMAGE_TYPE_CHOICES, DAMAGE_TYPES } from "./damage_type.mjs";
 import { registerHelpers } from "./handlebars.mjs";
 import { BaseCharacterData } from "./model/character/base_character.mjs";
 import { CharacterData } from "./model/character/character.mjs";
+import { Ability } from "./model/item/character_build/ability.mjs";
+import { Feat } from "./model/item/character_build/feat.mjs";
+import { Origin } from "./model/item/character_build/origin.mjs";
 import { Apparel } from "./model/item/equipment/apparel.mjs";
 import { Kit } from "./model/item/equipment/kit.mjs";
 import { Shield } from "./model/item/equipment/shield.mjs";
@@ -31,6 +34,10 @@ Hooks.once("init", () => {
 	CONFIG.Item.dataModels.shield = Shield;
 	CONFIG.Item.dataModels.kit = Kit;
 
+	CONFIG.Item.dataModels.origin = Origin;
+	CONFIG.Item.dataModels.ability = Ability;
+	CONFIG.Item.dataModels.feat = Feat;
+
 	CONFIG.Dice.rolls.push(WardenCheck);
 	CONFIG.Dice.rolls.push(WardenEffect);
 
@@ -42,7 +49,16 @@ Hooks.once("init", () => {
 	});
 
 	DocumentSheetConfig.registerSheet(Item, "warden", EquipmentSheet, {
-		types: ["utilityItem", "weapon", "apparel", "shield", "kit"],
+		types: [
+			"utilityItem",
+			"weapon",
+			"apparel",
+			"shield",
+			"kit",
+			"origin",
+			"ability",
+			"feat",
+		],
 		makeDefault: true,
 		label: "warden.equipment.sheet.label",
 	});

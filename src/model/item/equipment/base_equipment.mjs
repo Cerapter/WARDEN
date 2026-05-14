@@ -103,4 +103,8 @@ export class BaseEquipment extends TypeDataModel {
 	isEquipment() {
 		return true;
 	}
+
+	get supportedTabs() {
+		return ["properties", "traits"];
+	}
 }

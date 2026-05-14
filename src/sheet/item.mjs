@@ -9,6 +9,9 @@ export class EquipmentSheet extends HandlebarsApplicationMixin(ItemSheet) {
 		tabs: {
 			template: "templates/generic/tab-navigation.hbs",
 		},
+		description: {
+			template: "systems/warden/static/sheets/item/description.hbs",
+		},
 		properties: {
 			template: "systems/warden/static/sheets/item/properties.hbs",
 			scrollable: [""],
@@ -19,18 +22,11 @@ export class EquipmentSheet extends HandlebarsApplicationMixin(ItemSheet) {
 		},
 	};
 
-	static TABS = {
-		primary: {
-			initial: "properties",
-			labelPrefix: "warden.item.sheet.tab",
-			tabs: [{ id: "properties" }, { id: "traits" }],
-		},
-	};
-
 	static DEFAULT_OPTIONS = {
 		actions: {},
 		window: {
 			contentClasses: ["zero-pad", "item-sheet"],
+			resizable: true,
 		},
 		form: {
 			submitOnChange: true,
@@ -52,16 +48,33 @@ export class EquipmentSheet extends HandlebarsApplicationMixin(ItemSheet) {
 
 		return context;
 	}
+
+	_getTabsConfig(_) {
+		const tabs =
+			this.item.system.supportedTabs?.map((tab) => ({ id: tab })) ?? [];
+
+		return {
+			labelPrefix: "warden.item.sheet.tab",
+			tabs,
+			initial: tabs[0]?.id,
+		};
+	}
 	async _preparePartContext(partId, context, options) {
-		await super._prepareContext(partId, context, options);
+		await super._preparePartContext(partId, context, options);
+
+		context.tab = context.tabs[partId];
 
 		switch (partId) {
 			case "properties":
-				context.tab = context.tabs[partId];
-				context.properties = this.item.system.getProperties();
+				context.properties = this.item.system.getProperties?.() ?? [];
 				break;
 			case "traits":
-				context.tab = context.tabs[partId];
+				break;
+			case "description":
+				context.description =
+					await foundry.applications.ux.TextEditor.implementation.enrichHTML(
+						this.item.system.description,
+					);
 				break;
 		}
 

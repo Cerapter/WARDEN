@@ -8,7 +8,11 @@
 			"weapon": "Weapon",
 			"apparel": "Apparel",
 			"shield": "Shield",
-			"kit": "Kit"
+			"kit": "Kit",
+
+			"origin": "Origin",
+			"ability": "Ability",
+			"feat": "Feat"
 		}
 	},
 	"warden": {
@@ -213,7 +217,9 @@
 				"tab": {
 					"properties": "Properties",
 					"traits": "Traits",
-					"effects": "Effects"
+					"effects": "Effects",
+
+					"description": "Description"
 				}
 			}
 		},

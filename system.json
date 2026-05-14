@@ -18,7 +18,11 @@
 			"weapon": {},
 			"apparel": {},
 			"shield": {},
-			"kit": {}
+			"kit": {},
+
+			"origin": { "htmlFields": "description" },
+			"ability": { "htmlFields": "description" },
+			"feat": { "htmlFields": "description" }
 		}
 	},
 	"languages": [
