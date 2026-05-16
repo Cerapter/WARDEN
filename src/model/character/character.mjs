@@ -514,7 +514,7 @@ export class CharacterData extends BaseCharacterData {
 			value: this.defense.perception.rank,
 		});
 
-		this.dynamic_effects.check_bonus.push({
+		this.dynamic_effects.bonus.push({
 			label: "Untrained Proficiency",
 			domains: new Set(["untrained"]),
 
@@ -526,7 +526,7 @@ export class CharacterData extends BaseCharacterData {
 			value: this.level / 2,
 		});
 
-		this.dynamic_effects.check_bonus.push({
+		this.dynamic_effects.bonus.push({
 			label: "Combat Proficiency",
 			domains: new Set(["combat"]),
 			defaultEnabled: true,
@@ -536,7 +536,7 @@ export class CharacterData extends BaseCharacterData {
 			mode: "upgrade",
 			value: "@profCalc",
 		});
-		this.dynamic_effects.check_bonus.push({
+		this.dynamic_effects.bonus.push({
 			label: "Skill Proficiency",
 			domains: new Set(["skill"]),
 			defaultEnabled: true,
@@ -546,7 +546,7 @@ export class CharacterData extends BaseCharacterData {
 			mode: "upgrade",
 			value: "@profCalc",
 		});
-		this.dynamic_effects.check_bonus.push({
+		this.dynamic_effects.bonus.push({
 			label: "Special Proficiency",
 			domains: new Set(["special"]),
 			defaultEnabled: true,
@@ -556,7 +556,7 @@ export class CharacterData extends BaseCharacterData {
 			mode: "upgrade",
 			value: "@profCalc",
 		});
-		this.dynamic_effects.check_bonus.push({
+		this.dynamic_effects.bonus.push({
 			label: "Toughness Proficiency",
 			domains: new Set(["toughness"]),
 			defaultEnabled: true,
@@ -566,7 +566,7 @@ export class CharacterData extends BaseCharacterData {
 			mode: "upgrade",
 			value: "@profCalc",
 		});
-		this.dynamic_effects.check_bonus.push({
+		this.dynamic_effects.bonus.push({
 			label: "Resolve Proficiency",
 			domains: new Set(["resolve"]),
 			defaultEnabled: true,
@@ -576,7 +576,7 @@ export class CharacterData extends BaseCharacterData {
 			mode: "upgrade",
 			value: "@profCalc",
 		});
-		this.dynamic_effects.check_bonus.push({
+		this.dynamic_effects.bonus.push({
 			label: "Perception Proficiency",
 			domains: new Set(["perception"]),
 			defaultEnabled: true,

@@ -66,8 +66,8 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 		);
 
 		const untrainedResolver = system.untrainedCheckResolver();
-		untrainedResolver.resolve("check_bonus");
-		context.untrainedBonus = untrainedResolver.checkModifierSum();
+		untrainedResolver.resolve("bonus");
+		context.untrainedBonus = untrainedResolver.modifierSum();
 
 		context.path = {};
 		for (const name of Object.keys(system.path)) {
@@ -161,21 +161,21 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 	#prepareProficiencyDisplay(name, dataPath) {
 		const resolver = this.actor.system.proficiencyCheckResolver(name);
 		const rank = resolver.resolve("proficiency_rank");
-		const bonus = resolver.checkModifierSum();
+		const bonus = resolver.modifierSum();
 		return { name, rank, bonus, path: dataPath };
 	}
 	#prepareSkillDisplay(name, data) {
 		const resolver = this.actor.system.skillCheckResolver(name);
 
 		const rank = resolver.resolve("proficiency_rank");
-		const bonus = resolver.checkModifierSum();
+		const bonus = resolver.modifierSum();
 		return { name, rank, bonus, is_proficient: data.is_proficient };
 	}
 	#prepareKnowledgeSkillDisplay(id, data) {
 		const resolver = this.actor.system.knowledgeCheckResolver(id);
 
 		const rank = resolver.resolve("proficiency_rank");
-		const bonus = resolver.checkModifierSum();
+		const bonus = resolver.modifierSum();
 		return { id, topic: data.topic, rank, bonus };
 	}
 

@@ -82,12 +82,10 @@ export class BaseCharacterData extends TypeDataModel {
 	/**
 	 * @typedef {
 	 *    "proficiency_rank"
-	 *  | "check_bonus"
-	 *  | "check_penalty"
+	 *  | "bonus"
+	 *  | "penalty"
 	 *  | "effect_dice"
 	 *  | "effect_potency"
-	 *  | "effect_bonus"
-	 *  | "effect_penalty"
 	 *  | "benefit"
 	 *  | "detriment"
 	 * } DynamicEffectType
@@ -120,13 +118,11 @@ export class BaseCharacterData extends TypeDataModel {
 		this.dynamic_effects = {
 			proficiency_rank: [],
 
-			check_bonus: [],
-			check_penalty: [],
+			bonus: [],
+			penalty: [],
 
 			effect_dice: [],
 			effect_potency: [],
-			effect_bonus: [],
-			effect_penalty: [],
 
 			benefit: [],
 			detriment: [],
@@ -219,22 +215,12 @@ class DynamicResultResolver {
 	#calcModifierSum(type) {
 		return Object.values(this.results[type]).reduce((a, b) => a + b, 0);
 	}
-	checkModifierSum() {
-		this.#resolveType("check_bonus");
-		this.#resolveType("check_penalty");
+	modifierSum() {
+		this.#resolveType("bonus");
+		this.#resolveType("penalty");
 
 		return (
-			this.#calcModifierSum("check_bonus") -
-			this.#calcModifierSum("check_penalty")
-		);
-	}
-	effectModifierSum() {
-		this.#resolveType("effect_bonus");
-		this.#resolveType("effect_penality");
-
-		return (
-			this.#calcModifierSum("effect_bonus") -
-			this.#calcModifierSum("effect_penality")
+			this.#calcModifierSum("bonus") - this.#calcModifierSum("penalty")
 		);
 	}
 
@@ -252,13 +238,11 @@ class DynamicResultResolver {
 
 		this.#resolveType("proficiency_rank");
 
-		this.#resolveType("check_bonus");
-		this.#resolveType("check_penalty");
+		this.#resolveType("bonus");
+		this.#resolveType("penalty");
 
 		this.#resolveType("effect_dice");
 		this.#resolveType("effect_potency");
-		this.#resolveType("effect_bonus");
-		this.#resolveType("effect_penalty");
 
 		this.#resolveType("benefit");
 		this.#resolveType("detriment");
@@ -286,10 +270,8 @@ class DynamicResultResolver {
 
 	#getDefaultValue(type) {
 		switch (type) {
-			case "check_bonus":
-			case "check_penalty":
-			case "effect_bonus":
-			case "effect_penalty":
+			case "bonus":
+			case "penalty":
 				return {
 					universal: 0,
 					proficiency: 0,
@@ -333,10 +315,8 @@ class DynamicResultResolver {
 
 	#getEffectTarget(type, effect) {
 		switch (type) {
-			case "check_bonus":
-			case "check_penalty":
-			case "effect_bonus":
-			case "effect_penalty":
+			case "bonus":
+			case "penalty":
 				return [
 					this.results[type][effect.modifier_type],
 					(v) => (this.results[type][effect.modifier_type] = v),
@@ -348,10 +328,8 @@ class DynamicResultResolver {
 
 	#overrideEffectApplied(type, effect) {
 		switch (type) {
-			case "check_bonus":
-			case "check_penalty":
-			case "effect_bonus":
-			case "effect_penalty":
+			case "bonus":
+			case "penalty":
 				this.appliedEffects[type] =
 					this.appliedEffects[type]?.filter(
 						(e) => e.modifier_type !== effect.modifier_type,

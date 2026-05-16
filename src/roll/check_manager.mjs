@@ -61,7 +61,7 @@ class CheckManager {
 	 * @param {PendingEffect} pendingEffect
 	 */
 	addModifier(pendingEffect) {
-		const path = pendingEffect.value < 0 ? "check_penalty" : "check_bonus";
+		const path = pendingEffect.value < 0 ? "penalty" : "bonus";
 
 		if (pendingEffect.modifier_type !== "universal") {
 			this.#disableModifierType(path, pendingEffect.modifier_type);
@@ -122,7 +122,7 @@ class CheckManager {
 	 * @returns {string} - The formula used for the roll.
 	 */
 	get formula() {
-		const sum = this.resolver.checkModifierSum();
+		const sum = this.resolver.modifierSum();
 
 		const sumStr = sum === 0 ? "" : sum < 0 ? sum.toString() : `+${sum}`;
 
@@ -254,8 +254,8 @@ const modifierSort = (a, b) => {
 };
 export const transformEffectsForDisplay = (effects, resolver) => {
 	const annotatedBonuses =
-		effects.check_bonus?.map((e, i) => ({
-			path: "check_bonus",
+		effects.bonus?.map((e, i) => ({
+			path: "bonus",
 			index: i,
 			modifier_type: e.modifier_type,
 			dir: 1,
@@ -264,8 +264,8 @@ export const transformEffectsForDisplay = (effects, resolver) => {
 			enabled: e.enabled,
 		})) ?? [];
 	const annotatedPenalties =
-		effects.check_penalty?.map((e, i) => ({
-			path: "check_penalty",
+		effects.penalty?.map((e, i) => ({
+			path: "penalty",
 			index: i,
 			modifier_type: e.modifier_type,
 			dir: -1,
