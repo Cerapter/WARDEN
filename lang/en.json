@@ -31,7 +31,10 @@
 					"kit-in-non-kit-slot": "Kits may only be put into the kit slot.",
 					"pocket-weight": "Only Light items fit inside pockets.",
 
-					"too-many-origins": "The character already has two origins"
+					"too-many-origins": "The character already has two origins.",
+					"duplicate-ability": "The character already has this ability.",
+					"duplicate-feat": "The character already has this feat.",
+					"no-required-ability": "The character does not have the associated ability."
 				},
 
 				"button": {
