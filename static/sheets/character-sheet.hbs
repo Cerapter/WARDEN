@@ -104,6 +104,20 @@
 				</div>
 			</article>
 		{{/each}}
+
+		{{#if orphanedItems.length}}
+			<section>
+				<header class="black text-center bold">Orphaned Items</header>
+				If you can see this, something has gone wrong!
+				<ul>
+					{{#each orphanedItems}}
+						<li class="orphan" data-item-id="{{ id }}">
+							{{ name }}
+						</li>
+					{{/each}}
+				</ul>
+			</section>
+		{{/if}}
 	</div>
 
 	<section class="resource-wrapper col-span-2 white text-center">

@@ -127,7 +127,35 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 			})),
 		);
 
+		context.orphanedItems = this.#findOrphanedItems(context);
+
 		return context;
+	}
+
+	#findOrphanedItems(context) {
+		const registeredItems = new Set();
+
+		registeredItems.add(context.kit.id);
+		context.equipped_items
+			.filter((i) => i !== null)
+			.forEach((i) => registeredItems.add(i.id));
+		context.pocket_items
+			.filter((i) => i !== null)
+			.forEach((i) => registeredItems.add(i.id));
+		context.pack_items
+			.filter((i) => i !== null)
+			.forEach((i) => registeredItems.add(i.id));
+
+		context.system.origins
+			.slice(0, 2)
+			.forEach((o) => registeredItems.add(o.id));
+
+		context.abilities.forEach((ability) => {
+			registeredItems.add(ability.id);
+			ability.feats.forEach((feat) => registeredItems.add(feat.id));
+		});
+
+		return this.actor.items.filter((i) => !registeredItems.has(i.id));
 	}
 
 	#prepareProficiencyDisplay(name, dataPath) {
@@ -364,7 +392,7 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 					},
 				},
 			],
-			".origin, .ability, .feat",
+			".origin, .ability, .feat, .orphan",
 		);
 	}
 
