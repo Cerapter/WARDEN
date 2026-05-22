@@ -11,7 +11,9 @@
 	"styles": ["static/style.css"],
 	"documentTypes": {
 		"Actor": {
-			"character": {}
+			"character": {},
+			"mook": {},
+			"adversary": {}
 		},
 		"Item": {
 			"utilityItem": {},

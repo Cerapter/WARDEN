@@ -1,4 +1,4 @@
-<section class="character-sheet">
+<section class="actor-sheet character-sheet">
 	<!--<img
 		class="profile-img"
 		src="{{actor.img}}"
@@ -28,9 +28,9 @@
 		value=system.level
 		max=10
 		type="number"
-		classes="black subheader"
+		classes="black subheader superscript-label"
 	}}
-	<div class="white subheader pointer hover-glow" data-action="check" data-type="untrained">
+	<div class="white subheader superscript-label pointer hover-glow" data-action="check" data-type="untrained">
 		<label>Untrained Bonus</label>
 		<div>
 			{{~numberFormat
@@ -39,7 +39,7 @@
 			~}}
 		</div>
 	</div>
-	<div class="black subheader">
+	<div class="black subheader superscript-label">
 		<label>{{localize "warden.character.sheet.origin"}}</label>
 
 		{{#if system.origins.[0]}}
@@ -50,7 +50,7 @@
 			<div>&mdash;</div>
 		{{/if}}
 	</div>
-	<div class="white subheader">
+	<div class="white subheader superscript-label">
 		<label>{{localize "warden.character.sheet.origin"}}</label>
 
 		{{#if system.origins.[1]}}

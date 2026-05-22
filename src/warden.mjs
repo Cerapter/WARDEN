@@ -1,8 +1,10 @@
 import { DAMAGE_TYPE_CHOICES, DAMAGE_TYPES } from "./damage_type.mjs";
 import { WardenItem } from "./document/item.mjs";
 import { registerHelpers } from "./handlebars.mjs";
+import { AdversaryData } from "./model/character/adversary.mjs";
 import { BaseCharacterData } from "./model/character/base_character.mjs";
 import { CharacterData } from "./model/character/character.mjs";
+import { MookData } from "./model/character/mook.mjs";
 import { Ability } from "./model/item/character_build/ability.mjs";
 import { Feat } from "./model/item/character_build/feat.mjs";
 import { Origin } from "./model/item/character_build/origin.mjs";
@@ -15,6 +17,7 @@ import { WardenCheck } from "./roll/warden_check.mjs";
 import { WardenEffect } from "./roll/warden_effect.mjs";
 import { CharacterSheet } from "./sheet/character.mjs";
 import { EquipmentSheet } from "./sheet/item.mjs";
+import { OpponentSheet } from "./sheet/opponent.mjs";
 
 globalThis["WARDEN"] = {};
 globalThis["WARDEN"].DAMAGE_TYPES = DAMAGE_TYPES;
@@ -22,8 +25,18 @@ globalThis["WARDEN"].DAMAGE_TYPE_CHOICES = DAMAGE_TYPE_CHOICES;
 
 Hooks.once("init", () => {
 	CONFIG.Actor.dataModels.character = CharacterData;
+	CONFIG.Actor.dataModels.mook = MookData;
+	CONFIG.Actor.dataModels.adversary = AdversaryData;
 	CONFIG.Actor.trackableAttributes = {
 		character: {
+			bar: ["hit_points", "strain"],
+			value: [],
+		},
+		mook: {
+			bar: ["hit_points", "strain"],
+			value: [],
+		},
+		adversary: {
 			bar: ["hit_points", "strain"],
 			value: [],
 		},
@@ -49,6 +62,11 @@ Hooks.once("init", () => {
 		types: ["character"],
 		makeDefault: true,
 		label: "warden.character.sheet.label",
+	});
+	DocumentSheetConfig.registerSheet(Actor, "warden", OpponentSheet, {
+		types: ["mook", "adversary"],
+		makeDefault: true,
+		label: "warden.opponent.sheet.label",
 	});
 
 	DocumentSheetConfig.registerSheet(Item, "warden", EquipmentSheet, {

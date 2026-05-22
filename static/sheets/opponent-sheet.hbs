@@ -1,0 +1,157 @@
+<section class="actor-sheet opponent-sheet">
+	<div class="col-span-2 gray header">
+		{{formInput
+			actor.schema.fields.name
+			value=actor.name
+		}}
+
+		{{#if system.is_mook}}
+			{{formGroup
+				fields.is_elite
+				value=system.is_elite
+				classes="grid superscript-label"
+			}}
+		{{else}}
+			{{formGroup
+				fields.level
+				value=system.level
+				classes="grid superscript-label"
+			}}
+		{{/if}}
+	</div>
+
+	<div
+		class="subheader white bold hover-glow pointer grid place-center"
+		data-action="check"
+		data-type="statistic"
+		data-major="true"
+	>
+		{{~numberFormat
+			majorStatistic.bonus
+			sign=true
+		~}}
+		&nbsp;(
+		{{~localize (concat "warden.proficiency_rank." majorStatistic.rank) ~}}
+		)
+	</div>
+	<div
+		class="subheader black bold hover-glow pointer grid place-center"
+		data-action="check"
+		data-type="statistic"
+		data-major="false"
+	>
+		{{~numberFormat
+			minorStatistic.bonus
+			sign=true
+		~}}
+		&nbsp;(
+		{{~localize (concat "warden.proficiency_rank." minorStatistic.rank) ~}}
+		)
+	</div>
+
+	<div class="resource-wrapper text-center white col-span-2 col-subgrid">
+		<div class="grid row-subgrid row-span-2">
+			<div class="slashed value-border flex">
+				{{formInput
+					fields.hit_points.fields.value
+					value=system.hit_points.value
+					max=system.hit_points.max
+					type="number"
+				}}
+				<div class="divider"></div>
+				{{formInput
+					fields.max_hit_points
+					value=system.hit_points.max
+					type="number"
+				}}
+			</div>
+			<label>{{localize "warden.character.hit_points"}}</label>
+		</div>
+		<div class="grid row-subgrid row-span-2">
+			<div class="slashed value-border flex">
+				{{formInput
+					fields.strain.fields.value
+					value=system.strain.value
+					max=system.strain.max
+					type="number"
+				}}
+				<div class="divider"></div>
+				{{formInput
+					fields.max_strain
+					value=system.strain.max
+					type="number"
+				}}
+			</div>
+			<label>{{localize "warden.character.strain"}}</label>
+		</div>
+		<!-- This is just ass fake as it is for pcs right now -->
+		<div class="grid row-subgrid row-span-2">
+			<div class="slashed value-border flex">
+				<div>{{ system.speed.value }}</div>
+				<div class="divider"></div>
+				<div>{{ system.speed.base }}</div>
+			</div>
+			<label>{{localize "warden.character.speed"}}</label>
+		</div>
+		<div class="grid row-subgrid row-span-2">
+			<div class="value-border grid place-center">{{localize (warden-size-loc-key system.size)}}</div>
+			<label>{{localize "warden.character.size.label"}}</label>
+		</div>
+	</div>
+
+	<div class="gray col-span-2 grid col-subgrid proficiencies">
+		{{#each proficiencies}}
+			<div
+				class="proficiency hover-glow pointer"
+				data-action="check"
+				data-type="proficiency"
+				data-path="{{ path }}"
+				data-name="{{ name }}"
+			>
+
+				<span class="pointer diamond" data-action="toggleValue" data-path="system.{{ name }}.is_major">
+					{{> warden-diamond
+						filled=is_major
+					}}
+				</span>
+				<span>
+					{{~numberFormat
+						bonus
+						sign=true
+					~}}
+				</span>
+				<span>{{localize (concat "warden.character.FIELDS." path ".label")}}</span>
+			</div>
+		{{/each}}
+	</div>
+
+	<div class="abilities col-span-2 black">
+
+		{{#each system.abilities}}
+			<div class="ability">
+				<span class="pointer diamond" data-action="toggleValue" data-path="system.abilities.{{ @key }}.is_major"
+				>
+					{{> warden-diamond
+						filled=is_major
+					}}
+				</span>
+				<div class="textarea-auto-size-wrapper row-span-3" data-content="{{~ description ~}}">
+					<textarea
+						name="system.abilities.{{ @key }}.description"
+						placeholder='{{localize "warden.character.FIELDS.description.placeholder"}}'
+					>
+					{{~ description ~}}
+					</textarea>
+				</div>
+
+				<span class="pointer hover-glow" data-action="deleteAbility" data-id="{{ @key }}">
+					<i class="fa-solid fa-trash-can"></i>
+				</span>
+			</div>
+		{{/each}}
+		<div class="curve-button col-span-2">
+			<button data-action="addAbility"><i class="fa-solid fa-plus"></i></button>
+		</div>
+	</div>
+
+</section>

@@ -17,6 +17,7 @@ export class BaseCharacterData extends TypeDataModel {
 	static defineSchema() {
 		return {
 			size: new NumberField({
+				required: true,
 				choices: {
 					0: this.sizeLocKey(0),
 					1: this.sizeLocKey(1),
@@ -25,6 +26,7 @@ export class BaseCharacterData extends TypeDataModel {
 					4: this.sizeLocKey(4),
 					5: this.sizeLocKey(5),
 				},
+				initial: 2,
 			}),
 
 			level: new NumberField({

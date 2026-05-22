@@ -1,7 +1,9 @@
 {
 	"TYPES": {
 		"Actor": {
-			"character": "Player Character"
+			"character": "Player Character",
+			"mook": "Mook",
+			"adversary": "Adversary"
 		},
 		"Item": {
 			"utilityItem": "Utility Item",
@@ -61,13 +63,23 @@
 				"massive": "Massive"
 			},
 
+			"statistic": {
+				"major": {
+					"label": "Major Statistic"
+				},
+				"minor": {
+					"label": "Minor Statistic"
+				}
+			},
+
 			"FIELDS": {
 				"pronouns": {
 					"label": "Pronouns",
 					"placeholder": "Pronouns"
 				},
 				"description": {
-					"label": "Description"
+					"label": "Description",
+					"placeholder": "Description"
 				},
 
 				"size": {
@@ -187,9 +199,14 @@
 
 				"knowledge_skills": {
 					"label": "Knowledge Skills"
+				},
+
+				"is_elite": {
+					"label": "Elite"
 				}
 			}
 		},
+
 		"equipment": {
 			"sheet": {
 				"label": "WARDEN Equipment Sheet"
