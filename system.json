@@ -38,5 +38,6 @@
 		"hotReload": {
 			"extensions": ["hbs", "json", "css"]
 		}
-	}
+	},
+	"download": "https://github.com/Lunar-Dawn/WARDEN/archive/refs/heads/main.zip"
 }
