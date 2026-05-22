@@ -484,6 +484,10 @@
 			text-align: right;
 		}
 	}
+
+	.effects {
+		grid-template-columns: min-content 1fr min-content;
+	}
 }
 
 /* Check window classes */

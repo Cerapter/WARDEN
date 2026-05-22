@@ -16,6 +16,6 @@ export class Origin extends TypeDataModel {
 	}
 
 	get supportedTabs() {
-		return ["description"];
+		return ["description", "effects"];
 	}
 }

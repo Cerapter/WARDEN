@@ -1,3 +1,5 @@
+import { getBaseActiveEffect } from "../dynamic_effects/activeEffectFactory.mjs";
+
 const { HandlebarsApplicationMixin } = foundry.applications.api;
 const { ItemSheet } = foundry.applications.sheets;
 
@@ -20,10 +22,24 @@ export class EquipmentSheet extends HandlebarsApplicationMixin(ItemSheet) {
 			template: "systems/warden/static/sheets/item/traits.hbs",
 			scrollable: [""],
 		},
+		effects: {
+			template: "systems/warden/static/sheets/item/effects.hbs",
+			scrollable: [""],
+			forms: {
+				".effects": {
+					handler: EquipmentSheet.#effectFormHandler,
+					submitOnChange: true,
+					closeOnSubmit: false,
+				},
+			},
+		},
 	};
 
 	static DEFAULT_OPTIONS = {
-		actions: {},
+		actions: {
+			newEffect: EquipmentSheet.newEffect,
+			deleteEffect: EquipmentSheet.deleteEffect,
+		},
 		window: {
 			contentClasses: ["zero-pad", "item-sheet"],
 			resizable: true,
@@ -76,8 +92,75 @@ export class EquipmentSheet extends HandlebarsApplicationMixin(ItemSheet) {
 						this.item.system.description,
 					);
 				break;
+			case "effects":
+				context.effects = this.item.effects
+					.filter((e) => e.changes.length > 0)
+					.map((e) => ({
+						effect: e,
+						change_string: JSON.stringify(
+							e.changes[0].value,
+							null,
+							4,
+						),
+					}));
+				context.effect_types = {
+					"system.dynamic_effects.proficiency_rank":
+						"Proficiency Rank",
+					"system.dynamic_effects.bonus": "Bonus",
+					"system.dynamic_effects.penalty": "Penalty",
+					"system.dynamic_effects.effect_dice":
+						"Effect Dice (Not implemented)",
+					"system.dynamic_effects.effect_potency":
+						"Effect Potency (Not implemented)",
+					"system.dynamic_effects.benefit":
+						"Benefit (Not implemented)",
+					"system.dynamic_effects.detriment":
+						"Detriment (Not implemented)",
+				};
+				break;
 		}
 
 		return context;
+	}
+
+	static async #effectFormHandler(e, form, data) {
+		if (e.type !== "submit") return;
+
+		// Dirty hack since Foundry breaks FormData.getAll
+		const keys = [].concat(data.object.key);
+		const values = [].concat(data.object.value);
+
+		const updates = [].concat(data.object.id).map((id, index) => ({
+			_id: id,
+			"system.changes": [
+				{
+					key: keys[index],
+					value: JSON.parse(values[index]),
+				},
+			],
+		}));
+
+		await foundry.documents.modifyBatch([
+			{
+				action: "update",
+				documentName: "ActiveEffect",
+				updates,
+				parent: this.item,
+			},
+		]);
+	}
+	static async newEffect() {
+		await ActiveEffect.create(
+			getBaseActiveEffect(this.item.name, "bonus"),
+			{ parent: this.item },
+		);
+		this.render({ parts: ["effects"] });
+	}
+	static async deleteEffect(e, target) {
+		const id = target.closest("[data-id]").dataset.id;
+
+		await this.item.deleteEmbeddedDocuments("ActiveEffect", [id]);
+
+		this.render({ parts: ["effects"] });
 	}
 }

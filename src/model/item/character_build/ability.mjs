@@ -19,7 +19,7 @@ export class Ability extends TypeDataModel {
 	}
 
 	get supportedTabs() {
-		return ["description", "properties"];
+		return ["description", "properties", "effects"];
 	}
 
 	getProperties() {

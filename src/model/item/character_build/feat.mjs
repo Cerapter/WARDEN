@@ -22,7 +22,7 @@ export class Feat extends TypeDataModel {
 	}
 
 	get supportedTabs() {
-		return ["description", "properties"];
+		return ["description", "properties", "effects"];
 	}
 
 	getProperties() {
