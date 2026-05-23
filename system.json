@@ -39,5 +39,6 @@
 			"extensions": ["hbs", "json", "css"]
 		}
 	},
-	"download": "https://github.com/Lunar-Dawn/WARDEN/archive/refs/heads/main.zip"
+	"download": "https://github.com/Lunar-Dawn/WARDEN/archive/refs/heads/main.zip",
+	"manifest": "https://raw.githubusercontent.com/Lunar-Dawn/WARDEN/refs/heads/main/system.json"
 }
