@@ -135,7 +135,7 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 	#findOrphanedItems(context) {
 		const registeredItems = new Set();
 
-		registeredItems.add(context.kit.id);
+		registeredItems.add(context.kit?.id);
 		context.equipped_items
 			.filter((i) => i !== null)
 			.forEach((i) => registeredItems.add(i.id));

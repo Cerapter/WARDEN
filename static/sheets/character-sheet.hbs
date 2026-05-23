@@ -247,14 +247,23 @@
 
 		<section class="grid col-subgrid col-span-2 gray inventory-grid">
 			<div class="kit equipped equipment-context" data-inventory-area="kit" data-item-id="{{ kit.id }}">
-				<span>{{ kit.name }}</span>
-				<div class="charges">
-					<!-- TODO: Hook up clicks -->
-					{{> warden-diamonds
-						num=kit.system.charges.max
-						filled=kit.system.charges.current
-					}}
-				</div>
+				{{#if kit}}
+					<span>
+						{{ kit.name }}
+					</span>
+					<div class="charges">
+						<!-- TODO: Hook up clicks -->
+						{{> warden-diamonds
+							num=kit.system.charges.max
+							filled=kit.system.charges.current
+						}}
+					</div>
+				{{else}}
+					<span>
+						{{localize "warden.character.sheet.no-kit"}}
+					</span>
+				{{/if}}
+
 			</div>
 			{{#each equipped_items}}
 				{{#if this}}

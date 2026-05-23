@@ -285,13 +285,7 @@ export class CharacterData extends BaseCharacterData {
 		const id = foundry.utils.randomID();
 		newKit._id = id;
 
-		return foundry.documents.modifyBatch([
-			{
-				action: "delete",
-				documentName: "Item",
-				ids: [this.kit.id],
-				parent: this.parent,
-			},
+		const updates = [
 			{
 				action: "create",
 				documentName: "Item",
@@ -309,7 +303,18 @@ export class CharacterData extends BaseCharacterData {
 					},
 				],
 			},
-		]);
+		];
+
+		if (this.kit !== undefined) {
+			updates.push({
+				action: "delete",
+				documentName: "Item",
+				ids: [this.kit.id],
+				parent: this.parent,
+			});
+		}
+
+		return foundry.documents.modifyBatch(updates);
 	}
 	/**
 	 * Performs mutation of the inventory, adding a new item, removing an existing item, or swapping the area of items.

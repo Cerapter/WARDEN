@@ -27,6 +27,8 @@
 
 				"origin": "Origin",
 
+				"no-kit": "No Kit Equipped",
+
 				"warnings": {
 					"no-inventory-area": "Equipment must be dropped on an inventory slot.",
 					"non-kit-in-kit-slot": "Only kits may be inserted into the kit slot.",
