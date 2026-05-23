@@ -246,7 +246,12 @@
 		</section>
 
 		<section class="grid col-subgrid col-span-2 gray inventory-grid">
-			<div class="kit equipped equipment-context" data-inventory-area="kit" data-item-id="{{ kit.id }}">
+			<div
+				class="kit equipped equipment-context"
+				data-inventory-area="kit"
+				data-item-id="{{ kit.id }}"
+				data-tooltip-html="{{ kit.system.description }}"
+			>
 				{{#if kit}}
 					<span>
 						{{ kit.name }}
@@ -271,6 +276,7 @@
 						class="draggable equipped equipment-context"
 						data-inventory-area="equipped"
 						data-item-id="{{ id }}"
+						data-tooltip-html="{{ this.system.description }}"
 					>
 						{{ name }}
 						{{#if this.system.equippedButtons}}
@@ -296,7 +302,12 @@
 			<header class="col-span-2 bold black text-center">{{localize "warden.character.sheet.pockets"}}</header>
 			{{#each pocket_items}}
 				{{#if this}}
-					<div class="draggable equipment-context" data-inventory-area="pockets" data-item-id="{{ id }}">
+					<div
+						class="draggable equipment-context"
+						data-inventory-area="pockets"
+						data-item-id="{{ id }}"
+						data-tooltip-html="{{ this.system.description }}"
+					>
 						{{ name }}
 					</div>
 				{{else}}
@@ -307,7 +318,12 @@
 			<header class="col-span-2 bold black text-center">{{localize "warden.character.sheet.pack"}}</header>
 			{{#each pack_items}}
 				{{#if this}}
-					<div class="draggable equipment-context" data-inventory-area="pack" data-item-id="{{ id }}">
+					<div
+						class="draggable equipment-context"
+						data-inventory-area="pack"
+						data-item-id="{{ id }}"
+						data-tooltip-html="{{ this.system.description }}"
+					>
 						{{ name }}
 					</div>
 				{{else}}
