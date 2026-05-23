@@ -1,6 +1,7 @@
 import { BaseEquipment } from "./base_equipment.mjs";
 
 const { NumberField } = foundry.data.fields;
+const { renderTemplate } = foundry.applications.handlebars;
 
 /**
  * @property {number} defense
@@ -42,5 +43,18 @@ export class Shield extends BaseEquipment {
 		};
 
 		return properties;
+	}
+
+	/**
+	 * Displays defense and block values
+	 * @returns {HTMLElement}
+	 */
+	async equippedSnippet() {
+		return renderTemplate(
+			"systems/warden/static/sheets/item/shield-snippet.hbs",
+			{
+				shield: this,
+			},
+		);
 	}
 }

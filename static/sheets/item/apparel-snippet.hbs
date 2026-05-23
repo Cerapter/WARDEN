@@ -1,0 +1,17 @@
+<div class="equipment-snippet apparel-snippet">
+	<div class="col-span-2">{{localize "warden.apparel.armor.label"}}: {{ apparel.armor }}</div>
+	<div>
+		{{localize "warden.apparel.strength.short_label"}}:{{#if apparel.strength}}
+			{{ apparel.strength }}
+		{{else}}
+			&mdash;
+		{{/if}}
+	</div>
+	<div>
+		{{localize "warden.apparel.weakness.short_label"}}:{{#if apparel.weakness}}
+			{{ apparel.weakness }}
+		{{else}}
+			&mdash;
+		{{/if}}
+	</div>
+</div>

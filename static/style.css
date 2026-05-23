@@ -431,6 +431,15 @@
 					line-height: unset;
 				}
 			}
+
+			.equipment-snippet {
+				font-style: italic;
+			}
+
+			.apparel-snippet {
+				display: grid;
+				grid-template-columns: 50% 50%;
+			}
 		}
 
 		.kit {

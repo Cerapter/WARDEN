@@ -1,6 +1,7 @@
 import { BaseEquipment } from "./base_equipment.mjs";
 
 const { NumberField, StringField } = foundry.data.fields;
+const { renderTemplate } = foundry.applications.handlebars;
 
 /**
  * @property {number} armor
@@ -54,5 +55,18 @@ export class Apparel extends BaseEquipment {
 		};
 
 		return properties;
+	}
+
+	/**
+	 * Displays armor value, strength, and weakness
+	 * @returns {HTMLElement}
+	 */
+	async equippedSnippet() {
+		return renderTemplate(
+			"systems/warden/static/sheets/item/apparel-snippet.hbs",
+			{
+				apparel: this,
+			},
+		);
 	}
 }

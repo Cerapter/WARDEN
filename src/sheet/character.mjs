@@ -55,10 +55,13 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 
 		context.kit = system.kit;
 
-		context.equipped_items = this.paddedInventoryList(
-			system.equipped_items,
-			5,
-		);
+		const equipped_items = system.equipped_items;
+		for (const item of equipped_items) {
+			item.equippedSnippet = await item.system.equippedSnippet();
+		}
+
+		context.equipped_items = this.paddedInventoryList(equipped_items, 5);
+
 		context.pocket_items = this.paddedInventoryList(system.pocket_items, 4);
 		context.pack_items = this.paddedInventoryList(
 			system.pack_items,

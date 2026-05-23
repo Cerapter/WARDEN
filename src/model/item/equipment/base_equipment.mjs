@@ -104,6 +104,14 @@ export class BaseEquipment extends TypeDataModel {
 		return [];
 	}
 
+	/**
+	 * Returns a HTMLElement to display below equipped items
+	 * @returns {HTMLElement|null}
+	 */
+	async equippedSnippet() {
+		return null;
+	}
+
 	isEquipment() {
 		return true;
 	}

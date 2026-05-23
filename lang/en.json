@@ -275,10 +275,12 @@
 				"label": "Armor"
 			},
 			"strength": {
-				"label": "Strength"
+				"label": "Strength",
+				"short_label": "S"
 			},
 			"weakness": {
-				"label": "Weakness"
+				"label": "Weakness",
+				"short_label": "W"
 			}
 		},
 		"shield": {
