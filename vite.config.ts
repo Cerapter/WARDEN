@@ -44,7 +44,7 @@ const postcss = {
 export default defineConfig(({ mode: _mode }) => {
 	return {
 		root: "src/", // Source location / esbuild root.
-		base: `/${systemPath}/dist`, // Base module path that 30001 / served dev directory.
+		base: `/${systemPath}/dist`, // Base system path that 30001 / served dev directory.
 		publicDir: false, // No public resources to copy.
 		cacheDir: ".vite-cache", // Relative from root directory.
 
@@ -72,7 +72,7 @@ export default defineConfig(({ mode: _mode }) => {
 				// All other paths besides package ID path are served from main Foundry server.
 				[`^(?!/${systemPath}/)`]: "http://localhost:30000",
 
-				// Rewrite incoming `module-id.js` request from Foundry to the dev server `index.ts`.
+				// Rewrite incoming `system-id.js` request from Foundry to the dev server `index.ts`.
 				[`/${systemPath}/dist/${systemJSON.id}.js`]: {
 					target: `http://localhost:30001/${systemPath}/dist`,
 					rewrite: () => `/${entry}`,
