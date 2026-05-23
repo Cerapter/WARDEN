@@ -125,7 +125,7 @@ export class DynamicResultResolver {
 			return this.discriminators.has(effect.applicable_if);
 
 		// TODO: More complex resolution mechanics
-		return effect.applicable_if.all((cond) =>
+		return effect.applicable_if.every((cond) =>
 			this.discriminators.has(cond),
 		);
 	}
