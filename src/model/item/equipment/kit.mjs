@@ -16,12 +16,14 @@ export class Kit extends BaseEquipment {
 					required: true,
 					min: 0,
 					initial: 1,
+					label: "warden.kit.charges.current.label",
 				}),
 				max: new NumberField({
 					required: true,
 					min: 1,
 					max: 3,
 					initial: 1,
+					label: "warden.kit.charges.max.label",
 				}),
 			}),
 
@@ -30,13 +32,34 @@ export class Kit extends BaseEquipment {
 				min: 2,
 				max: 6,
 				initial: 2,
+				label: "warden.kit.pack_slots.label",
 			}),
 		};
 	}
 
-	get chargesBoolArray() {
-		return Array.fromRange(this.charges.max).map(
-			(i) => i < this.charges.current,
-		);
+	prepareDerivedData() {
+		super.prepareDerivedData();
+
+		this.charges.current = Math.min(this.charges.current, this.charges.max);
+	}
+
+	getProperties() {
+		const properties = { ...super.getProperties() };
+
+		properties.current_charges = {
+			field: this.schema.fields.charges.fields.current,
+			value: this.charges.current,
+		};
+		properties.max_charges = {
+			field: this.schema.fields.charges.fields.max,
+			value: this.charges.max,
+		};
+
+		properties.pack_slots = {
+			field: this.schema.fields.pack_slots,
+			value: this.pack_slots,
+		};
+
+		return properties;
 	}
 }

@@ -289,6 +289,19 @@
 				"label": "Block"
 			}
 		},
+		"kit": {
+			"charges": {
+				"current": {
+					"label": "Current Charges"
+				},
+				"max": {
+					"label": "Max Charges"
+				}
+			},
+			"pack_slots": {
+				"label": "Pack Slots"
+			}
+		},
 		"ability": {
 			"FIELDS": {
 				"description": {
