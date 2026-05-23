@@ -7,19 +7,6 @@
 - Typically, if you modify the system code, or modify the system's compendia in their exported JSON form, you would run the above command. If you modify the system's compendia in-Foundry, you can use `npm run extract` to extract them into JSON form.
   - It is suggested you only keep track of and push JSON files of the compendia, as they're both easier to read as a human, and easier for git to track.
 
-## BADENGINE warnings
-
-If you get a warning about an `EBADENGINE` like so:
-
-```
-npm warn EBADENGINE Unsupported engine {
-npm warn EBADENGINE   package: 'foundryvtt-sync@2.4.0',
-npm warn EBADENGINE   required: { node: '24' },
-...
-```
-
-It simply means that one of the dev modules, most likely [FoundryVTT Sync](https://github.com/MrVauxs/FoundryVTT-Sync), needs a different node version than what you have. You can typically use something like `nvm` to change your current node version.
-
 ## FoundryVTT Sync
 
 Admittedly, FoundryVTT Sync was made more for modules, so using it in this way is kind of a bastardisation of how it should be used.  
