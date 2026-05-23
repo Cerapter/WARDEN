@@ -16,11 +16,11 @@
 			"adversary": {}
 		},
 		"Item": {
-			"utilityItem": {},
-			"weapon": {},
-			"apparel": {},
-			"shield": {},
-			"kit": {},
+			"utilityItem": { "htmlFields": "description" },
+			"weapon": { "htmlFields": "description" },
+			"apparel": { "htmlFields": "description" },
+			"shield": { "htmlFields": "description" },
+			"kit": { "htmlFields": "description" },
 
 			"origin": { "htmlFields": "description" },
 			"ability": { "htmlFields": "description" },

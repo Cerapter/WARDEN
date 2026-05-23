@@ -1,4 +1,4 @@
-const { NumberField, StringField } = foundry.data.fields;
+const { NumberField, StringField, HTMLField } = foundry.data.fields;
 const { TypeDataModel } = foundry.abstract;
 
 /**
@@ -47,6 +47,10 @@ export class BaseEquipment extends TypeDataModel {
 					damaged: "warden.equipment.condition.damaged",
 					broken: "warden.equipment.condition.broken",
 				},
+			}),
+
+			description: new HTMLField({
+				required: true,
 			}),
 		};
 	}
@@ -105,6 +109,6 @@ export class BaseEquipment extends TypeDataModel {
 	}
 
 	get supportedTabs() {
-		return ["properties", "traits", "effects"];
+		return ["description", "properties", "traits", "effects"];
 	}
 }
