@@ -1,4 +1,8 @@
-import { DAMAGE_TYPE_CHOICES, DAMAGE_CATEGORY_CHOICES, DAMAGE_TYPES } from "./damage_type.mjs";
+import {
+	DAMAGE_TYPE_CHOICES,
+	DAMAGE_CATEGORY_CHOICES,
+	DAMAGE_TYPES,
+} from "./damage_type.mjs";
 import { WardenItem } from "./document/item.mjs";
 import { registerHelpers } from "./handlebars.mjs";
 import { AdversaryData } from "./model/character/adversary.mjs";

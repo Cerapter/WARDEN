@@ -21,20 +21,40 @@ export class Apparel extends BaseEquipment {
 				label: "warden.apparel.armor.label",
 			}),
 
-			strength: new SetField(new StringField({
-				required: true,
-				nullable: true,
-				initial: null,
-				choices: {...WARDEN.DAMAGE_TYPE_CHOICES, ...WARDEN.DAMAGE_CATEGORY_CHOICES},
-				label: "warden.apparel.strength.label",
-			}), { required: true, initial: [], label: "warden.apparel.strength.label" }),
-			weakness: new SetField(new StringField({
-				required: true,
-				nullable: true,
-				initial: null,
-				choices: {...WARDEN.DAMAGE_TYPE_CHOICES, ...WARDEN.DAMAGE_CATEGORY_CHOICES},
-				label: "warden.apparel.weakness.label",
-			}), { required: true, initial: [], label: "warden.apparel.weakness.label" }),
+			strength: new SetField(
+				new StringField({
+					required: true,
+					nullable: true,
+					initial: null,
+					choices: {
+						...WARDEN.DAMAGE_TYPE_CHOICES,
+						...WARDEN.DAMAGE_CATEGORY_CHOICES,
+					},
+					label: "warden.apparel.strength.label",
+				}),
+				{
+					required: true,
+					initial: [],
+					label: "warden.apparel.strength.label",
+				},
+			),
+			weakness: new SetField(
+				new StringField({
+					required: true,
+					nullable: true,
+					initial: null,
+					choices: {
+						...WARDEN.DAMAGE_TYPE_CHOICES,
+						...WARDEN.DAMAGE_CATEGORY_CHOICES,
+					},
+					label: "warden.apparel.weakness.label",
+				}),
+				{
+					required: true,
+					initial: [],
+					label: "warden.apparel.weakness.label",
+				},
+			),
 		};
 	}
 
