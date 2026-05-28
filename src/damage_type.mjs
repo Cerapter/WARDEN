@@ -32,3 +32,10 @@ export const DAMAGE_TYPE_CHOICES = Object.fromEntries(
 		`warden.damage_type.${k}`,
 	]),
 );
+
+export const DAMAGE_CATEGORY_CHOICES = Object.fromEntries(
+	Object.entries(DAMAGE_TYPES).map(([_, v]) => [
+		v.category,
+		`warden.damage_category.${v.category}`,
+	]),
+);

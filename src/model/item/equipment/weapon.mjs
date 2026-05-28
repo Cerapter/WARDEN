@@ -2,14 +2,14 @@ import { runCheck } from "../../../roll/check_manager.mjs";
 import { WardenEffect } from "../../../roll/warden_effect.mjs";
 import { BaseEquipment } from "./base_equipment.mjs";
 
-const { NumberField, StringField } = foundry.data.fields;
+const { NumberField, StringField, SetField } = foundry.data.fields;
 
 /**
  * @property {"melee"|"ranged"} type
  * @property {number} hands
  * @property {number} range
  * @property {4|6|8|10|12} dic_size
- * @property {string} damage_type
+ * @property {string[]} damage_types
  */
 export class Weapon extends BaseEquipment {
 	static defineSchema() {
@@ -55,12 +55,12 @@ export class Weapon extends BaseEquipment {
 				},
 				label: "warden.weapon.damage_die.label",
 			}),
-			damage_type: new StringField({
+			damage_types: new SetField(new StringField({
 				required: true,
 				initial: "slash",
 				choices: WARDEN.DAMAGE_TYPE_CHOICES,
 				label: "warden.weapon.damage_type.label",
-			}),
+			}), { required: true, initial: [], label: "warden.weapon.damage_types.label" }),
 		};
 	}
 
@@ -83,9 +83,9 @@ export class Weapon extends BaseEquipment {
 			field: this.schema.fields.damage_die,
 			value: this.damage_die,
 		};
-		properties.damage_type = {
-			field: this.schema.fields.damage_type,
-			value: this.damage_type,
+		properties.damage_types = {
+			field: this.schema.fields.damage_types,
+			value: this.damage_types,
 		};
 
 		return properties;

@@ -261,7 +261,7 @@
 			"damage_die": {
 				"label": "Damage Die"
 			},
-			"damage_type": {
+			"damage_types": {
 				"label": "Damage Type"
 			},
 			"range": {
