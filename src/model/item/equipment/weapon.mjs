@@ -57,14 +57,12 @@ export class Weapon extends BaseEquipment {
 			}),
 			damage_types: new SetField(
 				new StringField({
-					required: true,
-					initial: "slash",
 					choices: WARDEN.DAMAGE_TYPE_CHOICES,
 					label: "warden.weapon.damage_type.label",
 				}),
 				{
 					required: true,
-					initial: [],
+					initial: ["slash"],
 					label: "warden.weapon.damage_types.label",
 				},
 			),
