@@ -426,6 +426,10 @@
 			"physical": "Physical",
 			"energy": "Energy",
 			"special": "Special"
+		},
+
+		"ui": {
+			"effect_roll_button": "Roll Effect"
 		}
 	}
 }

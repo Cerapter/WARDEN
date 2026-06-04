@@ -753,3 +753,8 @@
 		padding: 1px 0.5em;
 	}
 }
+
+/* Override to allow floating roll button to be pressed */
+#warden-chat-roll-button {
+	pointer-events: all;
+}

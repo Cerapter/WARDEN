@@ -23,10 +23,15 @@ class EffectManager {
 	 * @param {ChatSpeakerData} speaker
 	 * @param {EffectParameters} parameters
 	 */
-	constructor(rollData, speaker, parameters) {
+	constructor(rollData, speaker, parameters = {}) {
 		this.rollData = rollData;
 		this.speaker = speaker;
 		this.parameters = parameters;
+
+		this.parameters.num_dice ??= 1;
+		this.parameters.die_size ??= 6;
+		this.parameters.potency ??= 1;
+		this.parameters.modifier ??= 0;
 
 		this.#validateParameters();
 	}
@@ -76,7 +81,7 @@ class EffectManager {
 		);
 	}
 
-	async executeCheck() {
+	async evaluateEffect() {
 		const rollMode = game.settings.get("core", "messageMode");
 
 		this.roll = new WardenEffect(this.formula, this.rollData, {});
@@ -100,17 +105,20 @@ class EffectManager {
  * @param {Partial<EffectParameters>} parameters
  * @param {{skip?:boolean}} options
  */
-export const runEffect = async (rollData, speaker, parameters, options) => {
+export const runEffect = async (
+	rollData,
+	speaker,
+	parameters,
+	{ skip = false } = {},
+) => {
 	const manager = new EffectManager(rollData, speaker, parameters);
 
-	options.skip ??= false;
-
-	if (!options.skip) {
+	if (!skip) {
 		const success = await manager.display();
 		if (!success) {
 			return null;
 		}
 	}
 
-	return manager.executeCheck();
+	return manager.evaluateEffect();
 };

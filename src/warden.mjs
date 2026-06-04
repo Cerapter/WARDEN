@@ -1,6 +1,7 @@
+import { setupRollButton } from "./chat_roll_buttons.mjs";
 import {
-	DAMAGE_TYPE_CHOICES,
 	DAMAGE_CATEGORY_CHOICES,
+	DAMAGE_TYPE_CHOICES,
 	DAMAGE_TYPES,
 } from "./damage_type.mjs";
 import { WardenItem } from "./document/item.mjs";
@@ -90,6 +91,7 @@ Hooks.once("init", () => {
 	});
 
 	registerHelpers();
+	setupRollButton();
 });
 
 Hooks.once("i18nInit", () => {
