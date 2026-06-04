@@ -1,5 +1,5 @@
 import { runCheck } from "../../../roll/check_manager.mjs";
-import { WardenEffect } from "../../../roll/warden_effect.mjs";
+import { runEffect } from "../../../roll/effect_manager.mjs";
 import { BaseEquipment } from "./base_equipment.mjs";
 
 const { NumberField, StringField, SetField } = foundry.data.fields;
@@ -8,7 +8,7 @@ const { NumberField, StringField, SetField } = foundry.data.fields;
  * @property {"melee"|"ranged"} type
  * @property {number} hands
  * @property {number} range
- * @property {4|6|8|10|12} dic_size
+ * @property {4|6|8|10|12} damage_die
  * @property {string[]} damage_types
  */
 export class Weapon extends BaseEquipment {
@@ -96,26 +96,17 @@ export class Weapon extends BaseEquipment {
 		return properties;
 	}
 
-	runStrike({ skip = false, map = 0 }) {
-		const rollData = this.parent.actor.getRollData();
-		const speaker = ChatMessage.getSpeaker({
-			actor: this.parent.actor,
-		});
-
-		let title;
-		const domains = new Set(["strike", `strike.${this.parent.id}`]);
+	#weaponResolver(map) {
+		const domains = new Set([
+			"strike",
+			"strike.attack",
+			`strike.${this.parent.id}.attack`,
+		]);
 		const discriminators = new Set();
-		const difficulty = 10 + map * 5;
 
 		if (this.type === "melee") {
-			title = _loc("warden.action.melee_strike_weapon_title", {
-				weapon: this.parent.name,
-			});
 			domains.add("strike.melee");
 		} else {
-			title = _loc("warden.action.ranged_strike_weapon_title", {
-				weapon: this.parent.name,
-			});
 			domains.add("strike.ranged");
 		}
 
@@ -123,10 +114,32 @@ export class Weapon extends BaseEquipment {
 			discriminators.add("map");
 		}
 
-		const resolver = this.parent.actor.system.proficiencyCheckResolver(
-			"combat",
-			{ domains, discriminators },
-		);
+		return this.parent.actor.system.proficiencyCheckResolver("combat", {
+			domains,
+			discriminators,
+		});
+	}
+
+	runStrike({ skip = false, map = 0 }) {
+		const rollData = this.parent.actor.getRollData();
+		const speaker = ChatMessage.getSpeaker({
+			actor: this.parent.actor,
+		});
+
+		let title;
+		const difficulty = 10 + map * 5;
+
+		if (this.type === "melee") {
+			title = _loc("warden.action.melee_strike_weapon_title", {
+				weapon: this.parent.name,
+			});
+		} else {
+			title = _loc("warden.action.ranged_strike_weapon_title", {
+				weapon: this.parent.name,
+			});
+		}
+
+		const resolver = this.#weaponResolver(map);
 
 		return runCheck(
 			rollData,
@@ -135,6 +148,61 @@ export class Weapon extends BaseEquipment {
 			{
 				difficulty,
 				title,
+			},
+			{ skip },
+		);
+	}
+
+	rollDamage({ skip = false, map = 0 }) {
+		const rollData = this.parent.actor.getRollData();
+		const speaker = ChatMessage.getSpeaker({
+			actor: this.parent.actor,
+		});
+
+		const title = _loc("warden.weapon.damage_flavor", {
+			weapon: this.parent.name,
+		});
+
+		const domains = new Set([
+			"damage",
+			"strike",
+			"strike.damage",
+			`strike.${this.parent.id}.damage`,
+		]);
+		const discriminators = new Set();
+
+		if (this.type === "melee") {
+			domains.add("strike.melee");
+		} else {
+			domains.add("strike.ranged");
+		}
+
+		if (map > 0) {
+			discriminators.add("map");
+		}
+
+		const resolver = this.parent.actor.system.getDynamicResultResolver(
+			domains,
+			discriminators,
+		);
+		const attackResolver = this.#weaponResolver(map);
+
+		const num_dice = attackResolver.resolve("proficiency_rank");
+
+		let modifier = resolver.modifierSum();
+		if (this.type === "melee") {
+			modifier += attackResolver.resolve("proficiency_rank");
+		}
+
+		return runEffect(
+			rollData,
+			speaker,
+			{
+				title,
+				num_dice,
+				die_size: this.damage_die,
+				potency: 1,
+				modifier,
 			},
 			{ skip },
 		);
@@ -159,30 +227,7 @@ export class Weapon extends BaseEquipment {
 			},
 			{
 				label: _loc("warden.weapon.damage_button"),
-				onClick: async () => {
-					const rollData = this.parent.actor.getRollData();
-					const speaker = ChatMessage.getSpeaker({
-						actor: this.parent.actor,
-					});
-
-					const rollMode = game.settings.get("core", "messageMode");
-
-					const roll = WardenEffect.fromParts(
-						this.damage_die,
-						Math.max(this.parent.actor.system.path.combat.rank, 1),
-						1,
-						0,
-						rollData,
-					);
-
-					await roll.toMessage({
-						speaker,
-						rollMode,
-						flavor: _loc("warden.weapon.damage_flavor", {
-							weapon: this.parent.name,
-						}),
-					});
-				},
+				onClick: (e) => this.rollDamage({ skip: e.shiftKey, map: 0 }),
 			},
 		];
 	}

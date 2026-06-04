@@ -1,0 +1,72 @@
+<section class="effect-window text-center">
+	<div class="parameter">
+		<button data-action="num_dice" data-dir="up"><i class="fa-solid fa-angle-up"></i></button>
+		<label>
+			<span>{{ parameters.num_dice }}</span>
+			<input
+				class="text-center"
+				type="number"
+				name="num_dice"
+				value="{{ parameters.num_dice }}"
+				min="1"
+				max="5"
+			/>
+		</label>
+		<button data-action="num_dice" data-dir="down"><i class="fa-solid fa-angle-down"></i></button>
+	</div>
+
+	<div class="parameter">
+		<button data-action="die_size" data-dir="up"><i class="fa-solid fa-angle-up"></i></button>
+		<label>
+			<span>d{{ parameters.die_size }}</span>
+			<input
+				class="text-center"
+				type="number"
+				name="die_size"
+				value="{{ parameters.die_size }}"
+				min="4"
+				max="12"
+			/>
+		</label>
+		<button data-action="die_size" data-dir="down"><i class="fa-solid fa-angle-down"></i></button>
+	</div>
+
+	<div class="parameter">
+		<button data-action="potency" data-dir="up"><i class="fa-solid fa-angle-up"></i></button>
+		<label>
+			<span>P{{ parameters.potency }}</span>
+			<input
+				class="text-center"
+				type="number"
+				name="potency"
+				value="{{ parameters.potency }}"
+				min="1"
+				max="{{ parameters.num_dice }}"
+			/>
+		</label>
+		<button data-action="potency" data-dir="down"><i class="fa-solid fa-angle-down"></i></button>
+	</div>
+
+	<div class="parameter">
+		<button data-action="modifier" data-dir="up"><i class="fa-solid fa-angle-up"></i></button>
+		<label>
+			<span>
+				{{~numberFormat
+					parameters.modifier
+					sign=true
+				~}}
+			</span>
+			<input
+				class="text-center"
+				type="number"
+				name="modifier"
+				value="{{ parameters.modifier }}"
+				min="-99"
+				max="99"
+			/>
+		</label>
+		<button data-action="modifier" data-dir="down"><i class="fa-solid fa-angle-down"></i></button>
+	</div>
+
+	<button class="col-span-4">{{localize "warden.roll.effect_submit"}}</button>
+</section>

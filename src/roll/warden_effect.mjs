@@ -3,10 +3,5 @@ export class WardenEffect extends Roll {
 		super(formula, data, options);
 	}
 
-	static fromParts(dieSize, numDice, potency, bonus, data, options = {}) {
-		const formula = `${numDice}d${dieSize}kh${potency} + ${bonus}`;
-		return new WardenEffect(formula, data, options);
-	}
-
 	static CHAT_TEMPLATE = "/systems/warden/static/chat/effect.hbs";
 }

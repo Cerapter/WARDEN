@@ -363,6 +363,8 @@
 			"submit_label_open": "Roll ({formula})",
 			"submit_label_difficulty": "Roll ({formula}) vs. DV {difficulty}",
 
+			"effect_submit": "Roll Effect",
+
 			"benefit": "Benefit",
 			"detriment": "Detriment",
 
