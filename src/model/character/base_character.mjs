@@ -148,13 +148,39 @@ export class BaseCharacterData extends TypeDataModel {
 	}
 
 	/**
+	 * Returns a list of domains that describe the current status of the character.
+	 * 
+	 * @param {string} prefix A custom prefix to differentiate domains. Defaults to `character`.
+	 * @returns {string[]} The relevant domains to the character.
+	 */
+	getDomains(prefix = "") {
+		const determined_prefix = prefix.length > 0 ? prefix : "character";
+
+		return [
+			`${determined_prefix}.level.${this.level}`,
+			`${determined_prefix}.level.${this.size}`,
+			`${determined_prefix}.hit_points.current.${this.hit_points.value}`,
+			`${determined_prefix}.hit_points.max.${this.hit_points.max}`,
+			`${determined_prefix}.hit_points.percent.${Math.round(this.hit_points.value / this.hit_points.max * 100)}`,
+			`${determined_prefix}.strain.current.${this.strain.value}`,
+			`${determined_prefix}.strain.max.${this.strain.max}`,
+			`${determined_prefix}.strain.percent.${Math.round(this.strain.value / this.strain.max * 100)}`
+		]
+	}
+
+	/**
 	 * Get a handler for all dynamic effects that belong to one of the domains and fulfills its applicability requirements
 	 * @param {string[]|Set<string>} domains - The domains to filter the effects by, if any overlap it's applied
 	 * @param {string[]|Set<string>} discriminators - Items used to filter an effect to see if it applies in the specific circumstance. Shape *very* much up for change
 	 * @return DynamicResultResolver
 	 */
 	getDynamicResultResolver(domains, discriminators = []) {
-		const domain_set = Array.isArray(domains) ? new Set(domains) : domains;
+		const target = game.user.targets.first()?.actor.system;
+		
+		const targetDomains = target !== undefined ? target.getDomains("target") : [];
+		const raw_domains = [...domains, ...this.getDomains(), ...targetDomains];
+		const domain_set = new Set(raw_domains);
+
 		const discriminator_set = Array.isArray(discriminators)
 			? new Set(discriminators)
 			: discriminators;
@@ -180,7 +206,7 @@ export class BaseCharacterData extends TypeDataModel {
 			filtered_effects,
 			{
 				origin: this,
-				target: game.user.targets.first()?.actor.system
+				target
 			},
 		);
 	}
