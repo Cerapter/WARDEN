@@ -73,9 +73,9 @@ export class DynamicResultResolver {
 				// Very special case here
 				const rank = this.#resolveType("proficiency_rank");
 				if (rank > 0) {
-					return rank + this.data.level;
+					return rank + this.data.origin.level;
 				} else {
-					return Math.floor(this.data.level / 2);
+					return Math.floor(this.data.origin.level / 2);
 				}
 			}
 

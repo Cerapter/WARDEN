@@ -179,7 +179,8 @@ export class BaseCharacterData extends TypeDataModel {
 			discriminator_set,
 			filtered_effects,
 			{
-				level: this.level,
+				origin: this,
+				target: game.user.targets.first()?.actor.system
 			},
 		);
 	}
