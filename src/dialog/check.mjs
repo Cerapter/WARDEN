@@ -72,6 +72,9 @@ export class CheckWindow extends HandlebarsApplicationMixin(ApplicationV2) {
 		context.difficulty = this.manager.difficulty;
 		context.isOpen = this.manager.isOpen;
 
+		context.benefit = this.manager.benefit;
+		context.detriment = this.manager.detriment;
+
 		context.pending_effect = this.pending_effect;
 		context.choices = {
 			universal: "warden.modifier_type_abbr.universal",

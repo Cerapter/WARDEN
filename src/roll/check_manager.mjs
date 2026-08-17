@@ -148,6 +148,14 @@ class CheckManager {
 					(this.parameters.detriment ? 5 : 0);
 	}
 
+	get detriment() {
+		return !!this.parameters.detriment;
+	}
+
+	get benefit() {
+		return !!this.parameters.benefit;
+	}
+
 	async display() {
 		return CheckWindow.wait(this, {});
 	}
