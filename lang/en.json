@@ -24,6 +24,7 @@
 				"equipment": "Equipment",
 				"pockets": "Pockets",
 				"pack": "Pack",
+				"statistics": "Statistics",
 
 				"origin": "Origin",
 
@@ -49,6 +50,7 @@
 
 			"name": "Character name",
 			"hit_points": "Hit Points",
+			"temporary_hit_points": "Temporary HP",
 			"strain": "Strain",
 
 			"speed": "Speed",
