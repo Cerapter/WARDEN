@@ -88,6 +88,9 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 			);
 		}
 
+		// Gimmick-ass solution
+		system.calculateBasicStats();
+
 		context.skill = {};
 		for (const [name, data] of Object.entries(system.skill)) {
 			context.skill[name] = this.#prepareSkillDisplay(name, data);

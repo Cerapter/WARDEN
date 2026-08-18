@@ -430,22 +430,47 @@ export class CharacterData extends BaseCharacterData {
 	prepareDerivedData() {
 		super.prepareDerivedData();
 
-		this.hit_points.max = 10 + 2 * this.defense.toughness.rank;
-		this.hit_points.value = Math.min(
-			this.hit_points.value,
-			this.hit_points.max,
-		);
-
-		this.strain.max = 10 + 2 * this.defense.resolve.rank;
-		this.strain.value = Math.min(this.strain.value, this.strain.max);
-
-		this.speed = {};
-		this.speed.base = 5;
-		this.speed.value = this.speed.base;
-
 		this.wealth = Math.min(this.wealth, this.vocation.value);
 
 		this.#prepareBaseDynamicEffects();
+		this.calculateBasicStats();
+	}
+	calculateBasicStats(){
+		// Hit Points
+		{
+			const resolver = this.otherResolver({domains: ["hit_points"], discriminators: []});
+			const bonus = resolver.modifierSum();
+
+			this.hit_points.max = bonus;
+			this.hit_points.value = Math.min(
+				this.hit_points.value,
+				this.hit_points.max,
+			);
+		}
+
+		// Strain Points
+		{
+			const resolver = this.otherResolver({domains: ["strain_points"], discriminators: []});
+			const bonus = resolver.modifierSum();
+
+			this.strain.max = bonus;
+			this.strain.value = Math.min(
+				this.strain.value,
+				this.strain.max,
+			);
+		}
+
+		// Speed
+		{
+			const speed_resolver = this.otherResolver({domains: ["speed"], discriminators: []});
+			const speed_bonus = speed_resolver.modifierSum();
+			const base_speed_resolver = this.otherResolver({domains: ["base_speed"], discriminators: []});
+			const base_speed_bonus = base_speed_resolver.modifierSum();
+
+			this.speed = {};
+			this.speed.base = base_speed_bonus;
+			this.speed.value = this.speed.base + speed_bonus;
+		}
 	}
 	#prepareBaseDynamicEffects() {
 		this.dynamic_effects.proficiency_rank.push({
@@ -591,6 +616,37 @@ export class CharacterData extends BaseCharacterData {
 			mode: "upgrade",
 			value: "@profCalc",
 		});
+
+		this.dynamic_effects.bonus.push({
+			label: "Base Hit Points",
+			domains: new Set(["hit_points"]),
+			defaultEnabled: true,
+
+			modifier_type: "proficiency",
+
+			mode: "upgrade",
+			value: 10 + this.defense.toughness.rank * 2,
+		});
+		this.dynamic_effects.bonus.push({
+			label: "Base Strain Points",
+			domains: new Set(["strain_points"]),
+			defaultEnabled: true,
+
+			modifier_type: "proficiency",
+
+			mode: "upgrade",
+			value: 10 + this.defense.resolve.rank * 2,
+		});
+		this.dynamic_effects.bonus.push({
+			label: "Base Speed",
+			domains: new Set(["base_speed"]),
+			defaultEnabled: true,
+
+			modifier_type: "proficiency",
+
+			mode: "upgrade",
+			value: 5,
+		});
 	}
 
 	// TODO: add effect parameter for all of these when the system's worked out
@@ -626,6 +682,22 @@ export class CharacterData extends BaseCharacterData {
 
 		if (proficiency_name === "skill") {
 			domains.add("skill-path");
+		}
+
+		return this.getDynamicResultResolver(domains, discriminators);
+	}
+
+	/**
+	 * Parameters to resolve other data, that don't necessarily have to be checks.
+	 * 
+	 * @param {string[]|Set<string>} domains - Domains for this resolving.
+	 * @param {string[]|Set<string>} discriminators - Discriminators for this resolving.
+	 * 
+	 * @returns DynamicResultResolver
+	 */
+	otherResolver({ domains = [], discriminators = [] } = {}) {
+		if (Array.isArray(domains)) {
+			domains = new Set(domains);
 		}
 
 		return this.getDynamicResultResolver(domains, discriminators);
