@@ -156,6 +156,18 @@ export class BaseCharacterData extends TypeDataModel {
 	getDomains(prefix = "") {
 		const determined_prefix = prefix.length > 0 ? prefix : "character";
 
+		return []
+	}
+
+	/**
+	 * Returns a list of discriminators that describe the current status of the character.
+	 * 
+	 * @param {string} prefix A custom prefix to differentiate discriminators. Defaults to `character`.
+	 * @returns {string[]} The relevant discriminators to the character.
+	 */
+	getDiscriminators(prefix = "") {
+		const determined_prefix = prefix.length > 0 ? prefix : "character";
+
 		return [
 			`${determined_prefix}.level.${this.level}`,
 			`${determined_prefix}.level.${this.size}`,
@@ -180,10 +192,10 @@ export class BaseCharacterData extends TypeDataModel {
 		const targetDomains = target !== undefined ? target.getDomains("target") : [];
 		const raw_domains = [...domains, ...this.getDomains(), ...targetDomains];
 		const domain_set = new Set(raw_domains);
-
-		const discriminator_set = Array.isArray(discriminators)
-			? new Set(discriminators)
-			: discriminators;
+		
+		const targetDiscriminators = target !== undefined ? target.getDiscriminators("target") : [];
+		const raw_discriminators = [...discriminators, ...this.getDiscriminators(), ...targetDiscriminators];
+		const discriminator_set = new Set(raw_discriminators);
 
 		const filtered_effects = {};
 
