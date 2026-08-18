@@ -75,7 +75,7 @@ export class DynamicResultResolver {
 				if (rank > 0) {
 					return rank + this.data.origin.level;
 				} else {
-					return Math.floor(this.data.origin.level / 2);
+					return Math.min(Math.floor(this.data.origin.level / 2), 10);
 				}
 			}
 

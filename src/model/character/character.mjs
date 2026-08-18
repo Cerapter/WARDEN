@@ -553,7 +553,7 @@ export class CharacterData extends BaseCharacterData {
 			modifier_type: "proficiency",
 
 			mode: "upgrade",
-			value: this.level / 2,
+			value: Math.min(Math.floor(this.level / 2), 10),
 		});
 
 		this.dynamic_effects.bonus.push({
