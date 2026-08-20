@@ -1,10 +1,8 @@
 import { BaseEquipment } from "../model/item/equipment/base_equipment.mjs";
 import { runCheck } from "../roll/check_manager.mjs";
+import { BaseCharacterSheet } from "./base_character.mjs";
 
-const { HandlebarsApplicationMixin } = foundry.applications.api;
-const { ActorSheet } = foundry.applications.sheets;
-
-export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
+export class CharacterSheet extends BaseCharacterSheet {
 	static PARTS = {
 		main: {
 			template: "systems/warden/static/sheets/character-sheet.hbs",
@@ -45,13 +43,8 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 	async _prepareContext(options) {
 		const context = await super._prepareContext(options);
 
-		const actor = this.actor;
-		const system = actor.system;
-
-		context.actor = actor;
-		context.system = system;
-
-		context.fields = system.schema.fields;
+		const system = context.system;
+		const actor = context.actor;
 
 		context.kit = system.kit;
 
@@ -133,17 +126,6 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 			})),
 		);
 
-		context.conditions = await Promise.all(
-			system.conditions.map(async (a) => ({
-				id: a.id,
-				name: a.name,
-				description:
-					await foundry.applications.ux.TextEditor.implementation.enrichHTML(
-						a.system.description,
-					),
-			}))
-		);
-
 		context.orphanedItems = this.#findOrphanedItems(context);
 
 		return context;
@@ -166,6 +148,12 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 		context.system.origins
 			.slice(0, 2)
 			.forEach((o) => registeredItems.add(o.id));
+
+		[...context.conditions.permanent, ...context.conditions.persistent, ...context.conditions.temporary,
+			...context.warden_active_effects.permanent, ...context.warden_active_effects.persistent, ...context.warden_active_effects.temporary]
+			.flat()
+			.filter((i) => i !== null)
+			.forEach((i) => registeredItems.add(i.id));
 
 		context.abilities.forEach((ability) => {
 			registeredItems.add(ability.id);

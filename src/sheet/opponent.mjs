@@ -1,9 +1,7 @@
 import { runCheck } from "../roll/check_manager.mjs";
+import { BaseCharacterSheet } from "./base_character.mjs";
 
-const { HandlebarsApplicationMixin } = foundry.applications.api;
-const { ActorSheet } = foundry.applications.sheets;
-
-export class OpponentSheet extends HandlebarsApplicationMixin(ActorSheet) {
+export class OpponentSheet extends BaseCharacterSheet {
 	static PARTS = {
 		main: {
 			template: "systems/warden/static/sheets/opponent-sheet.hbs",
@@ -31,14 +29,6 @@ export class OpponentSheet extends HandlebarsApplicationMixin(ActorSheet) {
 	async _prepareContext(options) {
 		const context = await super._prepareContext(options);
 
-		const actor = this.actor;
-		const system = actor.system;
-
-		context.actor = actor;
-		context.system = system;
-
-		context.fields = system.schema.fields;
-
 		context.majorStatistic = this.#prepareStatisticDisplay("major", true);
 		context.minorStatistic = this.#prepareStatisticDisplay("minor", false);
 
@@ -65,15 +55,6 @@ export class OpponentSheet extends HandlebarsApplicationMixin(ActorSheet) {
 		const is_major = this.actor.system[name].is_major;
 		const bonus = resolver.modifierSum();
 		return { name, is_major, bonus, path: dataPath };
-	}
-
-	/**
-	 * Reject all dropped items
-	 * @return {Promise<null>}
-	 * @private
-	 */
-	async _onDropItem() {
-		return null;
 	}
 
 	async _onRender(context, options) {

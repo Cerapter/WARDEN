@@ -19,8 +19,6 @@ export class EquipmentSheet extends WARDENItemSheet {
 				break;
 		}
 
-		console.log(context);
-
 		return context;
 	}
 }

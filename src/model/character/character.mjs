@@ -236,7 +236,7 @@ export class CharacterData extends BaseCharacterData {
 	/**
 	 * Find out if a piece of equipment can be inserted in a specified area at a specified slot
 	 * @param {Item} item
-	 * @param {"kit"|"equipped"|"pockets"|"pack"} area
+	 * @param {"kit"|"equipped"|"pockets"|"pack"|"condition"} area
 	 * @return {true|string} Success or a warning message
 	 */
 	canAreaFitEquipment(item, area) {

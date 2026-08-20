@@ -232,4 +232,94 @@ export class BaseCharacterData extends TypeDataModel {
 		);
 		return Array.from(mapped).sort((i1, i2) => i1.sort - i2.sort);
 	}
+
+	/// TODO: characterData's editInventory could be merged with this somehow?
+	async editConditions(srcItem, { destArea, srcArea, destItem }) {
+		const operations = [];
+
+		const srcPath = srcArea == null ? srcArea : "condition_item_ids";
+		const srcSet =
+			srcPath == null
+				? srcPath
+				: new Set(foundry.utils.getProperty(this, srcPath));
+
+		const destPath = destArea == null ? destArea : "condition_item_ids";
+		const destSet =
+			destPath == null
+				? destPath
+				: new Set(foundry.utils.getProperty(this, destPath));
+
+		let id = srcItem.id;
+
+		if (srcArea == null) {
+			// If the srcItem comes from nowhere we need to create it
+			srcItem = srcItem.inCompendium
+				? game.items.fromCompendium(srcItem, { clearFolder: true })
+				: srcItem.toObject();
+
+			id = foundry.utils.randomID();
+
+			srcItem._id = id;
+
+			operations.push({
+				action: "create",
+				documentName: "Item",
+				data: [srcItem],
+				keepId: true,
+				parent: this.parent,
+			});
+		} else {
+			// Else we'll need to edit where it came from
+			srcSet.delete(id);
+			operations.push({
+				action: "update",
+				documentName: "Actor",
+				updates: [
+					{
+						_id: this.parent.id,
+						[`system.${srcPath}`]: srcSet,
+					},
+				],
+			});
+		}
+
+		if (destArea == null) {
+			// If the item is going nowhere we delete it
+			operations.push({
+				action: "delete",
+				documentName: "Item",
+				ids: [srcItem.id],
+				parent: this.parent,
+			});
+		} else {
+			// Else we add it to the destination
+			destSet.add(id);
+			operations.push({
+				action: "update",
+				documentName: "Actor",
+				updates: [
+					{ _id: this.parent.id, [`system.${destPath}`]: destSet },
+				],
+			});
+		}
+
+		if (destItem != null) {
+			// If we're swapping the Sets need to be updated inversely to the dropped srcItem
+			srcSet.add(destItem.id);
+			destSet.delete(destItem.id);
+
+			// And we can just swap their sort values to preserve orders
+			operations.push({
+				action: "update",
+				documentName: "Item",
+				updates: [
+					{ _id: srcItem.id, sort: destItem.sort },
+					{ _id: destItem.id, sort: srcItem.sort },
+				],
+				parent: this.parent,
+			});
+		}
+
+		await foundry.documents.modifyBatch(operations);
+	}
 }
