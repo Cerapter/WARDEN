@@ -133,6 +133,17 @@ export class CharacterSheet extends HandlebarsApplicationMixin(ActorSheet) {
 			})),
 		);
 
+		context.conditions = await Promise.all(
+			system.conditions.map(async (a) => ({
+				id: a.id,
+				name: a.name,
+				description:
+					await foundry.applications.ux.TextEditor.implementation.enrichHTML(
+						a.system.description,
+					),
+			}))
+		);
+
 		context.orphanedItems = this.#findOrphanedItems(context);
 
 		return context;

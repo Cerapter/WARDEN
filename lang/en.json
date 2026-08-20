@@ -14,7 +14,9 @@
 
 			"origin": "Origin",
 			"ability": "Ability",
-			"feat": "Feat"
+			"feat": "Feat",
+
+			"condition": "Condition / WARDEN Active Effect"
 		}
 	},
 	"warden": {
@@ -328,6 +330,35 @@
 					"label": "Ability",
 					"placeholder": "Slug ID of the Feat's Ability"
 				}
+			}
+		},
+
+		"condition": {
+			"sheet": {
+				"label": "WARDEN Condition / Active Effect Sheet"
+			},
+			"FIELDS": {
+				"description": {
+					"label": "Description"
+				},
+				"slug": {
+					"label": "Slug identifier"
+				},
+				"variant": {
+					"label": "Variant"
+				},
+				"type": {
+					"label": "Type"
+				}
+			},
+			"variant": {
+				"condition": "Condition",
+				"active_effect": "Active Effect"
+			},
+			"type": {
+				"temporary": "Temporary",
+				"persistent": "Persistent",
+				"permanent": "Permanent"
 			}
 		},
 

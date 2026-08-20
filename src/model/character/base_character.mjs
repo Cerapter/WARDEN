@@ -1,6 +1,6 @@
 import { DynamicResultResolver } from "../../dynamic_effects/resolver.mjs";
 
-const { AnyField, SchemaField, NumberField, ArrayField } = foundry.data.fields;
+const { AnyField, SchemaField, NumberField, ArrayField, SetField, DocumentIdField } = foundry.data.fields;
 const { TypeDataModel } = foundry.abstract;
 
 /**
@@ -53,6 +53,9 @@ export class BaseCharacterData extends TypeDataModel {
 					initial: 10,
 				}),
 			}),
+			condition_item_ids: new SetField(
+				new DocumentIdField({ type: "Item", readonly: false }),
+			),
 		};
 	}
 
@@ -221,5 +224,12 @@ export class BaseCharacterData extends TypeDataModel {
 				target
 			},
 		);
+	}
+
+	get conditions() {
+		const mapped = this.condition_item_ids.map((id) =>
+			this.parent.items.get(id),
+		);
+		return Array.from(mapped).sort((i1, i2) => i1.sort - i2.sort);
 	}
 }
